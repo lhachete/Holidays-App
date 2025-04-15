@@ -18,3 +18,9 @@
   border-color: #b084f9 !important;
   box-shadow: 0 0 0 0.2rem rgba(176, 132, 249, 0.25) !important;
 }
+
+.underline-custom {
+  text-decoration: underline;
+  text-decoration-color: white; /* o el color que quieras */
+  text-underline-offset: 3px;
+}
