@@ -7,17 +7,17 @@
                     <form>
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="username">
+                            <input type="text" class="form-control outline-purple" id="username" name="username">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password">
+                            <input type="password" class="form-control outline-purple" id="password" name="password">
                         </div>
                     </form>
-                    <button class="btn btn-primary w-100">Login in</button>
-                    <div class="text-center mt-4">
+                    <button class="btn btn-primary w-100 bg-lightPurple bg-lightPurple-hover">Login in</button>
+                    <div class="text-center mt-4 ">
                         <span>Create an account? </span>
-                        <a [routerLink]="['/register']">Sign up</a>
+                        <a [routerLink]="['/register']" class="text-lightPurple">Sign up</a>
                     </div>
                 </div>
             </div>
