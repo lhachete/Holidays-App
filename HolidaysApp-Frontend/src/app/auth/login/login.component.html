@@ -4,17 +4,17 @@
             <div class="card shadow">
                 <div class="card-body">
                     <h3 class="text-center mb-4">Login</h3>
-                    <form>
+                    <form [formGroup] = "loginForm">
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control outline-purple" id="username" name="username">
+                            <input type="text" class="form-control outline-purple" id="username" formControlName="username">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control outline-purple" id="password" name="password">
+                            <input type="password" class="form-control outline-purple" id="password" formControlName="password">
                         </div>
                     </form>
-                    <button class="btn btn-primary w-100 bg-lightPurple bg-lightPurple-hover">Login in</button>
+                    <button (click) = "login()" class="btn btn-primary w-100 bg-lightPurple bg-lightPurple-hover">Login in</button>
                     <div class="text-center mt-4 ">
                         <span>Create an account? </span>
                         <a [routerLink]="['/register']" class="text-lightPurple">Sign up</a>
@@ -24,3 +24,4 @@
         </div>
     </div>
 </div>
+
