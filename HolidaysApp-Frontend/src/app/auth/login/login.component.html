@@ -18,16 +18,14 @@
                         </div>
                         
                     </form>
-                    @if (userNotFound) {
-                        <p class="alert alert-danger mt-2" role="alert">
-                            Invalid user
-                        </p>
-                        
-                    } @else if (wrongPassword) {
-                        <p class="alert alert-danger mt-2" role="alert">
-                          Wrong password
-                        </p>
-                    }
+                    <div class="d-flex align-items-center justify-content-center mb-1">    
+                        @if (userNotFound || wrongPassword) {
+                            <p class="alert alert-danger mt-2 fw-bold" role="alert">
+                              {{ userNotFound ? 'Invalid user' : 'Wrong password!' }}
+                            </p>
+                          }
+                    </div>
+                
                     <button (click)="login()" class="btn btn-primary w-100 bg-lightPurple bg-lightPurple-hover">Login
                         in</button>
                     <div class="text-center mt-4 ">
