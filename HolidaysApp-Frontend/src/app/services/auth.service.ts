@@ -18,16 +18,18 @@ export class AuthService {
 
   constructor(private router: Router) { }
 
-  public login(username: string, password: string): boolean {
-    if (this.users[username] && this.users[username]['password'] == password) {
-      this.username = username;
-      this.isAuthenticated = true;
-      this.roles = this.users[username]['roles'];
-      return true;
+  public login(username: string, password: string): 'OK' | 'USER_ERROR' | 'PASS_ERROR' {
+    if (!this.users[username]) {
+      return 'USER_ERROR';
     }
-    else {
-      return false;
+    if (this.users[username].password !== password) {
+      return 'PASS_ERROR';
     }
+  
+    this.username = username;
+    this.isAuthenticated = true;
+    this.roles = this.users[username].roles;
+    return 'OK';
   }
 
   logout() {
@@ -40,5 +42,7 @@ export class AuthService {
   get isLoggedIn(): boolean {
     return this.isAuthenticated;
   }
+
+  
 
 }

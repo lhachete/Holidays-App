@@ -7,11 +7,13 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-login',
   imports: [RouterLink, ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
 })
 export class LoginComponent {
   public loginForm!: FormGroup;
-  
+  public userNotFound: boolean = false;
+  public wrongPassword: boolean = false;
+
+
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.formBuilder.group({
@@ -19,15 +21,24 @@ export class LoginComponent {
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
-  
-  login(): void {
-    let username = this.loginForm.value.username;
-    let password = this.loginForm.value.password;
-    let auth: boolean = this.authService.login(username, password);
 
-    if (auth == true) {
-      this.router.navigateByUrl("/");
+  login(): void {
+    const username = this.loginForm.value.username;
+    const password = this.loginForm.value.password;
+  
+    this.userNotFound = false;
+    this.wrongPassword = false;
+  
+    const result = this.authService.login(username, password);
+  
+    if (result === 'OK') {
+      this.router.navigateByUrl('/');
+    } else if (result === 'USER_ERROR') {
+      this.userNotFound = true;
+    } else if (result === 'PASS_ERROR') {
+      this.wrongPassword = true;
     }
   }
+  
 
 }

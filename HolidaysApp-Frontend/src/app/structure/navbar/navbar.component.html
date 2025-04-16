@@ -6,7 +6,7 @@
         </button>
 
         <div class="collapse navbar-collapse " id="navbarNav">
-            <ul class="navbar-nav ms-auto d-lg-flex gap-lg-3 align-items-center">
+            <ul class="navbar-nav ms-auto d-lg-flex gap-lg-3 align-items-lg-center">
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/" routerLinkActive="underline-custom text-white"
                         [routerLinkActiveOptions]="{ exact: true }">
@@ -17,13 +17,13 @@
                 <!-- LOGIN y LOGOUT -->
                 @if (!isAuthenticated) {
                 <a class="nav-link" routerLink="/login" >
-                    <button class="btn-lightPurple w-100" routerLinkActive="active button-active">
+                    <button class="btn-lightPurple" routerLinkActive="active button-active">
                         Login
                     </button>
                 </a>
                 } @else {
                     <a class="nav-link">
-                        <button (click)="logout()" class="btn-lightPurple w-100" routerLinkActive="active button-active">
+                        <button (click)="logout()" class="btn-lightPurple" routerLinkActive="active button-active">
                             Logout
                         </button>
                     </a>

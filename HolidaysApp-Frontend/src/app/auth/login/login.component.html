@@ -4,17 +4,32 @@
             <div class="card shadow">
                 <div class="card-body">
                     <h3 class="text-center mb-4">Login</h3>
-                    <form [formGroup] = "loginForm">
+                    <form [formGroup]="loginForm">
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control outline-purple" id="username" formControlName="username">
+                            <input type="text" class="form-control outline-purple" id="username"
+                                formControlName="username">
+                            
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control outline-purple" id="password" formControlName="password">
+                            <input type="password" class="form-control outline-purple" id="password"
+                                formControlName="password">
                         </div>
+                        
                     </form>
-                    <button (click) = "login()" class="btn btn-primary w-100 bg-lightPurple bg-lightPurple-hover">Login in</button>
+                    @if (userNotFound) {
+                        <p class="alert alert-danger mt-2" role="alert">
+                            Invalid user
+                        </p>
+                        
+                    } @else if (wrongPassword) {
+                        <p class="alert alert-danger mt-2" role="alert">
+                          Wrong password
+                        </p>
+                    }
+                    <button (click)="login()" class="btn btn-primary w-100 bg-lightPurple bg-lightPurple-hover">Login
+                        in</button>
                     <div class="text-center mt-4 ">
                         <span>Create an account? </span>
                         <a [routerLink]="['/register']" class="text-lightPurple">Sign up</a>
@@ -24,4 +39,3 @@
         </div>
     </div>
 </div>
-
