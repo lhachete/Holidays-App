@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, signal } from '@angular/core';
+import { FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
@@ -10,37 +10,42 @@ import { AuthService } from '../services/auth.service';
 })
 export class AuthComponent implements OnInit {
 
-  public authForm!: FormGroup;
+  public authForm = signal<FormGroup>(
+    new FormGroup({
+      userInput: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/)]),
+      username: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/)]),
+    }
+    ));
+
+    constructor(
+      private authService: AuthService,
+      private router: Router,
+      private route: ActivatedRoute
+    ) { }
+    
   public userNotFound: boolean = false;
   public wrongPassword: boolean = false;
   public mode: 'login' | 'register' = 'login';
-
-  constructor(
-    private formBuilder: FormBuilder,
-     private authService: AuthService,
-      private router: Router,
-      private route: ActivatedRoute
-    ) {
-    this.authForm = this.formBuilder.group({
-      userInput: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-      // Para el registro podrías agregar más campos, ejemplo:
-      // confirmPassword: ['']
-    });
-  }
+  public registerErrors: { username?: string, email?: string, password?: string } = {};
+    
 
   login(): void {
-    const userInput = this.authForm.value.userInput;
-    const password = this.authForm.value.password;
+
+    const userInput = this.authForm().value.userInput;
+    const password = this.authForm().value.password;
 
     this.userNotFound = false;
     this.wrongPassword = false;
-  
+
     const result = this.authService.login(userInput, password);
-  
+
     if (result === 'OK') {
       this.router.navigateByUrl('/');
     } else if (result === 'USER_ERROR') {
+      console.log(this.authForm().value)
       this.userNotFound = true;
     } else if (result === 'PASS_ERROR') {
       this.wrongPassword = true;
@@ -48,11 +53,41 @@ export class AuthComponent implements OnInit {
   }
 
   register(): void {
-    // Aquí se definirá la lógica de registro, validaciones extras, etc.
-    console.log('Registro de usuario:', this.authForm.value);
-    
-    //Para cuando sea exitoso.
-    this.router.navigateByUrl('/login');
+    const { username, email, password, confirmPassword } = this.authForm().value;
+    this.registerErrors.password = '';
+    this.registerErrors.username = '';
+    this.registerErrors.email = '';
+
+    const usernameExists = this.authService.users.some(user => user.username === username);
+    const emailExists = this.authService.users.some(user => user.email === email);
+
+    if (password !== confirmPassword) {
+      this.registerErrors.password = 'Passwords do not match.';
+    }
+    if (password.length < 6 || password.length > 20) {
+      this.registerErrors.password += ' Password must be between 6 and 20 characters.';
+    }
+
+    if (usernameExists) {
+      this.registerErrors.username = 'Username is already taken.';
+    }
+    if (username.length < 3) {
+      this.registerErrors.username = 'Username must be at least 3 characters long.';
+    }
+
+    if (emailExists) {
+      this.registerErrors.email = 'Email is already registered.';
+    }
+    if (!this.authForm().value.email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+      this.registerErrors.email += ' Invalid email format.';
+    }
+
+    if (this.authForm().valid && !usernameExists && !emailExists && password === confirmPassword) {
+      this.authService.registerUser({ username, email, password });
+      alert('User registered successfully!');
+      this.router.navigateByUrl('/login');
+    }
+
   }
 
   submit(): void {
@@ -66,7 +101,7 @@ export class AuthComponent implements OnInit {
       this.register();
     }
   }
-  
+
   ngOnInit(): void {
     this.route.data.subscribe(data => {
       if (data['mode']) this.mode = data['mode'];

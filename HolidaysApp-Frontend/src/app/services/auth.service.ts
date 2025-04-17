@@ -41,6 +41,11 @@ export class AuthService {
     return 'OK';
   }
 
+  public registerUser(user: { username: string, email: string, password: string }): void {
+    this.users = [...this.users, {...user, roles: ['USUARIO']}];
+  }
+  
+
   logout() {
     this.isAuthenticated = false;
     this.roles = [];
