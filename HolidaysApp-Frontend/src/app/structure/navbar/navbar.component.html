@@ -14,19 +14,49 @@
                     </a>
                 </li>
 
+
                 <!-- LOGIN y LOGOUT -->
                 @if (!isAuthenticated) {
-                <a class="nav-link" routerLink="/login" >
+                <a class="nav-link" routerLink="/login">
                     <button class="btn-lightPurple" routerLinkActive="active button-active">
                         Login
                     </button>
                 </a>
                 } @else {
-                    <a class="nav-link">
-                        <button (click)="logout()" class="btn-lightPurple" routerLinkActive="active button-active">
-                            Logout
-                        </button>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="vacationDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" >
+                        My Vacations
                     </a>
+                    <ul class="dropdown-menu" aria-labelledby="vacationDropdown">
+                        <li>
+                            <a class="dropdown-item" routerLink="/vacation/show" routerLinkActive="active">
+                                Show Vacations
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" routerLink="/vacation/book" routerLinkActive="active">
+                                Book Vacations
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" routerLink="/vacation/edit" routerLinkActive="active">
+                                Edit Vacations
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" routerLink="/vacation/delete" routerLinkActive="active">
+                                Delete Vacations
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <a class="nav-link">
+                    <button (click)="logout()" class="btn-lightPurple" routerLinkActive="active button-active">
+                        Logout
+                    </button>
+                </a>
                 }
             </ul>
         </div>

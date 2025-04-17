@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,24 +13,24 @@ export class AuthComponent implements OnInit {
   public authForm = signal<FormGroup>(
     new FormGroup({
       userInput: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/)]),
       username: new FormControl('', [Validators.required, Validators.minLength(3)]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(20), Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/)]),
+      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/)]),
     }
     ));
 
-    constructor(
-      private authService: AuthService,
-      private router: Router,
-      private route: ActivatedRoute
-    ) { }
-    
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
+
   public userNotFound: boolean = false;
   public wrongPassword: boolean = false;
   public mode: 'login' | 'register' = 'login';
   public registerErrors: { username?: string, email?: string, password?: string } = {};
-    
+
 
   login(): void {
 
@@ -63,8 +63,8 @@ export class AuthComponent implements OnInit {
     if (password !== confirmPassword) {
       this.registerErrors.password = 'Passwords do not match.';
     }
-    if (password.length < 6 || password.length > 20) {
-      this.registerErrors.password += ' Password must be between 6 and 20 characters.';
+    if (password.length < 8 || password.length > 20 || !password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/)) {
+      this.registerErrors.password += ' Password must be 8–20 characters long, and include at least one lowercase letter, one uppercase letter, one number, and one special character.';
     }
 
     if (usernameExists) {
@@ -91,7 +91,6 @@ export class AuthComponent implements OnInit {
   }
 
   submit(): void {
-    // Resetea los mensajes de error
     this.userNotFound = false;
     this.wrongPassword = false;
 

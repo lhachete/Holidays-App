@@ -34,6 +34,11 @@
   color: #b35cff;
 }
 
+.dropdown-item.active, .dropdown-item:active {
+  color: var(--bs-dropdown-link-active-color);
+  background-color: #b084f9;
+}
+
 .outline-purple:focus {
   border-color: #b084f9 !important;
   box-shadow: 0 0 0 0.2rem rgba(176, 132, 249, 0.25) !important;
