@@ -45,7 +45,6 @@ export class AuthComponent implements OnInit {
     if (result === 'OK') {
       this.router.navigateByUrl('/');
     } else if (result === 'USER_ERROR') {
-      console.log(this.authForm().value)
       this.userNotFound = true;
     } else if (result === 'PASS_ERROR') {
       this.wrongPassword = true;

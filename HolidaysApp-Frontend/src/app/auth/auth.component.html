@@ -46,8 +46,7 @@
                             <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control outline-purple" id="password"
                                 formControlName="password" placeholder="Enter password"
-                                [class.is-invalid]="registerErrors.password"
-                                [class.is-invalid]="mode === 'login' && wrongPassword">
+                                [class.is-invalid]="(mode === 'login' && wrongPassword) || (mode === 'register' && registerErrors.password)">
                             @if (registerErrors?.password) {
                             <div class="invalid-feedback mt-1 ms-1">
                                 <small class="text-danger">{{ registerErrors.password }}</small>
@@ -83,12 +82,12 @@
                     @if (mode === 'login') {
                     <div class="text-center mt-4">
                         <span>Create an account? </span>
-                        <a [routerLink]="['/register']" class="text-lightPurple">Sign up</a>
+                        <a routerLink='/register' class="text-lightPurple">Sign up</a>
                     </div>
                     } @else {
                     <div class="text-center mt-4">
                         <span>Already have an account? </span>
-                        <a [routerLink]="['/login']" class="text-lightPurple">Log in</a>
+                        <a routerLink='/login' class="text-lightPurple">Log in</a>
                     </div>
                     }
                 </div>
