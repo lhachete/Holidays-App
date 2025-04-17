@@ -81,6 +81,7 @@ export class AuthComponent implements OnInit {
       this.registerErrors.email += ' Invalid email format.';
     }
 
+    this.authForm().get('userInput')?.setValue(username);
     if (this.authForm().valid && !usernameExists && !emailExists && password === confirmPassword) {
       this.authService.registerUser({ username, email, password });
       alert('User registered successfully!');

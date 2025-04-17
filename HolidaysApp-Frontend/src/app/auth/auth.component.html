@@ -34,7 +34,7 @@
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control outline-purple" id="email" formControlName="email"
                                 placeholder="Enter email" [class.is-invalid]="registerErrors.email">
-                            @if (registerErrors?.email) {
+                            @if (registerErrors.email) {
                             <div class="invalid-feedback mt-1 ms-1">
                                 <small class="text-danger">{{ registerErrors.email }}</small>
                             </div>
@@ -47,7 +47,7 @@
                             <input type="password" class="form-control outline-purple" id="password"
                                 formControlName="password" placeholder="Enter password"
                                 [class.is-invalid]="(mode === 'login' && wrongPassword) || (mode === 'register' && registerErrors.password)">
-                            @if (registerErrors?.password) {
+                            @if (registerErrors.password) {
                             <div class="invalid-feedback mt-1 ms-1">
                                 <small class="text-danger">{{ registerErrors.password }}</small>
                             </div>
