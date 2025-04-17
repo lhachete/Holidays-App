@@ -22,7 +22,7 @@ export class AuthComponent implements OnInit {
       private route: ActivatedRoute
     ) {
     this.authForm = this.formBuilder.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
+      userInput: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]]
       // Para el registro podrías agregar más campos, ejemplo:
       // confirmPassword: ['']
@@ -30,13 +30,13 @@ export class AuthComponent implements OnInit {
   }
 
   login(): void {
-    const username = this.authForm.value.username;
+    const userInput = this.authForm.value.userInput;
     const password = this.authForm.value.password;
 
     this.userNotFound = false;
     this.wrongPassword = false;
   
-    const result = this.authService.login(username, password);
+    const result = this.authService.login(userInput, password);
   
     if (result === 'OK') {
       this.router.navigateByUrl('/');

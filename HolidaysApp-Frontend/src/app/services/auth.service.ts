@@ -7,35 +7,44 @@ import { Router } from '@angular/router';
 export class AuthService {
 
  // Aquí deberían de estar los usuarios reales que se creen en este objeto
-  public users: any = { 
-    admin: { password: '1234', roles: ['USUARIO', 'ADMIN'] },
-    user1: { password: '1234', roles: ['USUARIO'] }
-  };
+ public users: any[] = [
+  { username: 'admin', email: 'admin@example.com', password: '1234', roles: ['USUARIO', 'ADMIN'] },
+  { username: 'user1', email: 'user1@example.com', password: '1234', roles: ['USUARIO'] }
+];
 
-  public username: any;
+
+  public userInput: any;
   public isAuthenticated: boolean = false;
   public roles: string[] = [];
 
   constructor(private router: Router) { }
 
-  public login(username: string, password: string): 'OK' | 'USER_ERROR' | 'PASS_ERROR' {
-    if (!this.users[username]) {
+  public login(userInput: string, password: string): 'OK' | 'USER_ERROR' | 'PASS_ERROR' {
+    let user: any = null;
+    
+    if (userInput.includes("@")) {
+      user = this.users.find(u => u.email === userInput);
+    } else {
+      user = this.users.find(u => u.username === userInput);
+    }
+  
+    if (!user) {
       return 'USER_ERROR';
     }
-    if (this.users[username].password !== password) {
+    if (user.password !== password) {
       return 'PASS_ERROR';
     }
   
-    this.username = username;
+    this.userInput = user;
     this.isAuthenticated = true;
-    this.roles = this.users[username].roles;
+    this.roles = user.roles;
     return 'OK';
   }
 
   logout() {
     this.isAuthenticated = false;
     this.roles = [];
-    this.username = undefined;
+    this.userInput = undefined;
     this.router.navigateByUrl("/login");
   }
 
