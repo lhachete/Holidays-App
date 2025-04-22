@@ -1,0 +1,29 @@
+name: holidays-app
+services:
+  db:
+    image: postgres:17.0-bookworm
+    container_name: holidays_app_postgresql
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: gft
+    volumes:
+      - holidays_app_postgres_data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: holidays_app_pgadmin4
+    restart: always
+    links: 
+      - db
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: rtrh@gft.com
+      PGADMIN_DEFAULT_PASSWORD: gft
+    volumes:
+      - holidays_app_pgadmin_data:/var/lib/pgadmin
+volumes:
+  holidays_app_postgres_data:
+  holidays_app_pgadmin_data:
