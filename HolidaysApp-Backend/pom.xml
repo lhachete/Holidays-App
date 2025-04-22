@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>application</module>
-        <module>driving/api-rest</module>
+        <module>boot</module>
         <module>driving/api-rest</module>
     </modules>
 
