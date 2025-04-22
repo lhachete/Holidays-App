@@ -44,12 +44,15 @@ public class Employee {
     private String lastName;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "title", nullable = false)
     private Title title;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "gender", nullable = false)
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "marital_status", nullable = false)
     private MaritalStatus maritalStatus;
 
     private String nationality;

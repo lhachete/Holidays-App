@@ -29,11 +29,14 @@ public class Project {
     private Date realEndDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "project_type", nullable = false)
     private ProjectType projectType;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "project_state", nullable = false)
     private ProjectState projectState;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "vacation_type", nullable = false)
     private VacationType vacationType;
 }
