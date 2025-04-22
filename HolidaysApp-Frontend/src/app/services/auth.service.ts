@@ -46,6 +46,8 @@ export class AuthService {
     return this.isAuthenticated;
   }
 
-
+  hasRole(role: string): boolean {
+    return this.user?.roles.includes(role) ?? false;
+  }
 
 }

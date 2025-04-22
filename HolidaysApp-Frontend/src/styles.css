@@ -20,7 +20,7 @@
   color: white;
   border-radius: 10px;
   padding: 8px 16px;
-  transition: all 0.3s ease; /* opcional para suavizar el hover */
+  transition: all 0.3s ease;
 }
 
 .btn-lightPurple:hover {
