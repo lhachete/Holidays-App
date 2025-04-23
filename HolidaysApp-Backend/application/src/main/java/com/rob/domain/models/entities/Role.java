@@ -23,10 +23,11 @@ public class Role {
     @NotNull
     @Min(value = 0)
     @Max(value = 99999)
+    @Column(name = "rol_id")
     private Long roleId;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "role_type", nullable = false)
+    @Column(columnDefinition = "role_type",name = "rol", nullable = false)
     @NotNull
     @NotEmpty
     private Roles role;
