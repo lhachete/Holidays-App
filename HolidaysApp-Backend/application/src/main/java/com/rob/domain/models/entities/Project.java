@@ -1,4 +1,4 @@
-package com.rob.domain.models;
+package com.rob.domain.models.entities;
 
 import com.rob.domain.models.enums.ProjectState;
 import com.rob.domain.models.enums.ProjectType;
@@ -22,10 +22,20 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long projectId;
+
+    @Column(name = "name", nullable = false)
     private String projectName;
+
+    @Column(name = "description", nullable = true)
     private String projectDescription;
+
+    @Column(name = "start_date", nullable = false)
     private Date startDate;
+
+    @Column(name = "expected_end_date", nullable = true)
     private Date expectedEndDate;
+
+    @Column(name = "real_end_date", nullable = true)
     private Date realEndDate;
 
     @Enumerated(EnumType.STRING)

@@ -1,6 +1,5 @@
-package com.rob.domain.models;
+package com.rob.domain.models.entities;
 
-import com.rob.domain.models.enums.Roles;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +24,13 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String username;
+
+    @Column(name = "password",nullable = false)
     private String password;
+
+    @Column(name = "profile", unique = true, nullable = true)
     private String profilePicture;
+
+    @Column(name = "enabled", nullable = false)
     private boolean enabled;
 }
