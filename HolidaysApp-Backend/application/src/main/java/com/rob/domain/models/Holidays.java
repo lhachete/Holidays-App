@@ -28,8 +28,36 @@ public class Holidays {
     @JoinColumn(name = "reviewed_by_admin_id", nullable = false)
     private User reviewedByAdmin;
 
+    @Column(name = "review_date")
     private Date reviewDate;
+
+    @Column(name = "holiday_start_date")
     private Date holidayStartDate;
+
+    @Column(name = "holiday_end_date")
     private Date holidayEndDate;
 
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
+    @Column(name = "deleted_at")
+    private Date deletedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false)
+    private User createdBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updated_by", nullable = false)
+    private User updatedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "deleted_by", nullable = false)
+    private User deletedBy;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 }
