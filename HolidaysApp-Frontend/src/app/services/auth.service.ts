@@ -15,7 +15,14 @@ export class AuthService {
   public user: { username: string; password: string; email: string; roles: string[] } | null = null;
   public isAuthenticated: boolean = false;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+    const userSession = localStorage.getItem('userSession');
+    if (userSession) {
+      this.user = JSON.parse(userSession);
+      this.isAuthenticated = true;
+    }
+
+  }
 
   login(userInput: string, password: string): 'OK' | 'USER_ERROR' | 'PASS_ERROR' {
     const foundUser = this.users.find(user =>
@@ -28,6 +35,7 @@ export class AuthService {
     this.user = { username: foundUser.username, password: foundUser.password, email: foundUser.email, roles: foundUser.roles };
     this.isAuthenticated = true;
     console.log(this.user); //! <<<<< QUITAR, solo en development
+    localStorage.setItem('userSession', JSON.stringify(this.user));
     return 'OK';
   }
 
@@ -39,6 +47,7 @@ export class AuthService {
   logout() {
     this.isAuthenticated = false;
     this.user = null;
+    localStorage.removeItem('userSession');
     this.router.navigateByUrl("/login");
   }
 
