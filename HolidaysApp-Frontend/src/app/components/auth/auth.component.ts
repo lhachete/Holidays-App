@@ -11,21 +11,34 @@ import Swal from 'sweetalert2';
 })
 export class AuthComponent implements OnInit {
 
-  public authForm = signal<FormGroup>(
-    new FormGroup({
-      userInput: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/)]),
-      username: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/)]),
-    }
-    ));
+  loginForm: FormGroup;
+  registerForm: FormGroup;
+
+  userInput = new FormControl('', [Validators.required]);
+  username = new FormControl('', [Validators.required, Validators.minLength(3)]);
+  loginPassword = new FormControl('', [Validators.required, Validators.minLength(8)]);
+  registerPassword = new FormControl('', [Validators.required, Validators.minLength(8)]);
+  confirmPassword = new FormControl('', [Validators.required, Validators.minLength(8)]);
+  email = new FormControl('', [Validators.required, Validators.email]);
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.loginForm = new FormGroup({
+      userInput: this.userInput,
+      password: this.loginPassword,
+    });
+
+    this.registerForm = new FormGroup({
+      username: this.username,
+      email: this.email,
+      password: this.registerPassword,
+      confirmPassword: this.confirmPassword,
+    });
+
+  }
 
   public userNotFound: boolean = false;
   public wrongPassword: boolean = false;
@@ -35,8 +48,8 @@ export class AuthComponent implements OnInit {
 
   login(): void {
 
-    const userInput = this.authForm().value.userInput;
-    const password = this.authForm().value.password;
+    const userInput = this.loginForm.value.userInput;
+    const password = this.loginForm.value.password;
 
     this.userNotFound = false;
     this.wrongPassword = false;
@@ -52,38 +65,30 @@ export class AuthComponent implements OnInit {
     }
   }
 
-  register(): void {
-    const { username, email, password, confirmPassword } = this.authForm().value;
-    this.registerErrors.password = '';
-    this.registerErrors.username = '';
-    this.registerErrors.email = '';
+  private validateRegister(): boolean {
+    const { username, email, password, confirmPassword } = this.registerForm.value;
 
-    const usernameExists = this.authService.users.some(user => user.username === username);
-    const emailExists = this.authService.users.some(user => user.email === email);
+    this.registerErrors = {};
+
+    if (this.authService.users.some(user => user.username === username)) {
+      this.registerErrors.username = 'Username is already taken.';
+    }
+
+    if (this.authService.users.some(user => user.email === email)) {
+      this.registerErrors.email = 'Email is already registered.';
+    }
 
     if (password !== confirmPassword) {
       this.registerErrors.password = 'Passwords do not match.';
     }
-    if (password.length < 8 || password.length > 20 || !password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/)) {
-      this.registerErrors.password += ' Password must be 8–20 characters long, and include at least one lowercase letter, one uppercase letter, one number, and one special character.';
-    }
 
-    if (usernameExists) {
-      this.registerErrors.username = 'Username is already taken.';
-    }
-    if (username.length < 3) {
-      this.registerErrors.username = 'Username must be at least 3 characters long.';
-    }
+    return Object.keys(this.registerErrors).length === 0;
+  }
 
-    if (emailExists) {
-      this.registerErrors.email = 'Email is already registered.';
-    }
-    if (!this.authForm().value.email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
-      this.registerErrors.email += ' Invalid email format.';
-    }
 
-    this.authForm().get('userInput')?.setValue(username);
-    if (this.authForm().valid && !usernameExists && !emailExists && password === confirmPassword) {
+  register(): void {
+    const { username, email, password } = this.registerForm.value;
+    if (this.registerForm.valid && this.validateRegister()) {
       this.authService.registerUser({ username, email, password });
       Swal.fire({
         icon: 'success',
@@ -95,7 +100,6 @@ export class AuthComponent implements OnInit {
       })
       this.router.navigateByUrl('/login');
     }
-
   }
 
   submit(): void {
@@ -108,6 +112,15 @@ export class AuthComponent implements OnInit {
       this.register();
     }
   }
+
+  get form(): FormGroup {
+    return this.mode === 'login' ? this.loginForm : this.registerForm;
+  }
+
+  isTouched(control: FormControl): boolean {
+    return control.dirty || control.touched;
+  }
+
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {

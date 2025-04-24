@@ -9,8 +9,8 @@ export class AuthService {
 
   // Aquí deberían de estar los usuarios reales que se creen en este objeto
   public users: any[] = [
-    { username: 'admin', email: 'admin@example.com', password: '1234', roles: ['USUARIO', 'ADMIN'] },
-    { username: 'user1', email: 'user1@example.com', password: '1234', roles: ['USUARIO'] }
+    { username: 'admin', email: 'admin@example.com', password: '12345678', roles: ['USUARIO', 'ADMIN'] },
+    { username: 'user1', email: 'user1@example.com', password: '12345678', roles: ['USUARIO'] }
   ];
 
   public user: User | null = null;
@@ -35,7 +35,7 @@ export class AuthService {
 
     this.user = { username: foundUser.username, email: foundUser.email, roles: foundUser.roles };
     this.isAuthenticated = true;
-    console.log(this.user); //! <<<<< QUITAR, solo en development
+
     localStorage.setItem('userSession', JSON.stringify(this.user));
     return 'OK';
   }

@@ -14,6 +14,10 @@
   color: #c490ff;
 }
 
+.btn:disabled {
+  border-color: #b35cff !important;
+}
+
 .btn-lightPurple {
   background-color: #c788fe !important;
   border: white solid 2px !important;

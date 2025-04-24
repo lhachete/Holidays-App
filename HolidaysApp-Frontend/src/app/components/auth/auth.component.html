@@ -8,7 +8,7 @@
                         @if (mode === 'login') { Login } @else { Register }
                     </h3>
 
-                    <form [formGroup]="authForm()" (ngSubmit)="submit()">
+                    <form [formGroup]="form" (ngSubmit)="submit()">
                         @if (mode === 'login') {
                         <div class="mb-3">
                             <label for="userInput" class="form-label">Username or Email</label>
@@ -22,45 +22,92 @@
                             <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control outline-purple" id="username"
                                 formControlName="username" placeholder="Enter username"
-                                [class.is-invalid]="registerErrors.username">
-                            @if (registerErrors.username) {
-                            <div class="invalid-feedback mt-1 ms-1">
+                                [class.is-invalid]="username.invalid && isTouched(username)">
+                            @if (username.hasError('required') && isTouched(username)) {
+                            <div class="mt-1 ms-1">
+                                <small class="text-danger">The username is required.</small>
+                            </div>
+                            } @else if (username.hasError('minlength') && isTouched(username)) {
+                            <div class="mt-1 ms-1">
+                                <small class="text-danger">The username must be at least {{
+                                    username.errors?.['minlength'].requiredLength }} characters long.</small>
+                            </div>
+                            } @else if (registerErrors.username) {
+                            <div class="mt-1 ms-1">
                                 <small class="text-danger">{{ registerErrors.username }}</small>
                             </div>
                             }
                         </div>
 
+
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control outline-purple" id="email" formControlName="email"
-                                placeholder="Enter email" [class.is-invalid]="registerErrors.email">
-                            @if (registerErrors.email) {
-                            <div class="invalid-feedback mt-1 ms-1">
+                                placeholder="Enter email" [class.is-invalid]="email.invalid && isTouched(email)">
+                            @if (email.hasError('required') && isTouched(email)) {
+                            <div class="mt-1 ms-1">
+                                <small class="text-danger">The email is required.</small>
+
+                            </div>
+                            } @else if (email.hasError('email') && isTouched(email)) {
+                            <div class="mt-1 ms-1">
+                                <small class="text-danger">Invalid email format.</small>
+                            </div>
+                            } @else if (registerErrors.email) {
+                            <div class="mt-1 ms-1">
                                 <small class="text-danger">{{ registerErrors.email }}</small>
                             </div>
                             }
                         </div>
                         }
 
+
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control outline-purple" id="password"
                                 formControlName="password" placeholder="Enter password"
-                                [class.is-invalid]="(mode === 'login' && wrongPassword) || (mode === 'register' && registerErrors.password)">
-                            @if (registerErrors.password) {
+                                [class.is-invalid]="(mode === 'login' && wrongPassword) || (mode === 'register' && registerPassword.invalid && isTouched(registerPassword))">
+                            @if (mode === 'login' && wrongPassword) {
                             <div class="invalid-feedback mt-1 ms-1">
                                 <small class="text-danger">{{ registerErrors.password }}</small>
+                            </div>
+                            } @else if (mode === 'register' && registerPassword.hasError('required') &&
+                            isTouched(registerPassword)) {
+                            <div class="mt-1 ms-1">
+                                <small class="text-danger">The password is required.</small>
+                            </div>
+                            } @else if (mode === 'register' && registerPassword.hasError('minlength') &&
+                            isTouched(registerPassword)) {
+                            <div class="mt-1 ms-1">
+                                <small class="text-danger">The password must be at least {{
+                                    registerPassword.errors?.['minlength'].requiredLength }} characters long.</small>
                             </div>
                             }
                         </div>
 
-                        <!-- Solo para modo register-->
+
                         @if (mode === 'register') {
                         <div class="mb-3">
                             <label for="confirmPassword" class="form-label">Confirm Password</label>
                             <input type="password" class="form-control outline-purple" id="confirmPassword"
-                                formControlName="confirmPassword" [class.is-invalid]="registerErrors.password">
-
+                                formControlName="confirmPassword"
+                                [class.is-invalid]="(confirmPassword.invalid && isTouched(confirmPassword))">
+                                
+                            @if (confirmPassword.hasError('required') && (confirmPassword.dirty ||
+                            confirmPassword.touched)) {
+                            <div class="mt-1 ms-1">
+                                <small class="text-danger">The password confirmation is required.</small>
+                            </div>
+                            } @else if (registerErrors.password && isTouched(confirmPassword)) {
+                            <div class="mt-1 ms-1">
+                                <small class="text-danger">{{ registerErrors.password }}</small>
+                            </div>
+                            } @else if (confirmPassword.hasError('minlength') && isTouched(confirmPassword)) {
+                            <div class="mt-1 ms-1">
+                                <small class="text-danger">The password must be at least {{
+                                    confirmPassword.errors?.['minlength'].requiredLength }} characters long.</small>
+                            </div>
+                            }
                         </div>
                         }
 
@@ -73,23 +120,22 @@
                         </div>
                         }
 
-                        <button type="submit" class="btn btn-primary mt-1 w-100 bg-lightPurple bg-lightPurple-hover">
+                        <button type="submit" [disabled]="form.invalid"
+                            class="btn btn-primary mt-1 w-100 bg-lightPurple bg-lightPurple-hover">
                             @if (mode === 'login') { Log in } @else { Register }
                         </button>
                     </form>
 
                     <!-- Pie variable según el modo -->
-                    @if (mode === 'login') {
                     <div class="text-center mt-4">
+                        @if (mode === 'login') {
                         <span>Create an account? </span>
                         <a routerLink='/register' class="text-lightPurple">Sign up</a>
-                    </div>
-                    } @else {
-                    <div class="text-center mt-4">
+                        } @else {
                         <span>Already have an account? </span>
                         <a routerLink='/login' class="text-lightPurple">Log in</a>
+                        }
                     </div>
-                    }
                 </div>
             </div>
         </div>
