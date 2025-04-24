@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -84,7 +85,14 @@ export class AuthComponent implements OnInit {
     this.authForm().get('userInput')?.setValue(username);
     if (this.authForm().valid && !usernameExists && !emailExists && password === confirmPassword) {
       this.authService.registerUser({ username, email, password });
-      alert('User registered successfully!');
+      Swal.fire({
+        icon: 'success',
+        title: 'Registration successful!',
+        text: 'You can now log in.',
+        iconColor: '#c490ff',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#c490ff',
+      })
       this.router.navigateByUrl('/login');
     }
 

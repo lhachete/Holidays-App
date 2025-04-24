@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import User from '../models/User';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class AuthService {
     { username: 'user1', email: 'user1@example.com', password: '1234', roles: ['USUARIO'] }
   ];
 
-  public user: { username: string; email: string; roles: string[] } | null = null;
+  public user: User | null = null;
   public isAuthenticated: boolean = false;
 
   constructor(private router: Router) {
