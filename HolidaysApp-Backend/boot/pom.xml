@@ -85,6 +85,11 @@
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.rob</groupId>
+            <artifactId>api-rest</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
