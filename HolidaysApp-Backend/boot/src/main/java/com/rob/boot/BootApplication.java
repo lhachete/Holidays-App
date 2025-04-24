@@ -1,5 +1,6 @@
 package com.rob.boot;
 
+import com.rob.domain.models.repository.OrganizationRepository;
 import com.rob.domain.models.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -15,10 +16,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = "com.rob.domain.models.entities")
 public class BootApplication implements CommandLineRunner {
 
-    public final RoleRepository roleRepository;
+    public final OrganizationRepository organizationRepository;
 
-    public BootApplication(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
+    public BootApplication(OrganizationRepository organizationRepository) {
+        this.organizationRepository = organizationRepository;
     }
 
     public static void main(String[] args) {
@@ -27,8 +28,8 @@ public class BootApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        this.roleRepository.findAll().forEach(role -> {
-            System.out.println("Role: " + role.toString());
+        this.organizationRepository.findAll().forEach(organization -> {
+            System.out.println("Organization: " + organization.toString());
         });
     }
 }
