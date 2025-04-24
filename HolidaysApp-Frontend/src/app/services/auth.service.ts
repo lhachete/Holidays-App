@@ -12,7 +12,7 @@ export class AuthService {
     { username: 'user1', email: 'user1@example.com', password: '1234', roles: ['USUARIO'] }
   ];
 
-  public user: { username: string; password: string; email: string; roles: string[] } | null = null;
+  public user: { username: string; email: string; roles: string[] } | null = null;
   public isAuthenticated: boolean = false;
 
   constructor(private router: Router) {
@@ -21,7 +21,6 @@ export class AuthService {
       this.user = JSON.parse(userSession);
       this.isAuthenticated = true;
     }
-
   }
 
   login(userInput: string, password: string): 'OK' | 'USER_ERROR' | 'PASS_ERROR' {
@@ -32,7 +31,8 @@ export class AuthService {
     if (!foundUser) return 'USER_ERROR';
     if (foundUser.password !== password) return 'PASS_ERROR';
 
-    this.user = { username: foundUser.username, password: foundUser.password, email: foundUser.email, roles: foundUser.roles };
+
+    this.user = { username: foundUser.username, email: foundUser.email, roles: foundUser.roles };
     this.isAuthenticated = true;
     console.log(this.user); //! <<<<< QUITAR, solo en development
     localStorage.setItem('userSession', JSON.stringify(this.user));

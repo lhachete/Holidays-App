@@ -21,6 +21,7 @@ export const routes: Routes = [
         { path: "edit", component: EditVacationComponent },
         { path: "delete", component: DeleteVacationComponent}
     ]},
+    
     { path: "admin", component: AdminComponent, canActivate: [authGuard, adminGuard] },
 
     { path: "forbidden", loadComponent: () => import('./errors/forbidden/forbidden.component').then(comp => comp.ForbiddenComponent) },

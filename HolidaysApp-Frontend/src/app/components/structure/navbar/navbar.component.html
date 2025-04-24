@@ -14,8 +14,6 @@
                     </a>
                 </li>
 
-
-                <!-- LOGIN y LOGOUT -->
                 @if (!isAuthenticated) {
                 <a class="nav-link" routerLink="/login">
                     <button class="btn-lightPurple" routerLinkActive="active button-active">
@@ -51,13 +49,13 @@
                         </li>
                     </ul>
                 </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/admin" routerLinkActive="underline-custom text-white">
-                        Admin
-                    </a>
-                </li>
-                
+                @if (user.roles.includes('ADMIN')) {
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/admin" routerLinkActive="underline-custom text-white">
+                            Admin
+                        </a>
+                    </li>
+                }
                 <a class="nav-link">
                     <button (click)="logout()" class="btn-lightPurple" routerLinkActive="active button-active">
                         Logout
