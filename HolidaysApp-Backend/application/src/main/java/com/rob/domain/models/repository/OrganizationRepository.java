@@ -6,8 +6,11 @@ import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrganizationRepository extends JpaRepository<Organization, Long> {
-    Organization findByName(String name);
-    Organization save(OrganizationDTO organization);
+    Optional<Organization> findByName(String name);
+    Optional<Organization> save(OrganizationDTO organization);
+    List<Organization> findAll();
+    List<Organization> findByNameContainingIgnoreCase(@NotEmpty String name);
 }

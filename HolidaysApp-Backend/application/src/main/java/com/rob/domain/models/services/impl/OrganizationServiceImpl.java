@@ -1,6 +1,7 @@
 package com.rob.domain.models.services.impl;
 
 import com.rob.domain.models.dtos.OrganizationDTO;
+import com.rob.domain.models.dtos.OrganizationUpdateDTO;
 import com.rob.domain.models.entities.Organization;
 import com.rob.domain.models.repository.OrganizationRepository;
 import com.rob.domain.models.services.OrganizationService;
@@ -18,34 +19,32 @@ public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationRepository organizationRepository;
 
     @Override
-    public Optional<List<OrganizationDTO>> getAllOrganizations() {
+    public Optional<List<Organization>> getAllOrganizations() {
         List<Organization> organizations = organizationRepository.findAll();
-        List<OrganizationDTO> organizationDTOs = new ArrayList<>();
-        for (Organization organization : organizations) {
-            organizationDTOs.add(new OrganizationDTO(organization));
-        }
-        return Optional.of(organizationDTOs);
+        if(!organizations.isEmpty())
+            return Optional.of(organizations);
+        return Optional.empty();
     }
 
     @Override
-    public Optional<OrganizationDTO> saveOrganization(OrganizationDTO organization) throws Exception {
-        Optional<OrganizationDTO> existingOrganization = findByName(organization.getName());
+    public Optional<Organization> saveOrganization(OrganizationDTO organization) throws Exception {
+        Optional<Organization> existingOrganization = findByName(organization.getName());
         if(existingOrganization.isEmpty()) {
             Organization savedOrg = organizationRepository.save(new Organization(organization.getName()));
-            return Optional.of(new OrganizationDTO(savedOrg));
+            return Optional.of(savedOrg);
         }
         return Optional.empty();
     }
 
     @Override
-    public Optional<OrganizationDTO> findOrganizationById(Long id) {
+    public Optional<Organization> findOrganizationById(Long id) {
         /* MAKES A RECURSIVE LOOP
         Optional<Organization> existingOrganization = findOrganizationById(id);
         return existingOrganization;
         */
         Optional<Organization> organization = organizationRepository.findById(id);
         if(organization.isPresent())
-            return Optional.of(new OrganizationDTO(organization.get()));
+            return Optional.of(organization.get());
         return Optional.empty();
     }
 
@@ -58,30 +57,40 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public Optional<OrganizationDTO> findByName(String name) {
-        Organization organization = organizationRepository.findByName(name);
-        if(organization != null)
-            return Optional.of(new OrganizationDTO(organization));
+    public Optional<Organization> findByName(String name) {
+        Optional<Organization> organization = organizationRepository.findByName(name);
+        if(organization.isPresent())
+            return organization;
         return Optional.empty();
     }
 
     @Override
-    public Optional<OrganizationDTO> updateOrganization(Organization organization) throws Exception {
-        Optional<OrganizationDTO> existingOrganization = findOrganizationById(organization.getOrgId());
+    public Optional<Organization> updateOrganization(OrganizationUpdateDTO organization) throws Exception {
+        Optional<Organization> existingOrganization = findByName(organization.getName());
         if(existingOrganization.isPresent()) {
-            organizationRepository.save(organization);
-            return Optional.of(new OrganizationDTO(organization));
+            existingOrganization.get().setName(organization.getNewOrganizationName());
+            Organization updatedOrg = organizationRepository.save(existingOrganization.get());
+            return Optional.of(updatedOrg);
         }
         return Optional.empty();
     }
 
     @Override
-    public Optional<OrganizationDTO> deleteOrganizationById(Long id) {
-        Optional<OrganizationDTO> existingOrganization = findOrganizationById(id);
+    public Optional<Organization> deleteOrganizationById(Long id) {
+        Optional<Organization> existingOrganization = findOrganizationById(id);
         if(existingOrganization.isPresent()) {
-            OrganizationDTO copy = new OrganizationDTO(existingOrganization.get().getName());
+            Organization copy = new Organization(existingOrganization.get().getOrgId(),existingOrganization.get().getName());
             organizationRepository.deleteById(id);
             return Optional.ofNullable(copy);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<Organization>> findByContainingName(String name) {
+        List<Organization> organization = organizationRepository.findByNameContainingIgnoreCase(name);
+        if(!organization.isEmpty()) {
+            return Optional.of(organization);
         }
         return Optional.empty();
     }
