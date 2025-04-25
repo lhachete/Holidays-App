@@ -17,6 +17,17 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectRepository projectRepository;
 
     @Override
+    public Optional<List<Project>> findProjectByName(String name) {
+        if(name != null) {
+            Optional<List<Project>> projects = Optional.of(projectRepository.findByProjectNameContainingIgnoreCase(name));
+            if (projects.isPresent())
+                return projects;
+            return Optional.empty();
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<Project> findProjectById(Long id) {
         Optional<Project> project = projectRepository.findById(id);
         if (project.isPresent())

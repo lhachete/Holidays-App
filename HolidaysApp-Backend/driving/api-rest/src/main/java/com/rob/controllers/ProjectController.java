@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,11 +20,28 @@ public class ProjectController {
     private ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
-        List<ProjectDTO> projects = projectService.getAllProjects().get()
-                .stream()
-                .map(ProjectDTO::new)
-                .toList();
-        return ResponseEntity.ok(projects);
+    public ResponseEntity<List<ProjectDTO>> getAllProjects(@RequestParam(name = "name",required = false) String name) {
+        List<ProjectDTO> projects = new ArrayList<>();
+        if (name != null) {
+            projects = projectService.findProjectByName(name).get()
+                    .stream()
+                    .map(ProjectDTO::new)
+                    .toList();
+            if(!projects.isEmpty()) {
+                return ResponseEntity.ok(projects);
+            }
+            return ResponseEntity.notFound().build();
+        } else {
+            projects = projectService.getAllProjects().get()
+                    .stream()
+                    .map(ProjectDTO::new)
+                    .toList();
+            if(!projects.isEmpty()) {
+                return ResponseEntity.ok(projects);
+            }
+            return ResponseEntity.notFound().build();
+        }
     }
+
+
 }

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ProjectService {
 
-
+     Optional<List<Project>> findProjectByName(String name);
      Optional<Project> findProjectById(Long id);
      Optional<List<Project>> getAllProjects();
      Optional<Project> saveProject(ProjectDTO project) throws Exception;
