@@ -1,5 +1,6 @@
 package com.rob.domain.models.dtos;
 
+import com.rob.domain.models.entities.Project;
 import com.rob.domain.models.enums.ProjectState;
 import com.rob.domain.models.enums.ProjectType;
 import com.rob.domain.models.enums.VacationType;
@@ -22,4 +23,14 @@ public class ProjectDTO {
     private ProjectType projectType;
     private ProjectState projectState;
     private VacationType vacationType;
+
+    public ProjectDTO(Project project) {
+        this.projectName = project.getProjectName();
+        this.projectDescription = project.getProjectDescription();
+        this.startDate = project.getStartDate();
+        this.expectedEndDate = project.getExpectedEndDate();
+        this.realEndDate = project.getRealEndDate();
+        this.projectType = project.getProjectType();
+        this.projectState = project.getProjectState();
+    }
 }

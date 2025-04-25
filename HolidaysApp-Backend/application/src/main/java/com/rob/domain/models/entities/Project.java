@@ -59,9 +59,4 @@ public class Project {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "project_state", nullable = false)
     private ProjectState projectState;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "vacation_type", nullable = false)
-    private VacationType vacationType;
 }
