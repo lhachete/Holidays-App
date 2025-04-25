@@ -55,7 +55,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost/api-rest/organizations?name=GFT",
+							"raw": "http://localhost/api-rest/organizations?name=A",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -67,7 +67,7 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "GFT"
+									"value": "A"
 								}
 							]
 						}
@@ -109,7 +109,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"orgId\": 1,\r\n    \"name\": \"GFT Technologies\"\r\n}",
+							"raw": "{\r\n    \"name\": \"GFT\",\r\n    \"newOrganizationName\": \"GFT Technologies\"\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -131,14 +131,82 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "New Org",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"HOLA\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api-rest/organizations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api-rest",
+								"organizations"
+							]
+						}
 					},
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "Get Roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api-rest/roles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api-rest",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Role By Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api-rest/organizations/{{id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api-rest",
+								"organizations",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Projects",
+			"item": []
 		}
 	],
 	"event": [
