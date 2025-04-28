@@ -1,5 +1,6 @@
 package com.rob.domain.models.entities;
 
+import com.rob.domain.models.dtos.RoleDTO;
 import com.rob.domain.models.enums.Roles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -32,4 +33,7 @@ public class Role {
     @NotEmpty
     private Roles role;
 
+    public Role(RoleDTO roleDTO) {
+        this.role = roleDTO.getRole();
+    }
 }

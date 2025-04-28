@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -17,12 +18,11 @@ public class ProjectDTO {
 
     private String projectName;
     private String projectDescription;
-    private Date startDate;
-    private Date expectedEndDate;
-    private Date realEndDate;
+    private LocalDate startDate;
+    private LocalDate expectedEndDate;
+    private LocalDate realEndDate;
     private ProjectType projectType;
     private ProjectState projectState;
-    private VacationType vacationType;
 
     public ProjectDTO(Project project) {
         this.projectName = project.getProjectName();
