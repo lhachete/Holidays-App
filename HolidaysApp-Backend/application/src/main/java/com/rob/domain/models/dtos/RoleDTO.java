@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RoleDTO {
 
-    private Roles role;
+    private Roles roleType;
 }

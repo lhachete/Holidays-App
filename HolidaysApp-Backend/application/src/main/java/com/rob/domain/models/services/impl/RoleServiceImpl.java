@@ -28,7 +28,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Optional<Role> saveRole(RoleDTO role) throws Exception {
-        if(!roleRepository.existsByRole(role.getRole())) {
+        if(!roleRepository.existsByRole(role.getRoleType())) {
             return roleRepository.save(role);
         }
         return Optional.empty();
@@ -52,10 +52,10 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Optional<Role> updateRole(RoleUpdateDTO role) throws Exception {
-        Optional<Role> roleOptional = roleRepository.findByRole(String.valueOf(role.getRole()));
+        Optional<Role> roleOptional = roleRepository.findByRole(String.valueOf(role.getRoleType()));
         if (roleOptional.isPresent()) {
             Role roleToUpdate = roleOptional.get();
-            roleToUpdate.setRole(role.getRole());
+            roleToUpdate.setRole(role.getRoleType());
             return Optional.of(roleRepository.save(roleToUpdate));
         }
         return Optional.empty();

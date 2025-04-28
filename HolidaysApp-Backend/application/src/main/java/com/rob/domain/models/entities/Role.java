@@ -34,6 +34,6 @@ public class Role {
     private Roles role;
 
     public Role(RoleDTO roleDTO) {
-        this.role = roleDTO.getRole();
+        this.role = roleDTO.getRoleType();
     }
 }

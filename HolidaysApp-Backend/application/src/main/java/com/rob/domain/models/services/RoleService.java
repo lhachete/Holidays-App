@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface RoleService {
     public Optional<List<Role>> getAllRoles();
-    public Optional<Role> saveRole(Role role) throws Exception;
+    public Optional<Role> saveRole(RoleDTO role) throws Exception;
     public Optional<Role> findRoleById(Long id);
     public Optional<Role> findByRole(String role);
     public Optional<Role> updateRole(RoleUpdateDTO role) throws Exception;
