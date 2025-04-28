@@ -8,11 +8,11 @@
         <version>3.4.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.rob</groupId>
-    <artifactId>boot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>boot</name>
-    <description>boot</description>
+        <groupId>com.rob</groupId>
+        <artifactId>boot</artifactId>
+        <version>1.0.0</version>
+        <name>boot</name>
+        <description>boot</description>
     <url/>
     <licenses>
         <license/>
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>com.rob</groupId>
             <artifactId>application</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
