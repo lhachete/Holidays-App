@@ -17,7 +17,7 @@ import java.util.Optional;
 @Repository
 public interface RoleRepository extends org.springframework.data.jpa.repository.JpaRepository<Role, Long> {
 
-    Optional<Role> save(RoleDTO organization);
+    Optional<Role> save(RoleDTO roleDTO);
 
     List<Role> findAll();
 

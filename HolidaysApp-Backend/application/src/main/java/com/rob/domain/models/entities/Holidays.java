@@ -1,6 +1,7 @@
 package com.rob.domain.models.entities;
 
 import com.rob.domain.models.enums.VacationState;
+import com.rob.domain.models.enums.VacationType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -85,4 +86,9 @@ public class Holidays {
     @NotNull
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
+
+    @NotNull
+    @Column(name="vacation_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private VacationType vacationType;
 }

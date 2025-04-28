@@ -46,7 +46,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Optional<Project> saveProject(ProjectDTO project) throws Exception {
         if (!projectRepository.existsByProjectName((project.getProjectName()))) {
-            Project newProject = new Project();
+            Project newProject = new Project(project);
+            //newProject.setProjectId(projectRepository.findMaxProjectId() + 1);
             //newProject.setName(project.getName());
             //newProject.setDescription(project.getDescription());
             return Optional.of(projectRepository.save(newProject));
