@@ -10,7 +10,6 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.rob</groupId>
     <artifactId>api-rest</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>

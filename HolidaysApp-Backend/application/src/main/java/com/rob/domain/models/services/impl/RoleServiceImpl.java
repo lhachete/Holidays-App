@@ -28,10 +28,13 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Optional<Role> saveRole(RoleDTO role) throws Exception {
-        if(!roleRepository.existsByRole(role.getRoleType())) {
-            return roleRepository.save(role);
+        List<Role> existingRoles = roleRepository.findAll();
+        for (Role existingRole : existingRoles) {
+            if (existingRole.getRole().equals(role.getRoleType())) {
+                return Optional.empty();
+            }
         }
-        return Optional.empty();
+        return Optional.of(roleRepository.save(new Role(role)));
     }
 
     @Override

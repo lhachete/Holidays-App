@@ -61,4 +61,17 @@ public class RoleController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<RoleDTO> deleteRole(@PathVariable("id") Long id) {
+        try {
+            Optional<Role> role = roleService.deleteRoleById(id);
+            if (role.isPresent()) {
+                return ResponseEntity.ok(new RoleDTO(role.get().getRole()));
+            }
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

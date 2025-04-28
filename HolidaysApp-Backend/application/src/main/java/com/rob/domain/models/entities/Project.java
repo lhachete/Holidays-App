@@ -3,7 +3,6 @@ package com.rob.domain.models.entities;
 import com.rob.domain.models.dtos.ProjectDTO;
 import com.rob.domain.models.enums.ProjectState;
 import com.rob.domain.models.enums.ProjectType;
-import com.rob.domain.models.enums.VacationType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Builder

@@ -12,7 +12,6 @@
         <module>application</module>
         <module>boot</module>
         <module>driving/api-rest</module>
-        <module>driven/postgres-repository</module>
     </modules>
 
     <properties>

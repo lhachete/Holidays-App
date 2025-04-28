@@ -16,6 +16,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class EmployeeDTO {
 
+    private String deptName;
+    private String projectName;
+    private String userName;
     private String nif;
     private Date birthday;
     private String country_of_birth;
@@ -34,6 +37,9 @@ public class EmployeeDTO {
     private String work_email;
 
     public EmployeeDTO(Employee employee) {
+        this.deptName = employee.getDepartment().getName();
+        this.projectName = employee.getProject().getProjectName();
+        this.userName = employee.getUser().getUsername();
         this.nif = employee.getNif();
         this.birthday = employee.getBirthday();
         this.country_of_birth = employee.getCountryOfBirth();

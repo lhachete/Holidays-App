@@ -1,5 +1,8 @@
 package com.rob.domain.models.entities;
 
+import com.rob.domain.models.entities.Department;
+import com.rob.domain.models.entities.Project;
+import com.rob.domain.models.entities.User;
 import com.rob.domain.models.enums.Gender;
 import com.rob.domain.models.enums.MaritalStatus;
 import com.rob.domain.models.enums.Title;

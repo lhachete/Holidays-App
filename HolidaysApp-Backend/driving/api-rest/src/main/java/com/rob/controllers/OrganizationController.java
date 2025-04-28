@@ -80,4 +80,17 @@ public class OrganizationController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+//    @PutMapping("/{id}")
+//    public ResponseEntity<OrganizationDTO> updateOrganizationById(@PathVariable(name = "id", required = true) Long id, @RequestBody OrganizationUpdateDTO organization) {
+//        try {
+//            Optional<Organization> updatedOrganization = organizationService.updateOrganizationById(id, organization);
+//            if(updatedOrganization.isPresent()) {
+//                return ResponseEntity.ok(new OrganizationDTO(updatedOrganization.get()));
+//            }
+//            return ResponseEntity.notFound().build();
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(null);
+//        }
+//    }
 }
