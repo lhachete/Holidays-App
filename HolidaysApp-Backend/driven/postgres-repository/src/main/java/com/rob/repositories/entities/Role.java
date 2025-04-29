@@ -1,4 +1,4 @@
-package com.rob.models;
+package com.rob.repositories.entities;
 
 import com.rob.models.enums.Roles;
 import jakarta.persistence.*;

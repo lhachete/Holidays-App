@@ -1,6 +1,6 @@
 package com.rob.boot;
 
-import com.rob.domain.models.repository.OrganizationRepository;
+import com.rob.repositories.repository.OrganizationRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "com.rob")
-@EnableJpaRepositories(basePackages = "com.rob.domain.models.repository")
-@EntityScan(basePackages = "com.rob.models")
+@EnableJpaRepositories(basePackages = "com.rob.repositories.repository")
+@EntityScan(basePackages = "com.rob.repositories")
 public class BootApplication implements CommandLineRunner {
 
     public final OrganizationRepository organizationRepository;

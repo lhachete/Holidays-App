@@ -1,8 +1,8 @@
 package com.rob.domain.models.services.impl;
 
 import com.rob.domain.models.dtos.ProjectDTO;
-import com.rob.domain.models.repository.ProjectRepository;
-import com.rob.models.Project;
+import com.rob.repositories.repository.ProjectRepository;
+import com.rob.repositories.entities.Project;
 import com.rob.domain.models.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

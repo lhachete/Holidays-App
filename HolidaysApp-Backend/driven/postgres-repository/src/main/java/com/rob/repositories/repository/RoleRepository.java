@@ -1,9 +1,7 @@
 package com.rob.repositories.repository;
 
-import com.rob.models.Role;
+import com.rob.repositories.entities.Role;
 import com.rob.models.enums.Roles;
-import jakarta.validation.constraints.NotEmpty;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

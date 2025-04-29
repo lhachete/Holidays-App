@@ -1,4 +1,4 @@
-package com.rob.models;
+package com.rob.repositories.entities;
 
 import com.rob.models.enums.VacationState;
 import com.rob.models.enums.VacationType;

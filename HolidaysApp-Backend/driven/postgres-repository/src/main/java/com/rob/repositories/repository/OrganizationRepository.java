@@ -1,6 +1,6 @@
 package com.rob.repositories.repository;
 
-import com.rob.models.Organization;
+import com.rob.repositories.entities.Organization;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,6 +1,6 @@
 package com.rob.domain.models.dtos;
 
-import com.rob.models.Department;
+import com.rob.repositories.entities.Department;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
 package com.rob.domain.models.dtos;
 
-import com.rob.models.Employee;
+import com.rob.repositories.entities.Employee;
 import com.rob.models.enums.Gender;
 import com.rob.models.enums.MaritalStatus;
 import com.rob.models.enums.Title;

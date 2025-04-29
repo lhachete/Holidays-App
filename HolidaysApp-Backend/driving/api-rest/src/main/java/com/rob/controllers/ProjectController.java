@@ -1,7 +1,7 @@
 package com.rob.controllers;
 
 import com.rob.domain.models.dtos.ProjectDTO;
-import com.rob.models.Project;
+import com.rob.repositories.entities.Project;
 import com.rob.domain.models.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

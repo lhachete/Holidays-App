@@ -1,7 +1,7 @@
 package com.rob.domain.models.services;
 
 import com.rob.domain.models.dtos.ProjectDTO;
-import com.rob.models.Project;
+import com.rob.repositories.entities.Project;
 
 import java.util.List;
 import java.util.Optional;

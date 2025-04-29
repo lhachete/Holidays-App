@@ -2,19 +2,19 @@ package com.rob.domain.models.services.impl;
 
 import com.rob.domain.models.dtos.OrganizationDTO;
 import com.rob.domain.models.dtos.OrganizationUpdateDTO;
-import com.rob.domain.models.repository.OrganizationRepository;
-import com.rob.models.Organization;
+import com.rob.repositories.repository.OrganizationRepository;
+import com.rob.repositories.entities.Organization;
 import com.rob.domain.models.services.OrganizationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class OrganizationServiceImpl implements OrganizationService {
 
-    @Autowired
     private OrganizationRepository organizationRepository;
 
     @Override

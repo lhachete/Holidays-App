@@ -1,7 +1,7 @@
 package com.rob.controllers;
 
 import com.rob.domain.models.dtos.RoleDTO;
-import com.rob.models.Role;
+import com.rob.repositories.entities.Role;
 import com.rob.domain.models.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

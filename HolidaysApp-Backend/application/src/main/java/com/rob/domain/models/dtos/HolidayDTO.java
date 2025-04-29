@@ -1,6 +1,6 @@
 package com.rob.domain.models.dtos;
 
-import com.rob.models.Holidays;
+import com.rob.repositories.entities.Holidays;
 import com.rob.models.enums.VacationState;
 import com.rob.models.enums.VacationType;
 

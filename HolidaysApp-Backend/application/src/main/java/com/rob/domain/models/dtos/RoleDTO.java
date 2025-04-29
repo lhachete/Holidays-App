@@ -1,6 +1,6 @@
 package com.rob.domain.models.dtos;
 
-import com.rob.models.Role;
+import com.rob.repositories.entities.Role;
 import com.rob.models.enums.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Data;
