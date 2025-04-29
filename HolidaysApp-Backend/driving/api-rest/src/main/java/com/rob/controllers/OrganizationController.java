@@ -2,7 +2,7 @@ package com.rob.controllers;
 
 import com.rob.domain.models.dtos.OrganizationDTO;
 import com.rob.domain.models.dtos.OrganizationUpdateDTO;
-import com.rob.domain.models.entities.Organization;
+import com.rob.models.Organization;
 import com.rob.domain.models.services.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

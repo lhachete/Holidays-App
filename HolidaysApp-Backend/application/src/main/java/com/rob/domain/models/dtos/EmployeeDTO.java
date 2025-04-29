@@ -1,10 +1,9 @@
 package com.rob.domain.models.dtos;
 
-import com.rob.domain.models.entities.Employee;
-import com.rob.domain.models.entities.Project;
-import com.rob.domain.models.enums.Gender;
-import com.rob.domain.models.enums.MaritalStatus;
-import com.rob.domain.models.enums.Title;
+import com.rob.models.Employee;
+import com.rob.models.enums.Gender;
+import com.rob.models.enums.MaritalStatus;
+import com.rob.models.enums.Title;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

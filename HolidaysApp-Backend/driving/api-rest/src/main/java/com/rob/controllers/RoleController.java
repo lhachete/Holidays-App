@@ -1,15 +1,12 @@
 package com.rob.controllers;
 
 import com.rob.domain.models.dtos.RoleDTO;
-import com.rob.domain.models.entities.Role;
-import com.rob.domain.models.enums.Roles;
-import com.rob.domain.models.repository.RoleRepository;
+import com.rob.models.Role;
 import com.rob.domain.models.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

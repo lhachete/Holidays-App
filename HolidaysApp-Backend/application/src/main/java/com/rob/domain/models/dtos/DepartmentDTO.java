@@ -1,6 +1,6 @@
 package com.rob.domain.models.dtos;
 
-import com.rob.domain.models.entities.Department;
+import com.rob.models.Department;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DepartmentDTO {
 
+    private String orgName;
     private String name;
     private String business_unit;
     private String division;
@@ -18,6 +19,7 @@ public class DepartmentDTO {
     private String time_zone;
 
     public DepartmentDTO(Department department) {
+        this.orgName = department.getOrganization().getName();
         this.name = department.getName();
         this.business_unit = department.getBusinessUnit();
         this.division = department.getDivision();

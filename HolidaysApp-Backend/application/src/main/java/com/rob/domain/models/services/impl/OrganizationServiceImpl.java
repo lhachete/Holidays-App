@@ -2,13 +2,12 @@ package com.rob.domain.models.services.impl;
 
 import com.rob.domain.models.dtos.OrganizationDTO;
 import com.rob.domain.models.dtos.OrganizationUpdateDTO;
-import com.rob.domain.models.entities.Organization;
 import com.rob.domain.models.repository.OrganizationRepository;
+import com.rob.models.Organization;
 import com.rob.domain.models.services.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

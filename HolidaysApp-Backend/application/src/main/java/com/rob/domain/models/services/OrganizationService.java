@@ -2,7 +2,7 @@ package com.rob.domain.models.services;
 
 import com.rob.domain.models.dtos.OrganizationDTO;
 import com.rob.domain.models.dtos.OrganizationUpdateDTO;
-import com.rob.domain.models.entities.Organization;
+import com.rob.models.Organization;
 
 import java.util.List;
 import java.util.Optional;

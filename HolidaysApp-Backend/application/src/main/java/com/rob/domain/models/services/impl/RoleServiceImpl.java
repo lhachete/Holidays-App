@@ -2,9 +2,8 @@ package com.rob.domain.models.services.impl;
 
 import com.rob.domain.models.dtos.RoleDTO;
 import com.rob.domain.models.dtos.RoleUpdateDTO;
-import com.rob.domain.models.entities.Role;
-import com.rob.domain.models.enums.Roles;
 import com.rob.domain.models.repository.RoleRepository;
+import com.rob.models.Role;
 import com.rob.domain.models.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,8 @@ public class RoleServiceImpl implements RoleService {
                 return Optional.empty();
             }
         }
-        return Optional.of(roleRepository.save(new Role(role)));
+        //return Optional.of(roleRepository.save(new Role(role)));
+        return Optional.empty();
     }
 
     @Override

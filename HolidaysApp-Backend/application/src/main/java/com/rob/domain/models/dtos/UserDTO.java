@@ -1,6 +1,6 @@
 package com.rob.domain.models.dtos;
 
-import com.rob.domain.models.entities.User;
+import com.rob.models.User;
 
 public class UserDTO {
     private String username;

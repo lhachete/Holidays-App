@@ -2,7 +2,7 @@ package com.rob.domain.models.services;
 
 import com.rob.domain.models.dtos.RoleDTO;
 import com.rob.domain.models.dtos.RoleUpdateDTO;
-import com.rob.domain.models.entities.Role;
+import com.rob.models.Role;
 import com.rob.domain.models.enums.Roles;
 
 import java.util.List;

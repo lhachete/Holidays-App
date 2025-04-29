@@ -1,9 +1,8 @@
 package com.rob.domain.models.dtos;
 
-import com.rob.domain.models.entities.Project;
-import com.rob.domain.models.enums.ProjectState;
-import com.rob.domain.models.enums.ProjectType;
-import com.rob.domain.models.enums.VacationType;
+import com.rob.models.Project;
+import com.rob.models.enums.ProjectState;
+import com.rob.models.enums.ProjectType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

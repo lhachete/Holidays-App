@@ -1,8 +1,8 @@
 package com.rob.domain.models.services.impl;
 
 import com.rob.domain.models.dtos.ProjectDTO;
-import com.rob.domain.models.entities.Project;
 import com.rob.domain.models.repository.ProjectRepository;
+import com.rob.models.Project;
 import com.rob.domain.models.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,11 +46,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Optional<Project> saveProject(ProjectDTO project) throws Exception {
         if (!projectRepository.existsByProjectName((project.getProjectName()))) {
-            Project newProject = new Project(project);
+            //Project newProject = new Project(project);
             //newProject.setProjectId(projectRepository.findMaxProjectId() + 1);
             //newProject.setName(project.getName());
             //newProject.setDescription(project.getDescription());
-            return Optional.of(projectRepository.save(newProject));
+            //return Optional.of(projectRepository.save(newProject));
         }
         return Optional.empty();
     }
