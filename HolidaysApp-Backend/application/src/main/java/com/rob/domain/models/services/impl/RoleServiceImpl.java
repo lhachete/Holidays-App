@@ -33,8 +33,9 @@ public class RoleServiceImpl implements RoleService {
                 return Optional.empty();
             }
         }
-        //return Optional.of(roleRepository.save(new Role(role)));
-        return Optional.empty();
+        Role newRole = new Role();
+        newRole.setRole(role.getRoleType());
+        return Optional.of(roleRepository.save(newRole));
     }
 
     @Override
