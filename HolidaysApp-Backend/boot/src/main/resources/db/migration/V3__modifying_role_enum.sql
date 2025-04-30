@@ -1,1 +1,0 @@
-ALTER TYPE roles RENAME TO role_type;

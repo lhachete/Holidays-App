@@ -1,1 +1,0 @@
-INSERT INTO organizations (name) VALUES ('GFT');
