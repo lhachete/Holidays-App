@@ -1,4 +1,4 @@
-package com.rob.boot;
+package com.rob.api_rest.boot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
