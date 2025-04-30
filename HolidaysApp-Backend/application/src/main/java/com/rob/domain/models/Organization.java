@@ -1,4 +1,4 @@
-package com.rob.api_rest.main.domain.models;
+package com.rob.domain.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
