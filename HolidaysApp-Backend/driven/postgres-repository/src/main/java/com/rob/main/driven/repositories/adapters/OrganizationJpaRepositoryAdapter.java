@@ -15,7 +15,7 @@ import java.util.List;
 
 @Data
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class OrganizationJpaRepositoryAdapter implements OrganizationRepositoryPort {
 
 
