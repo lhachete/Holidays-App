@@ -1,6 +1,6 @@
 package com.rob.driven.repositories.adapters;
 
-import com.rob.driven.repositories.OrganizationJpaRepository;
+import com.rob.driven.repositories.OrganizationMOJpaRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class OrganizationJpaRepositoryAdapter {
 
-    OrganizationJpaRepository organizationJpaRepository;
+    OrganizationMOJpaRepository organizationMOJpaRepository;
 }
