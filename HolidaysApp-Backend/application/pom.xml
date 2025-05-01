@@ -19,17 +19,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.rob</groupId>
-            <artifactId>boot</artifactId>
-            <version>1.0.0-</version>
-        </dependency>
-        <dependency>
-            <groupId>com.rob</groupId>
-            <artifactId>postgres-repository</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.38</version>

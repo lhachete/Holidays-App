@@ -1,6 +1,6 @@
-package com.rob.driven.repositories.adapters;
+package com.rob.main.driven.repositories.adapters;
 
-import com.rob.driven.repositories.OrganizationMOJpaRepository;
+import com.rob.main.driven.repositories.OrganizationMOJpaRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
