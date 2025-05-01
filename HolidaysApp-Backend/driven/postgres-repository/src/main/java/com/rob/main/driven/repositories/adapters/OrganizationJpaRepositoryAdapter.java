@@ -1,14 +1,34 @@
 package com.rob.main.driven.repositories.adapters;
 
+import com.rob.application.ports.driven.OrganizationRepositoryPort;
+import com.rob.domain.models.Organization;
 import com.rob.main.driven.repositories.OrganizationMOJpaRepository;
+import com.rob.main.driven.repositories.mappers.OrganizationMOMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
-@NoArgsConstructor
+import java.util.List;
+
 @Data
-public class OrganizationJpaRepositoryAdapter {
+@Service
+@AllArgsConstructor
+public class OrganizationJpaRepositoryAdapter implements OrganizationRepositoryPort {
 
     OrganizationMOJpaRepository organizationMOJpaRepository;
+    OrganizationMOMapper organizationMOMapper;
+
+    public OrganizationJpaRepositoryAdapter(OrganizationMOJpaRepository organizationMOJpaRepository) {
+        this.organizationMOJpaRepository = organizationMOJpaRepository;
+    }
+
+    public List<Organization> findAll() {
+        return organizationMOJpaRepository.findAll()
+                .stream()
+                .map(organizationMO -> {
+                    return organizationMOMapper.toOrganization(organizationMO);
+                })
+                .toList();
+    }
 }

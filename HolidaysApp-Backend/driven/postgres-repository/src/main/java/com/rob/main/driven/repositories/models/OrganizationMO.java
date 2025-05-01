@@ -1,4 +1,4 @@
-package com.rob.main.driven.repositories;
+package com.rob.main.driven.repositories.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

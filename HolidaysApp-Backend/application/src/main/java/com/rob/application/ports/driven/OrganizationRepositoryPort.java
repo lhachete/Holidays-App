@@ -1,7 +1,9 @@
 package com.rob.application.ports.driven;
 
-import com.rob.main.driven.repositories.models.OrganizationMO;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.rob.domain.models.Organization;
 
-public interface OrganizationRepositoryPort extends JpaRepository<OrganizationMO, Integer> {
+import java.util.List;
+
+public interface OrganizationRepositoryPort {
+    List<Organization> findAll();
 }

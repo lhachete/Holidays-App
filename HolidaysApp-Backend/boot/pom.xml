@@ -10,9 +10,9 @@
     </parent>
     <groupId>com.rob</groupId>
     <artifactId>boot</artifactId>
-    <version>1.0.0-</version>
-    <name>boot</name>
-    <description>boot</description>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
     <url/>
     <licenses>
         <license/>
