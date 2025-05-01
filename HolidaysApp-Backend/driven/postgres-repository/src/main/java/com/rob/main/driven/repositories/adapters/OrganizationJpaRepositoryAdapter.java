@@ -7,21 +7,21 @@ import com.rob.main.driven.repositories.mappers.OrganizationMOMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Data
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OrganizationJpaRepositoryAdapter implements OrganizationRepositoryPort {
 
-    OrganizationMOJpaRepository organizationMOJpaRepository;
-    OrganizationMOMapper organizationMOMapper;
 
-    public OrganizationJpaRepositoryAdapter(OrganizationMOJpaRepository organizationMOJpaRepository) {
-        this.organizationMOJpaRepository = organizationMOJpaRepository;
-    }
+    private final OrganizationMOJpaRepository organizationMOJpaRepository;
+    private final OrganizationMOMapper organizationMOMapper;
+
 
     public List<Organization> findAll() {
         return organizationMOJpaRepository.findAll()
