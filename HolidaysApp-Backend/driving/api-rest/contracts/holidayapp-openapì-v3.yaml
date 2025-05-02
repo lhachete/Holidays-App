@@ -6,7 +6,7 @@ servers:
   - url: http://localhost:8080
     description: Generated server url
 tags:
-  - name: get
+  - name: organizations
     description: Get all organizations of Organizations APIs
 paths:
   /organizationMOes:

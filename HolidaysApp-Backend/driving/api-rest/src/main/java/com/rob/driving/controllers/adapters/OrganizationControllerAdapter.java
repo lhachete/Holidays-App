@@ -40,5 +40,7 @@ public class OrganizationControllerAdapter {
     @GetMapping
     public List<Organization> getAllOrganizations() {
         return organizationServicePort.getAllOrganizations();
+        // try catch con el error que lo coga de los use case
+        // ej: error 404 y un mensaje
     }
 }
