@@ -12,7 +12,7 @@ paths:
   /api-rest/organizations:
     get:
       tags:
-        - get
+        - organizations
       summary: Get all organizations
       description: Get all organizations of Organizations APIs
       operationId: getAllOrganizations
@@ -156,4 +156,4 @@ components:
           type: boolean
     Links:
       type: object
-      additionalProperties:
+      additionalProperties: true
