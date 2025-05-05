@@ -26,7 +26,7 @@ paths: # Todos los endpoints de la API
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Organization'
+                  $ref: '#/components/schemas/OrganizationDTO'
         "400":
           description: Wrong Request – invalid parameters
           content:
@@ -77,10 +77,10 @@ paths: # Todos los endpoints de la API
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Organization'
+                  $ref: '#/components/schemas/OrganizationDTO'
 components:
   schemas:
-    Organization:
+    OrganizationDTO:
       description: This is the Organization model
       type: object
       properties:

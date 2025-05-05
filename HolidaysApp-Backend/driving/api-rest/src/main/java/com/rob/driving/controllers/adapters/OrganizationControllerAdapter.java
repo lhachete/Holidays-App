@@ -1,27 +1,28 @@
 package com.rob.driving.controllers.adapters;
 
 import com.rob.application.ports.driving.OrganizationServicePort;
-import com.rob.domain.models.Organization;
+import com.rob.driving.dtos.OrganizationDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Service;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import com.rob.driving.controllers.OrganizationsApi;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
 @RequiredArgsConstructor
 @RequestMapping("/api-rest/organizations")
-public class OrganizationControllerAdapter {
+public class OrganizationControllerAdapter implements OrganizationsApi {
 
     @Autowired
     OrganizationServicePort organizationServicePort;
@@ -42,8 +43,16 @@ public class OrganizationControllerAdapter {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     @GetMapping
-    public List<Organization> getAllOrganizations() {
-        return organizationServicePort.getAllOrganizations();
+    public ResponseEntity<List<OrganizationDTO>> getAllOrganizations() {
+        List<OrganizationDTO> organizationDTOS = new ArrayList<>();
+        organizationServicePort.getAllOrganizations().stream().map(organization -> {
+            OrganizationDTO organizationDTO = new OrganizationDTO();
+            organizationDTO.setId(organization.getId());
+            organizationDTO.setName(organization.getName());
+            organizationDTOS.add(organizationDTO);
+            return organizationDTO;
+        });
+        return ResponseEntity.ok(organizationDTOS);
         // try catch con el error que lo coga de los use case
         // ej: error 404 y un mensaje
     }
