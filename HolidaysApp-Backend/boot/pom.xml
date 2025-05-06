@@ -46,6 +46,11 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
+            <groupId>com.rob</groupId>
+            <artifactId>api-rest</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.8.6</version>
@@ -169,35 +174,6 @@
                         </exclude>
                     </excludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>7.3.0</version>
-                <executions>
-                    <execution>
-                        <id>generate-api</id>
-                        <phase>generate-sources</phase> <!-- Esto es clave -->
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>C:\Repos\practicasGFT\Holidays-App-GFT\HolidaysApp-Backend\driving\api-rest\contracts\holidayapp-openapi-v3.yaml</inputSpec>
-                            <generatorName>spring</generatorName> <!-- O java, depende del objetivo -->
-<!--                            <output>${project.build.directory}/generated-sources/openapi</output>-->
-                            <configOptions>
-<!--                                <sourceFolder>src/gen/java/main</sourceFolder>-->
-                                <interfaceOnly>true</interfaceOnly> <!-- opcional -->
-                                <useBeanValidation>false</useBeanValidation>
-                                <apiNameSuffix>Controller</apiNameSuffix>
-                                <useTags>true</useTags> <!-- Use el tag como nombre base del archivo, Genere una interfaz por cada grupo de endpoints con el mismo tag -->
-                            </configOptions>
-                            <packageName>com.rob</packageName>
-                            <apiPackage>com.rob.driving.controllers</apiPackage>
-                            <modelPackage>com.rob.driving.dtos</modelPackage>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

@@ -1,7 +1,7 @@
 package com.rob.driving.controllers.adapters;
 
 import com.rob.application.ports.driving.OrganizationServicePort;
-import com.rob.driving.dtos.OrganizationDTO;
+import com.rob.domain.models.Organization;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.annotation.PostConstruct;
@@ -13,10 +13,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import com.rob.driving.controllers.OrganizationsApi;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.rob.driving.api.OrganizationsApi;
+import com.rob.driving.dtos.OrganizationDTO;
+
+
 
 @RestController
 @AllArgsConstructor
@@ -44,15 +48,15 @@ public class OrganizationControllerAdapter implements OrganizationsApi {
     })
     @GetMapping
     public ResponseEntity<List<OrganizationDTO>> getAllOrganizations() {
-        List<OrganizationDTO> organizationDTOS = new ArrayList<>();
-        organizationServicePort.getAllOrganizations().stream().map(organization -> {
+        List<OrganizationDTO> organizationsDtos = new ArrayList<>();
+        List<Organization> organizations = organizationServicePort.getAllOrganizations();
+        for (Organization organization : organizations) {
             OrganizationDTO organizationDTO = new OrganizationDTO();
             organizationDTO.setId(organization.getId());
             organizationDTO.setName(organization.getName());
-            organizationDTOS.add(organizationDTO);
-            return organizationDTO;
-        });
-        return ResponseEntity.ok(organizationDTOS);
+            organizationsDtos.add(organizationDTO);
+        }
+        return ResponseEntity.ok(organizationsDtos);
         // try catch con el error que lo coga de los use case
         // ej: error 404 y un mensaje
     }
