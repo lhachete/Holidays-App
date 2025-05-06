@@ -69,41 +69,87 @@
 
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>7.3.0</version>
-                <executions>
-                    <execution>
-                        <id>generate-api</id>
-                        <phase>generate-sources</phase> <!-- Esto es clave -->
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <inherited>
-                            false
-                        </inherited>
+<!--    <build>-->
+<!--            <plugins>-->
+<!--                <plugin>-->
+<!--                    <groupId>org.openapitools</groupId>-->
+<!--                    <artifactId>openapi-generator-maven-plugin</artifactId>-->
+<!--                    <version>7.3.0</version>-->
+<!--                    <executions>-->
+<!--                        <execution>-->
+<!--                            <id>generate-api</id>-->
+<!--                            <phase>generate-sources</phase> &lt;!&ndash; Esto es clave &ndash;&gt;-->
+<!--                            <goals>-->
+<!--                                <goal>generate</goal>-->
+<!--                            </goals>-->
+<!--                            <inherited>-->
+<!--                                false-->
+<!--                            </inherited>-->
+<!--                            <configuration>-->
+<!--                                <inputSpec>${project.basedir}\driving\api-rest\contracts\holidayapp-openapi-v3.yaml</inputSpec>-->
+<!--                                <generatorName>spring</generatorName> &lt;!&ndash; O java, depende del objetivo &ndash;&gt;-->
+<!--                                &lt;!&ndash;                            <output>${project.build.directory}/generated-sources/openapi</output>&ndash;&gt;-->
+<!--                                <configOptions>-->
+<!--                                    &lt;!&ndash;                                <sourceFolder>src/gen/java/main</sourceFolder>&ndash;&gt;-->
+<!--                                    <interfaceOnly>true</interfaceOnly> &lt;!&ndash; opcional &ndash;&gt;-->
+<!--                                    <useBeanValidation>false</useBeanValidation>-->
+<!--                                    <apiNameSuffix>Controller</apiNameSuffix>-->
+<!--                                    <useTags>true</useTags> &lt;!&ndash; Use el tag como nombre base del archivo, Genere una interfaz por cada grupo de endpoints con el mismo tag &ndash;&gt;-->
+<!--                                </configOptions>-->
+<!--                                <packageName>com.rob</packageName>-->
+<!--                                <apiPackage>com.rob.driving.api</apiPackage>-->
+<!--                                <modelPackage>com.rob.driving.dtos</modelPackage>-->
+<!--                            </configuration>-->
+<!--                        </execution>-->
+<!--                    </executions>-->
+<!--                </plugin>-->
+<!--            </plugins>-->
+<!--    </build>-->
+
+    <profiles>
+        <profile>
+            <id>generate-openapi</id>
+            <activation>
+                <file>
+                    <!-- Este perfil solo se activa en el módulo que tenga el archivo
+             contracts/holidayapp-openapi-v3.yaml en la carpeta raíz -->
+                    <exists>${project.basedir}/contracts/holidayapp-openapi-v3.yaml</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openapitools</groupId>
+                        <artifactId>openapi-generator-maven-plugin</artifactId>
+                        <version>7.3.0</version>
+                        <executions>
+                            <execution>
+                                <id>generate-api</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                         <configuration>
-                            <inputSpec>${project.basedir}\driving\api-rest\contracts\holidayapp-openapi-v3.yaml</inputSpec>
-                            <generatorName>spring</generatorName> <!-- O java, depende del objetivo -->
-                            <!--                            <output>${project.build.directory}/generated-sources/openapi</output>-->
-                            <configOptions>
-                                <!--                                <sourceFolder>src/gen/java/main</sourceFolder>-->
-                                <interfaceOnly>true</interfaceOnly> <!-- opcional -->
-                                <useBeanValidation>false</useBeanValidation>
-                                <apiNameSuffix>Controller</apiNameSuffix>
-                                <useTags>true</useTags> <!-- Use el tag como nombre base del archivo, Genere una interfaz por cada grupo de endpoints con el mismo tag -->
-                            </configOptions>
-                            <packageName>com.rob</packageName>
+                            <!-- Aquí basedir tendrá que ser api-rest (driving/api-rest) -->
+                            <inputSpec>${project.basedir}/contracts/holidayapp-openapi-v3.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
                             <apiPackage>com.rob.driving.api</apiPackage>
                             <modelPackage>com.rob.driving.dtos</modelPackage>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                                <useTags>true</useTags>
+                            </configOptions>
+                            <output>${project.build.directory}/generated-sources/openapi</output>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 
 </project>
