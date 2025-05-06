@@ -82,8 +82,11 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <inherited>
+                            false
+                        </inherited>
                         <configuration>
-                            <inputSpec>C:\Repos\practicasGFT\Holidays-App-GFT\HolidaysApp-Backend\driving\api-rest\contracts\holidayapp-openapi-v3.yaml</inputSpec>
+                            <inputSpec>${project.basedir}\driving\api-rest\contracts\holidayapp-openapi-v3.yaml</inputSpec>
                             <generatorName>spring</generatorName> <!-- O java, depende del objetivo -->
                             <!--                            <output>${project.build.directory}/generated-sources/openapi</output>-->
                             <configOptions>
