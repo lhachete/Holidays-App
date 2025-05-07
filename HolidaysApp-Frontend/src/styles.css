@@ -1,0 +1,30 @@
+.login-inputs {
+    width: 100%; 
+    border-style: solid; 
+    border-color: rgb(211, 211, 211); 
+    border-radius: 5px;
+}
+
+.login-button {
+    background-color: #eba2fd;
+    border-color: white;
+}
+
+.login-button:hover {
+    background-color: #d751f8;
+    border-color: white;
+}
+
+.login-text {
+    color: #eba2fd;
+}
+
+.login-text-underline {
+    color: #eba2fd;
+    text-decoration: underline;
+}
+
+.login-text-underline:hover {
+    color: #d751f8;
+    text-decoration: underline;
+}
