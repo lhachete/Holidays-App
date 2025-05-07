@@ -15,6 +15,11 @@
     border-color: white;
 }
 
+.login-button:disabled {
+    background-color: #f3cafd;
+    border-color: white;
+}
+
 .login-text {
     color: #eba2fd;
 }

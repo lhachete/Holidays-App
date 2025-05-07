@@ -6,21 +6,35 @@
   <div class="card mt-5" style="width: 28rem;">
     <div class="card-body">
       <h3 class="card-title text-center login-text">Login</h3>
-      <div class="forms-inputs mt-4">
-        <fieldset class="label">
-          <label for="username mb-1" class ="mb-2">Username or Email:</label>
-          <input class="login-inputs px-2" type="text" id="username" placeholder="Enter your email" > 
-        </fieldset>
-        <fieldset class="label mt-3 mb-4">
-          <label for="password" class ="mb-2">Password:</label>
-          <input class="login-inputs px-2" type="text" id="password" placeholder="Enter your password"> 
-        </fieldset>
-        <button class="login-button login-button.hover btn btn-primary w-100">Login</button>
-        <div>
-          <p class="mt-2 mb-0 text-center">Create an account? <span class="login-text-underline">Sign Up</span></p>
+      <form [formGroup]="formLogin()">
+        <div class="forms-inputs mt-4">
+          <fieldset class="label">
+            <label for="username mb-1" class ="mb-2">Username or Email:</label>
+            <input class="login-inputs px-2" type="text" formControlName="usernameOrEmail" id="username" placeholder="Enter your email" > 
+            <div>
+              @if(isInvalidEmail == true) {
+                <small class="text-danger">Please enter a valid email</small>
+              }
+            </div>
+          </fieldset>
+          <fieldset class="label mt-3 mb-4">
+            <label for="password" class ="mb-2">Password:</label>
+            <input class="login-inputs px-2" type="text" id="password" formControlName="password" placeholder="Enter your password"> 
+            <div>
+              @if(isInvalidPassword == true) {
+                <small class="text-danger">Please enter a valid password</small>
+              }
+            </div>
+          </fieldset>
+          <button class="login-button login-button.hover btn btn-primary w-100" (click)="onSubmit()">Login</button>
+          <!--           <button [disabled]="formLogin().invalid" class="login-button login-button.hover btn btn-primary w-100">Login</button>-->
+          <div>
+            <p class="mt-2 mb-0 text-center">Create an account? <span class="login-text-underline">Sign Up</span></p>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>
+
 <router-outlet />
