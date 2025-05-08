@@ -3,6 +3,7 @@
     border-style: solid; 
     border-color: rgb(211, 211, 211); 
     border-radius: 5px;
+    height: 30px;
 }
 
 .login-button {
