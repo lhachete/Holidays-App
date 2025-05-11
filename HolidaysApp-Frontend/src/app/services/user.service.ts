@@ -1,39 +1,49 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Injectable } from '@angular/core';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, firstValueFrom, map, Observable, of } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
+
 export class UserService {
 
   users: any[] = [];
 
   constructor(private httpClient: HttpClient) {
 
-   }
+  }
 
-   login(usernameOrEmail: string, password: string): boolean {
-    let isLoggedIn:boolean = false;
-    console.log('users', this.httpClient.get<any[]>('https://dummyjson.com/users'))
-    return true;
-    // this.httpClient.get<any[]>('https://dummyjson.com/users')
-    // .subscribe(response => {
-    //   this.users = response;
+  async login(usernameOrEmail: string, password: string): Promise<boolean> {
 
-    //   const userFound = this.users.find(user =>
-    //     (user.username === usernameOrEmail || user.email === usernameOrEmail) &&
-    //     user.password === password
-    //   );
+    let correctLogin: boolean = false;
 
-    //   if (userFound) {
-    //     isLoggedIn = true;
-    //     console.log('✅ Login exitoso');
-    //     // continuar lógica aquí
-    //   } else {
-    //     console.log('❌ Usuario no encontrado');
-    //   }
-    // });
-    // return isLoggedIn;    
+    try {
+      const response = await firstValueFrom(this.httpClient.get<any>('https://dummyjson.com/users'));
+      console.log('respuesta:');
+      console.log(response);
+      console.log('users de la respuesta:');
+      console.log(response.users);
+      const users = response.users; // Aquí ya tienes el array
+  
+      users.forEach((user: any) => {
+        if ((user.username === usernameOrEmail || user.email === usernameOrEmail) && user.password === password) {
+          console.log('Login successful!');
+          correctLogin = true;
+        }
+      });
+  
+      console.log(usernameOrEmail, password);
+      return Promise.resolve(correctLogin);
+  
+    } catch (error) {
+      console.error('Error during login:', error);
+      return Promise.resolve(false);
+    }
+  }
+
+  getUsers(): void {
+    this.httpClient.get<any>('https://dummyjson.com/users').subscribe(user => {
+      this.users.push(user);
+    });
+    console.log(this.users);
   }
 }
