@@ -3,11 +3,12 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RouterOutlet } from '@angular/router';
 import Swal from 'sweetalert2';
 import { LoginComponent } from "./pages/login.component";
+import { HomeComponent } from "./pages/home/home.component";
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ReactiveFormsModule, LoginComponent],
+  imports: [RouterOutlet, ReactiveFormsModule, LoginComponent, HomeComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

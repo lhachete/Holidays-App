@@ -3,6 +3,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import Swal from 'sweetalert2';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 import { UserService } from '../services/user.service';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule, NavbarComponent],
@@ -12,6 +14,7 @@ import { UserService } from '../services/user.service';
 export class LoginComponent {
   isInvalidEmail: boolean = false;
   isInvalidPassword: boolean = false;
+  username: string = '';
   formLogin = signal<FormGroup>(
     new FormGroup({
       // Define your form controls here
@@ -21,7 +24,8 @@ export class LoginComponent {
     })
   );
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private router: Router) {
+    // Aquí puedes inicializar cualquier cosa que necesites
 
   }
 
@@ -40,40 +44,45 @@ export class LoginComponent {
 
   async onSubmit() {
     //this.userService.getUsers(); // Llama al servicio para obtener los usuarios
-     const form = this.formLogin();
+    const form = this.formLogin();
 
-     if (form.invalid) {
-       // Marcar todos los controles como tocados
-       Object.entries(form.controls).forEach(([formControlName, control]) => {
-         if (formControlName === 'usernameOrEmail' && control.errors) {
-           this.isInvalidEmail = true;
+    if (form.invalid) {
+      // Marcar todos los controles como tocados
+      Object.entries(form.controls).forEach(([formControlName, control]) => {
+        if (formControlName === 'usernameOrEmail' && control.errors) {
+          this.isInvalidEmail = true;
         }
-         if (formControlName === 'password' && control.errors) {
-           this.isInvalidPassword = true;
-         }
-         control.markAsTouched(); // Marca el control como tocado
-       });
+        if (formControlName === 'password' && control.errors) {
+          this.isInvalidPassword = true;
+        }
+        control.markAsTouched(); // Marca el control como tocado
+      });
 
-       console.log('Formulario inválido');
-     } else {
-       if (await this.userService.login(form.value.usernameOrEmail, form.value.password)) {
+      console.log('Formulario inválido');
+    } else {
+      if (await this.userService.login(form.value.usernameOrEmail, form.value.password)) {
+        this.username = this.userService.username; // Guardar el nombre de usuario en la variable de clase
+        console.log('username:', this.username);
         console.log('true')
-         Swal.fire({
-           position: "center",
-           icon: "success",
-           title: "Your work has been saved",
-           showConfirmButton: false,
-           timer: 1500
-         });
-       } else {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Login successful",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        // Aquí puedes redirigir al usuario a otra página o realizar cualquier otra acción
+        // Por ejemplo, redirigir a la página de inicio:
+        this.router.navigate(['/home']); // Asegúrate de importar Router y agregarlo en el constructor
+      } else {
         console.log('false')
-         Swal.fire({
-           icon: "error",
-           title: "Oops...",
-           text: "Something went wrong!",
-           footer: '<a href="#">Why do I have this issue?</a>'
-         });
-       }
-     }
+        Swal.fire({
+          icon: "error",
+          title: "Error with credentials",
+          text: "Password or email is incorrect",
+          footer: '<a href="#">Why do I have this issue?</a>'
+        });
+      }
+    }
   }
 }
