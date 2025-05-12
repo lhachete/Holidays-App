@@ -9,8 +9,8 @@ export class AuthService {
 
   // Aquí deberían de estar los usuarios reales que se creen en este objeto
   public users: any[] = [
-    { username: 'admin', email: 'admin@example.com', password: '12345678', roles: ['USUARIO', 'ADMIN'] },
-    { username: 'user1', email: 'user1@example.com', password: '12345678', roles: ['USUARIO'] }
+    { id: 1, username: 'admin', email: 'admin@example.com', password: '12345678', roles: ['USUARIO', 'ADMIN'] },
+    { id: 2, username: 'user1', email: 'user1@example.com', password: '12345678', roles: ['USUARIO'] }
   ];
 
   public user: User | null = null;

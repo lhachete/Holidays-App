@@ -6,8 +6,7 @@ import { NavbarComponent } from './components/structure/navbar/navbar.component'
   selector: 'app-root',
   imports: [RouterOutlet, NavbarComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'vacaciones';
+  title = 'vacations';
 }

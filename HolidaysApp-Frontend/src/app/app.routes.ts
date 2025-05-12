@@ -16,14 +16,14 @@ export const routes: Routes = [
     { path: "register", component: AuthComponent, data: { mode: 'register' } },
 
     { path: "vacation", component: VacationComponent, canActivate: [authGuard], children: [
-        { path: "show", component: ShowVacationComponent},
+        { path: "show", component: ShowVacationComponent },
         { path: "book", component: BookVacationComponent },
         { path: "edit", component: EditVacationComponent },
-        { path: "delete", component: DeleteVacationComponent}
+        { path: "delete", component: DeleteVacationComponent }
     ]},
     
-    { path: "admin", component: AdminComponent, canActivate: [authGuard, adminGuard] },
-
+    /* { path: "admin", component: AdminComponent, canActivate: [authGuard, adminGuard] }, */
+    
     { path: "forbidden", loadComponent: () => import('./errors/forbidden/forbidden.component').then(comp => comp.ForbiddenComponent) },
     { path: "**", loadComponent: () => import('./errors/not-found/not-found.component').then(comp => comp.NotFoundComponent) }
 
