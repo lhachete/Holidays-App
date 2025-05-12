@@ -1,3 +1,10 @@
 .navbar-bg {
   background-color: #eba2fd;
 }
+
+.btn-style {
+  color: white;
+  background-color: #efc4fa;
+  border: white solid 2px;
+  border-radius: 5px;
+}

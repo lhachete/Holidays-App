@@ -3,11 +3,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import Swal from 'sweetalert2';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 import { UserService } from '../services/user.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, NavbarComponent],
+  imports: [ReactiveFormsModule, NavbarComponent, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -82,33 +82,33 @@ export class LoginComponent {
   }
 
   getFormValidationErrors(): string[] {
-  const errors: string[] = [];
-  const form = this.formLogin();
+    const errors: string[] = [];
+    const form = this.formLogin();
 
-  for (const controlName in form.controls) {
-    console.log(controlName);
-  }
-
-  Object.keys(form.controls).forEach(controlName => {
-    const controlErrors = form.get(controlName)?.errors;
-    if (controlErrors) {
-      Object.keys(controlErrors).forEach(errorKey => {
-        console.log('se mete en el for');
-        if (errorKey === 'required') {
-          errors.push(`${controlName} es obligatorio.`);
-        } else if (errorKey === 'email') {
-          errors.push(`${controlName} no tiene formato de email válido.`);
-        } else if (errorKey === 'minlength') {
-          console.log('se mete en el min');
-          errors.push(`${controlName} debe tener al menos ${controlErrors['minlength'].requiredLength} caracteres.`);
-        } else if (errorKey === 'maxlength') {
-          errors.push(`${controlName} no puede tener más de ${controlErrors['maxlength'].requiredLength} caracteres.`);
-        }
-        // Puedes seguir añadiendo más condiciones aquí
-      });
+    for (const controlName in form.controls) {
+      console.log(controlName);
     }
-  });
-  console.log('errors:', errors);
-  return errors;
-}
+
+    Object.keys(form.controls).forEach(controlName => {
+      const controlErrors = form.get(controlName)?.errors;
+      if (controlErrors) {
+        Object.keys(controlErrors).forEach(errorKey => {
+          console.log('se mete en el for');
+          if (errorKey === 'required') {
+            errors.push(`${controlName} es obligatorio.`);
+          } else if (errorKey === 'email') {
+            errors.push(`${controlName} no tiene formato de email válido.`);
+          } else if (errorKey === 'minlength') {
+            console.log('se mete en el min');
+            errors.push(`${controlName} debe tener al menos ${controlErrors['minlength'].requiredLength} caracteres.`);
+          } else if (errorKey === 'maxlength') {
+            errors.push(`${controlName} no puede tener más de ${controlErrors['maxlength'].requiredLength} caracteres.`);
+          }
+          // Puedes seguir añadiendo más condiciones aquí
+        });
+      }
+    });
+    console.log('errors:', errors);
+    return errors;
+  }
 }

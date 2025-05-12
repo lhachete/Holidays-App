@@ -1,0 +1,46 @@
+<app-navbar></app-navbar>
+<div class="d-flex justify-content-center align-items-center" style="height: calc(100vh - 10rem);">
+  <div class="card mt-5 shadow-lg" style="width: 28rem;">
+    <div class="card-body">
+      <h3 class="card-title text-center login-text">Register</h3>
+      <form [formGroup]="formRegister()">
+        <div class="forms-inputs mt-4">
+          <fieldset class="label">
+            <label for="username mb-1" class="mb-2">Username:</label>
+            <input class="login-inputs px-2 mb-3" type="text" formControlName="username" id="username"
+              placeholder="Enter your Username">
+          </fieldset>          
+          <fieldset class="label">
+            <label for="username mb-1" class="mb-2">Email:</label>
+            <input class="login-inputs px-2" type="text" formControlName="email" id="email"
+              placeholder="Enter your email">
+          </fieldset>
+          <fieldset class="label mt-3 mb-4">
+            <label for="password" class="mb-2">Password:</label>
+            <input class="login-inputs px-2" type="password" id="password" formControlName="password"
+              placeholder="Enter your password">
+          </fieldset>
+          <fieldset class="label mb-4">
+            <label for="password" class="mb-2">Repeat Password:</label>
+            <input class="login-inputs px-2" type="password" id="repeatPassword" formControlName="repeatPassword"
+              placeholder="Enter your password">
+          </fieldset>
+          <button class="login-button login-button.hover btn btn-primary w-100" (click)="onSubmit()">Register</button>
+          <div>
+            @if(formValidationErrors.length > 0) {
+            <ul>
+              @for(error of formValidationErrors; track $index) {
+              <li style="color:rgb(183, 0, 0)"><small class="text-danger">{{error}}</small></li>
+              }
+            </ul>
+            }
+          </div>
+          <div>
+            <p class="mt-2 mb-0 text-center">Do you have an account? <a class="login-text-underline"
+                routerLink="/login">Log in</a></p>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
