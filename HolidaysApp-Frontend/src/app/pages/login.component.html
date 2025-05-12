@@ -16,14 +16,14 @@
             </fieldset>
             <fieldset class="label mt-3 mb-4">
               <label for="password" class ="mb-2">Password:</label>
-              <input class="login-inputs px-2" type="password" id="password" formControlName="password" placeholder="Enter your password"> 
+              <input class="login-inputs px-2" type="password" id="password" formControlName="password" placeholder="Enter your password" value="emily.johnson@x.dummyjson.com"> 
               <!-- <div>
                 @if(isInvalidPassword == true) {
                   <small class="text-danger">Please enter a valid password</small>
                 }
               </div> -->
             </fieldset>
-            <button class="login-button login-button.hover btn btn-primary w-100" (click)="onSubmit()">Login</button>
+            <button class="login-button login-button.hover btn btn-primary w-100" (click)="onSubmit()" value="emilyspass">Login</button>
             <!--           <button [disabled]="formLogin().invalid" class="login-button login-button.hover btn btn-primary w-100">Login</button>-->
             <div>
               <p class="mt-2 mb-0 text-center">Create an account? <span class="login-text-underline">Sign Up</span></p>
