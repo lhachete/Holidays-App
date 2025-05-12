@@ -26,6 +26,15 @@
             <button class="login-button login-button.hover btn btn-primary w-100" (click)="onSubmit()">Login</button>
             <!--           <button [disabled]="formLogin().invalid" class="login-button login-button.hover btn btn-primary w-100">Login</button>-->
             <div>
+              @if(formValidationErrors.length > 0) {
+                <ul>
+                @for(error of formValidationErrors; track $index) {
+                  <li style="color:rgb(183, 0, 0)"><small class="text-danger">{{error}}</small></li>
+                }
+                </ul>
+              }
+            </div>
+            <div>
               <p class="mt-2 mb-0 text-center">Create an account? <span class="login-text-underline">Sign Up</span></p>
             </div>
           </div>

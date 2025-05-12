@@ -15,6 +15,7 @@ export class LoginComponent {
   isInvalidEmail: boolean = false;
   isInvalidPassword: boolean = false;
   username: string = '';
+  formValidationErrors: string[] = [];
   formLogin = signal<FormGroup>(
     new FormGroup({
       // Define your form controls here
@@ -48,15 +49,8 @@ export class LoginComponent {
 
     if (form.invalid) {
       // Marcar todos los controles como tocados
-      Object.entries(form.controls).forEach(([formControlName, control]) => {
-        if (formControlName === 'usernameOrEmail' && control.errors) {
-          this.isInvalidEmail = true;
-        }
-        if (formControlName === 'password' && control.errors) {
-          this.isInvalidPassword = true;
-        }
-        control.markAsTouched(); // Marca el control como tocado
-      });
+      this.formValidationErrors = this.getFormValidationErrors();
+      console.log(this.formValidationErrors);
 
       console.log('Formulario inválido');
     } else {
@@ -75,6 +69,7 @@ export class LoginComponent {
         // Por ejemplo, redirigir a la página de inicio:
         this.router.navigate(['/home']); // Asegúrate de importar Router y agregarlo en el constructor
       } else {
+        this.formValidationErrors = this.getFormValidationErrors();
         console.log('false')
         Swal.fire({
           icon: "error",
@@ -85,4 +80,35 @@ export class LoginComponent {
       }
     }
   }
+
+  getFormValidationErrors(): string[] {
+  const errors: string[] = [];
+  const form = this.formLogin();
+
+  for (const controlName in form.controls) {
+    console.log(controlName);
+  }
+
+  Object.keys(form.controls).forEach(controlName => {
+    const controlErrors = form.get(controlName)?.errors;
+    if (controlErrors) {
+      Object.keys(controlErrors).forEach(errorKey => {
+        console.log('se mete en el for');
+        if (errorKey === 'required') {
+          errors.push(`${controlName} es obligatorio.`);
+        } else if (errorKey === 'email') {
+          errors.push(`${controlName} no tiene formato de email válido.`);
+        } else if (errorKey === 'minlength') {
+          console.log('se mete en el min');
+          errors.push(`${controlName} debe tener al menos ${controlErrors['minlength'].requiredLength} caracteres.`);
+        } else if (errorKey === 'maxlength') {
+          errors.push(`${controlName} no puede tener más de ${controlErrors['maxlength'].requiredLength} caracteres.`);
+        }
+        // Puedes seguir añadiendo más condiciones aquí
+      });
+    }
+  });
+  console.log('errors:', errors);
+  return errors;
+}
 }
