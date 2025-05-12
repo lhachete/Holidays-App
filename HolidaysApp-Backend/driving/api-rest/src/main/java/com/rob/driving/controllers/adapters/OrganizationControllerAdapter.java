@@ -25,20 +25,17 @@ import com.rob.driving.dtos.OrganizationDTO;
 
 @RestController
 @AllArgsConstructor
-@RequiredArgsConstructor
 @RequestMapping("/api-rest/organizations")
 public class OrganizationControllerAdapter implements OrganizationsApi {
 
-    @Autowired
-    OrganizationDTOMapper organizationDTOMapper;
+    private final OrganizationDTOMapper organizationDTOMapper;
 
-    @Autowired
-    OrganizationServicePort organizationServicePort;
+    private final OrganizationServicePort organizationServicePort;
 
-    @PostConstruct
-    public void init() {
-        System.out.println("Controller loaded!");
-    }
+//    @PostConstruct
+//    public void init() {
+//        System.out.println("Controller loaded!");
+//    }
 
     @Tag(name = "get", description = "Get all organizations of Organizations APIs")
     @Operation(operationId = "getAllOrganizations",summary = "Get all organizations", description = "Get all organizations of Organizations APIs")
