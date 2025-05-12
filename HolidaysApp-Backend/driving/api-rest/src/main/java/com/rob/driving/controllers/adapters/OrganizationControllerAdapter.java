@@ -2,6 +2,7 @@ package com.rob.driving.controllers.adapters;
 
 import com.rob.application.ports.driving.OrganizationServicePort;
 import com.rob.domain.models.Organization;
+import com.rob.driving.mappers.OrganizationDTOMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.annotation.PostConstruct;
@@ -29,6 +30,9 @@ import com.rob.driving.dtos.OrganizationDTO;
 public class OrganizationControllerAdapter implements OrganizationsApi {
 
     @Autowired
+    OrganizationDTOMapper organizationDTOMapper;
+
+    @Autowired
     OrganizationServicePort organizationServicePort;
 
     @PostConstruct
@@ -51,10 +55,10 @@ public class OrganizationControllerAdapter implements OrganizationsApi {
         List<OrganizationDTO> organizationsDtos = new ArrayList<>();
         List<Organization> organizations = organizationServicePort.getAllOrganizations();
         for (Organization organization : organizations) {
-            OrganizationDTO organizationDTO = new OrganizationDTO();
-            organizationDTO.setId(organization.getId());
-            organizationDTO.setName(organization.getName());
-            organizationsDtos.add(organizationDTO);
+//            OrganizationDTO organizationDTO = new OrganizationDTO();
+//            organizationDTO.setId(organization.getId());
+//            organizationDTO.setName(organization.getName());
+            organizationsDtos.add(organizationDTOMapper.toOrganizationDTO(organization));
         }
         return ResponseEntity.ok(organizationsDtos);
         // try catch con el error que lo coga de los use case

@@ -45,6 +45,12 @@
             <version>2.2.29</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.6.0.Beta1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <properties>
