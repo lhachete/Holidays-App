@@ -19,8 +19,8 @@ export class LoginComponent {
     new FormGroup({
       // Define your form controls here
       // Example: name: new FormControl('')
-      usernameOrEmail: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(25)]),
+      usernameOrEmail: new FormControl('emily.johnson@x.dummyjson.com', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
+      password: new FormControl('emilyspass', [Validators.required, Validators.minLength(8), Validators.maxLength(25)]),
     })
   );
 
