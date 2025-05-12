@@ -16,6 +16,7 @@ public interface OrganizationDTOMapper {
         return organizationDTO;
     }
 
+    // funcion que utiliza el patron builder para crear un objeto OrganizationDTO
     default Organization toOrganization(OrganizationDTO organizationDTO) {
         return Organization.builder()
                 .id(organizationDTO.getId())

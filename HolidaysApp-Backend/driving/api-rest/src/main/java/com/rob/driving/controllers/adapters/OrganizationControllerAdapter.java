@@ -11,12 +11,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.rob.driving.api.OrganizationsApi;
 import com.rob.driving.dtos.OrganizationDTO;
@@ -24,10 +26,12 @@ import com.rob.driving.dtos.OrganizationDTO;
 
 
 @RestController
+// inyeccion por constructor
 @AllArgsConstructor
 @RequestMapping("/api-rest/organizations")
 public class OrganizationControllerAdapter implements OrganizationsApi {
 
+    // se pone allargs constructor y private final para que spring lo inyecte
     private final OrganizationDTOMapper organizationDTOMapper;
 
     private final OrganizationServicePort organizationServicePort;
@@ -60,5 +64,14 @@ public class OrganizationControllerAdapter implements OrganizationsApi {
         return ResponseEntity.ok(organizationsDtos);
         // try catch con el error que lo coga de los use case
         // ej: error 404 y un mensaje
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrganizationDTO> getOrganizationById(@PathVariable(value = "id") Integer id) {
+        Optional<Organization> organization = organizationServicePort.getOrganizationById(id);
+        if(organization.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(organizationDTOMapper.toOrganizationDTO(organization.get()));
     }
 }

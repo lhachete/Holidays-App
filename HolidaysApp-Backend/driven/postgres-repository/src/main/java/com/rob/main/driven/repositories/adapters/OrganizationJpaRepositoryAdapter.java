@@ -4,6 +4,7 @@ import com.rob.application.ports.driven.OrganizationRepositoryPort;
 import com.rob.domain.models.Organization;
 import com.rob.main.driven.repositories.OrganizationMOJpaRepository;
 import com.rob.main.driven.repositories.mappers.OrganizationMOMapper;
+import com.rob.main.driven.repositories.models.OrganizationMO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @Service
@@ -30,5 +32,10 @@ public class OrganizationJpaRepositoryAdapter implements OrganizationRepositoryP
                     return organizationMOMapper.toOrganization(organizationMO);
                 })
                 .toList();
+    }
+
+    @Override
+    public Optional<Organization> findById(Integer id) {
+        return Optional.ofNullable(organizationMOMapper.toOrganization(organizationMOJpaRepository.findById(id).get()));
     }
 }
