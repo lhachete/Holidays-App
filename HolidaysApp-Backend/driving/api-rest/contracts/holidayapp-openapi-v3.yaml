@@ -1,0 +1,91 @@
+openapi: 3.0.0
+
+info: # Información general sobre la API
+  title: HolidaysApp API Rest
+  version: 1.0.0
+  description: API Rest for HolidaysApp
+servers: # URLs base del servidor
+  - url: http://localhost:8080
+    description: Generated server url
+tags: # Opcional: para agrupar endpoints
+  - name: Organizations
+    description: An API CRUD to manage organizations
+paths: # Todos los endpoints de la API
+  /api-rest/organizations:
+    get:
+      tags:
+        - Organizations
+      summary: Get all organizations
+      description: Get all organizations of Organizations APIs
+      operationId: getAllOrganizations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: Organization not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The Organization was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationDTO'
+components:
+  schemas:
+    OrganizationDTO:
+      description: This is the Organization model
+      type: object
+      properties:
+        id:
+          type: integer
+          #format: int32
+        name:
+          type: string
