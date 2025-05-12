@@ -80,7 +80,7 @@ export class LoginComponent {
           icon: "error",
           title: "Error with credentials",
           text: "Password or email is incorrect",
-          footer: '<a href="#">Why do I have this issue?</a>'
+          //footer: '<a href="#">Why do I have this issue?</a>'
         });
       }
     }

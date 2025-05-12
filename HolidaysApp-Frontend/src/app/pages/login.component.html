@@ -8,20 +8,20 @@
             <fieldset class="label">
               <label for="username mb-1" class ="mb-2">Username or Email:</label>
               <input class="login-inputs px-2" type="text" formControlName="usernameOrEmail" id="username" placeholder="Enter your email" > 
-              <div>
+              <!-- <div>
                 @if(isInvalidEmail == true) {
                   <small class="text-danger">Please enter a valid email</small>
                 }
-              </div>
+              </div> -->
             </fieldset>
             <fieldset class="label mt-3 mb-4">
               <label for="password" class ="mb-2">Password:</label>
               <input class="login-inputs px-2" type="password" id="password" formControlName="password" placeholder="Enter your password"> 
-              <div>
+              <!-- <div>
                 @if(isInvalidPassword == true) {
                   <small class="text-danger">Please enter a valid password</small>
                 }
-              </div>
+              </div> -->
             </fieldset>
             <button class="login-button login-button.hover btn btn-primary w-100" (click)="onSubmit()">Login</button>
             <!--           <button [disabled]="formLogin().invalid" class="login-button login-button.hover btn btn-primary w-100">Login</button>-->
