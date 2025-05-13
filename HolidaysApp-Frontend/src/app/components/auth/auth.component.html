@@ -1,0 +1,62 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+
+                    <h3 class="text-center mb-4">
+                        @if (mode === 'login') { Login } @else { Register}
+                    </h3>
+
+                    <form [formGroup]="form" (ngSubmit)="submit()">
+
+                        @for (field of currentFields; track field.key) {
+                        <div class="mb-3">
+                            <label [for]="field.key" class="form-label">{{ field.label }}</label>
+                            <input [type]="field.type" class="form-control outline-purple" [id]="field.key"
+                                [formControlName]="field.key" [placeholder]="'Enter ' + field.label" [class.is-invalid]="
+                                    form.get(field.key)?.invalid && isTouched(form.get(field.key))
+                                    || (mode === 'login' && field.key==='userInput' && userNotFound)
+                                    || (mode === 'login' && field.key==='password' && wrongPassword)" />
+
+                                <!-- Si hay errores los muestro -->
+                            @if (getErrorMessages(field.key).length > 0) {
+                                @for (msg of getErrorMessages(field.key); track $index) {
+                                    <div class="mt-1 ms-1">
+                                        <small class="text-danger">{{ msg }}</small>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        }
+
+                        @if (mode==='login' && (userNotFound || wrongPassword)) {
+                        <div class="d-flex align-items-center justify-content-center mb-1">
+                            <p class="alert alert-danger mt-2 fw-bold" role="alert">
+                                {{ userNotFound ? 'Invalid user' : 'Wrong password!' }}
+                            </p>
+                        </div>
+                        }
+
+                        <button type="submit" [disabled]="form.invalid" class="btn btn-primary mt-1 w-100 bg-lightPurple bg-lightPurple-hover">
+                            {{ mode === 'login' ? 'Log in' : 'Register' }}
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        @if (mode==='login') {
+                        <span> Create an account?
+                            <a routerLink="/register" class="text-lightPurple">Sign up</a>
+                        </span>
+                        } @else {
+                        <span> Already have an account?
+                            <a routerLink="/login" class="text-lightPurple">Log in</a>
+                        </span>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

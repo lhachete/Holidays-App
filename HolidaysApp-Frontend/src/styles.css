@@ -1,36 +1,55 @@
-.login-inputs {
-    width: 100%; 
-    border-style: solid; 
-    border-color: rgb(211, 211, 211); 
-    border-radius: 5px;
-    height: 30px;
+
+.bg-lightPurple {
+  background-color: #c788fe !important;
+  border-color: #c788fe;
 }
 
-.login-button {
-    background-color: #eba2fd;
-    border-color: white;
+.bg-lightPurple-hover:hover {
+  background-color: #dcbdff !important;
+  border-color: #b35cff;
+  color: #b35cff;
 }
 
-.login-button:hover {
-    background-color: #d751f8;
-    border-color: white;
+.text-lightPurple {
+  color: #c490ff;
 }
 
-.login-button:disabled {
-    background-color: #f3cafd;
-    border-color: white;
+.btn:disabled {
+  border-color: #b35cff !important;
 }
 
-.login-text {
-    color: #eba2fd;
+.btn-lightPurple {
+  background-color: #c788fe !important;
+  border: white solid 2px !important;
+  color: white;
+  border-radius: 10px;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
 }
 
-.login-text-underline {
-    color: #eba2fd;
-    text-decoration: underline;
+.btn-lightPurple:hover {
+  background-color: #dcbdff !important;
+  border-color: #b35cff;
+  color: #b35cff;
 }
 
-.login-text-underline:hover {
-    color: #d751f8;
-    text-decoration: underline;
+.button-active{
+  background-color: #dcbdff !important;
+  color: #b35cff;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  color: var(--bs-dropdown-link-active-color);
+  background-color: #b084f9;
+}
+
+.outline-purple:focus {
+  border-color: #b084f9 !important;
+  box-shadow: 0 0 0 0.2rem rgba(176, 132, 249, 0.25) !important;
+}
+
+.underline-custom {
+  text-decoration: underline;
+  text-decoration-color: white; 
+  text-underline-offset: 3px;
 }
