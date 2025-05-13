@@ -8,11 +8,13 @@ import java.util.Optional;
 public interface OrganizationServicePort {
     List<Organization> getAllOrganizations();
 
-    Optional<Organization> getOrganizationById(Integer id);
+    Organization getOrganizationById(Integer id);
 
     List<Organization> getOrganizationsByName(String name);
 
     Organization createOrganization(Organization organization);
 
     Organization updateOrganization(Organization organization);
+
+    Organization deleteOrganizationById(Integer id);
 }

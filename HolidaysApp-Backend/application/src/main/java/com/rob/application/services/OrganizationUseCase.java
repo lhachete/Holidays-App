@@ -20,7 +20,7 @@ public class OrganizationUseCase implements OrganizationServicePort {
     }
 
     @Override
-    public Optional<Organization> getOrganizationById(Integer id) {
+    public Organization getOrganizationById(Integer id) {
         return organizationJpaRepositoryPort.findById(id);
     }
 
@@ -37,5 +37,10 @@ public class OrganizationUseCase implements OrganizationServicePort {
     @Override
     public Organization updateOrganization(Organization organization) {
         return organizationJpaRepositoryPort.update(organization);
+    }
+
+    @Override
+    public Organization deleteOrganizationById(Integer id) {
+        return organizationJpaRepositoryPort.deleteById(id);
     }
 }

@@ -65,11 +65,8 @@ public class OrganizationControllerAdapter implements OrganizationsApi {
 
     @GetMapping("/{id}")
     public ResponseEntity<OrganizationDTO> getOrganizationById(@PathVariable(value = "id") Integer id) {
-        Optional<Organization> organization = organizationServicePort.getOrganizationById(id);
-        if(organization.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(organizationDTOMapper.toOrganizationDTO(organization.get()));
+        Organization organization = organizationServicePort.getOrganizationById(id);
+        return ResponseEntity.ok(organizationDTOMapper.toOrganizationDTO(organization));
     }
 
     @PostMapping
@@ -84,5 +81,11 @@ public class OrganizationControllerAdapter implements OrganizationsApi {
         Organization organization = organizationDTOMapper.toOrganization(organizationDTO);
         Organization updatedOrganization = organizationServicePort.updateOrganization(organization);
         return ResponseEntity.ok(organizationDTOMapper.toOrganizationDTO(updatedOrganization));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<OrganizationDTO> deleteOrganization(@PathVariable(value = "id") Integer id) {
+        Organization deletedOrganization = organizationServicePort.deleteOrganizationById(id);
+        return ResponseEntity.ok(organizationDTOMapper.toOrganizationDTO(deletedOrganization));
     }
 }

@@ -35,8 +35,8 @@ public class OrganizationJpaRepositoryAdapter implements OrganizationRepositoryP
     }
 
     @Override
-    public Optional<Organization> findById(Integer id) {
-        return Optional.ofNullable(organizationMOMapper.toOrganization(organizationMOJpaRepository.findById(id).get()));
+    public Organization findById(Integer id) {
+        return organizationMOMapper.toOrganization(organizationMOJpaRepository.findById(id).get());
     }
 
     @Override
@@ -59,5 +59,12 @@ public class OrganizationJpaRepositoryAdapter implements OrganizationRepositoryP
     public Organization update(Organization organization) {
         OrganizationMO organizationMO = organizationMOMapper.toOrganizationEntity(organization);
         return organizationMOMapper.toOrganization(organizationMOJpaRepository.save(organizationMO));
+    }
+
+    @Override
+    public Organization deleteById(Integer id) {
+        OrganizationMO organizationMO = organizationMOJpaRepository.findById(id).get();
+        organizationMOJpaRepository.deleteById(id);
+        return organizationMOMapper.toOrganization(organizationMO);
     }
 }
