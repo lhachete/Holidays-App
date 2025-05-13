@@ -28,4 +28,14 @@ public class OrganizationUseCase implements OrganizationServicePort {
     public List<Organization> getOrganizationsByName(String name) {
         return organizationJpaRepositoryPort.findByNameContaining(name);
     }
+
+    @Override
+    public Organization createOrganization(Organization organization) {
+        return organizationJpaRepositoryPort.save(organization);
+    }
+
+    @Override
+    public Organization updateOrganization(Organization organization) {
+        return organizationJpaRepositoryPort.update(organization);
+    }
 }

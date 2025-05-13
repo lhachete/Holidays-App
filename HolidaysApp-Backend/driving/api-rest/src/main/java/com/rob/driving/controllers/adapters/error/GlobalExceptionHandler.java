@@ -1,5 +1,6 @@
 package com.rob.driving.controllers.adapters.error;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -46,6 +47,22 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    // 🎯 1. Específica para integridad de datos
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, String>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        String message = ex.getMostSpecificCause().getMessage();
+
+        if (message != null && message.contains("organizations_name_key")) {
+            errorResponse.put("error", "Organization name already exists");
+        } else {
+            errorResponse.put("error", "Data integrity violation");
+        }
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    // 🎯 2. Específica para entidades no encontradas
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<Map<String, String>> handleNoSuchElementException(NoSuchElementException ex) {
         Map<String, String> errorResponse = new HashMap<>();

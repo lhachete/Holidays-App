@@ -11,4 +11,8 @@ public interface OrganizationServicePort {
     Optional<Organization> getOrganizationById(Integer id);
 
     List<Organization> getOrganizationsByName(String name);
+
+    Organization createOrganization(Organization organization);
+
+    Organization updateOrganization(Organization organization);
 }

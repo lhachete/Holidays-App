@@ -48,4 +48,16 @@ public class OrganizationJpaRepositoryAdapter implements OrganizationRepositoryP
                 })
                 .toList();
     }
+
+    @Override
+    public Organization save(Organization organization) {
+        OrganizationMO organizationMO = organizationMOMapper.toOrganizationEntity(organization);
+        return organizationMOMapper.toOrganization(organizationMOJpaRepository.save(organizationMO));
+    }
+
+    @Override
+    public Organization update(Organization organization) {
+        OrganizationMO organizationMO = organizationMOMapper.toOrganizationEntity(organization);
+        return organizationMOMapper.toOrganization(organizationMOJpaRepository.save(organizationMO));
+    }
 }

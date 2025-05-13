@@ -1,6 +1,7 @@
 package com.rob.driving.mappers;
 
 import com.rob.domain.models.Organization;
+import com.rob.driving.dtos.OrganizationCreateDTO;
 import com.rob.driving.dtos.OrganizationDTO;
 import org.springframework.stereotype.Component;
 import org.mapstruct.Mapper;
@@ -21,6 +22,12 @@ public interface OrganizationDTOMapper {
         return Organization.builder()
                 .id(organizationDTO.getId())
                 .name(organizationDTO.getName())
+                .build();
+    }
+
+    default Organization toOrganization(OrganizationCreateDTO organizationCreateDTO) {
+        return Organization.builder()
+                .name(organizationCreateDTO.getName())
                 .build();
     }
 }
