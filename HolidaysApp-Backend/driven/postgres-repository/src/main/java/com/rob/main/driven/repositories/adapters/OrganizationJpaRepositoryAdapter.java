@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Data
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OrganizationJpaRepositoryAdapter implements OrganizationRepositoryPort {
 
 

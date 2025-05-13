@@ -27,7 +27,7 @@ import com.rob.driving.dtos.OrganizationDTO;
 
 @RestController
 // inyeccion por constructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/api-rest/organizations")
 public class OrganizationControllerAdapter implements OrganizationsApi {
 
