@@ -4,16 +4,17 @@ import com.rob.application.ports.driven.OrganizationRepositoryPort;
 import com.rob.application.ports.driving.OrganizationServicePort;
 import com.rob.domain.models.Organization;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class OrganizationUseCase implements OrganizationServicePort {
 
-    OrganizationRepositoryPort organizationJpaRepositoryPort;
+    private final OrganizationRepositoryPort organizationJpaRepositoryPort;
 
     public List<Organization> getAllOrganizations() {
         return organizationJpaRepositoryPort.findAll();
