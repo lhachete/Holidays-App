@@ -7,7 +7,9 @@ import java.util.Optional;
 
 public interface OrganizationRepositoryPort {
     List<Organization> findAll();
+
     Organization findById(Integer id);
+
     List<Organization> findByNameContaining(String name);
 
     Organization save(Organization organization);

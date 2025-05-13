@@ -20,10 +20,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrganizationJpaRepositoryAdapter implements OrganizationRepositoryPort {
 
-
     private final OrganizationMOJpaRepository organizationMOJpaRepository;
     private final OrganizationMOMapper organizationMOMapper;
-
 
     public List<Organization> findAll() {
         return organizationMOJpaRepository.findAll()
