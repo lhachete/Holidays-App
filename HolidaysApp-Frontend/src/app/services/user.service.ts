@@ -20,8 +20,9 @@ export class UserService {
     y sino la esperan dara error porque la funcion no habra devuelto nada
   */
   // La funcion es asincrona porque hace una peticion http y se sabe que puede tardar un tiempo en completarse
-  async login(usernameOrEmail: string, password: string): Promise<boolean> { // El promise es como el future de Flutter, es una promesa que se resuelve en el futuro y 
-    // hasta entonces no tiene valor
+  async login(usernameOrEmail: string, password: string): Promise<boolean> { // El promise es como el future de Flutter, 
+                                                                            // es una promesa que se resuelve en el futuro y 
+                                                                            // hasta entonces no tiene valor
 
     let correctLogin: boolean = false;
 
@@ -34,10 +35,6 @@ export class UserService {
     try {
       const response = await firstValueFrom(this.httpClient.get<any>('https://dummyjson.com/users')); // esto devuelve un objeto que dentro 
       // tiene el atributo users que es un array
-      console.log('respuesta:');
-      console.log(response);
-      console.log('users de la respuesta:');
-      console.log(response.users);
       const users = response.users; // Aquí ya tienes el array
 
       users.forEach((user: any) => {
