@@ -27,6 +27,7 @@ export class AuthService {
   async login( userInput: string, password: string): Promise<'OK' | 'USER_ERROR' | 'PASS_ERROR'> {
     try {
       const users: User[] = await this.userService.getAllUsers();
+      console.log('Users:', users);
       const foundUser = users.find(u =>
         u.username === userInput || u.email === userInput
       );
