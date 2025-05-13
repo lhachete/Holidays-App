@@ -9,4 +9,6 @@ public interface OrganizationServicePort {
     List<Organization> getAllOrganizations();
 
     Optional<Organization> getOrganizationById(Integer id);
+
+    List<Organization> getOrganizationsByName(String name);
 }

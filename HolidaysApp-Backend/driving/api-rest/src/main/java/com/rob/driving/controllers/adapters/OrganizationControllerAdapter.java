@@ -10,10 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.ArrayList;
@@ -52,8 +49,16 @@ public class OrganizationControllerAdapter implements OrganizationsApi {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     @GetMapping
-    public ResponseEntity<List<OrganizationDTO>> getAllOrganizations() {
+    public ResponseEntity<List<OrganizationDTO>> getAllOrganizations(@RequestParam(name = "name",required = false) String name) {
         List<OrganizationDTO> organizationsDtos = new ArrayList<>();
+
+        if(name != null) {
+            List<Organization> organizations = organizationServicePort.getOrganizationsByName(name);
+            for (Organization organization : organizations) {
+                organizationsDtos.add(organizationDTOMapper.toOrganizationDTO(organization));
+            }
+            return ResponseEntity.ok(organizationsDtos);
+        }
         List<Organization> organizations = organizationServicePort.getAllOrganizations();
         for (Organization organization : organizations) {
 //            OrganizationDTO organizationDTO = new OrganizationDTO();
@@ -74,4 +79,5 @@ public class OrganizationControllerAdapter implements OrganizationsApi {
         }
         return ResponseEntity.ok(organizationDTOMapper.toOrganizationDTO(organization.get()));
     }
+
 }

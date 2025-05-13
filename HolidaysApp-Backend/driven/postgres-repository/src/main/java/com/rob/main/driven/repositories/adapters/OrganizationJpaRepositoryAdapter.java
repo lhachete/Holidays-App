@@ -38,4 +38,14 @@ public class OrganizationJpaRepositoryAdapter implements OrganizationRepositoryP
     public Optional<Organization> findById(Integer id) {
         return Optional.ofNullable(organizationMOMapper.toOrganization(organizationMOJpaRepository.findById(id).get()));
     }
+
+    @Override
+    public List<Organization> findByNameContaining(String name) {
+        return organizationMOJpaRepository.findByNameContaining(name)
+                .stream()
+                .map(organizationMO -> {
+                    return organizationMOMapper.toOrganization(organizationMO);
+                })
+                .toList();
+    }
 }

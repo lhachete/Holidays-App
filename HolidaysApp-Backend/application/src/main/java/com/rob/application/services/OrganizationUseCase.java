@@ -23,4 +23,9 @@ public class OrganizationUseCase implements OrganizationServicePort {
     public Optional<Organization> getOrganizationById(Integer id) {
         return organizationJpaRepositoryPort.findById(id);
     }
+
+    @Override
+    public List<Organization> getOrganizationsByName(String name) {
+        return organizationJpaRepositoryPort.findByNameContaining(name);
+    }
 }
