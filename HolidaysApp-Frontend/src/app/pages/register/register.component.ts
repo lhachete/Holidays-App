@@ -47,6 +47,13 @@ export class RegisterComponent {
         this.router.navigate(['/login']);
       } else {
         console.log('false');
+        Swal.fire({
+          icon: "error",
+          title: "Users already exists with tihs credentials",
+          text: "Username or email already exists",
+          //text: "Password or email is incorrect",
+          //footer: '<a href="#">Why do I have this issue?</a>'
+        });
         // Aquí puedes manejar el error de registro, como mostrar un mensaje al usuario
       }
     }
