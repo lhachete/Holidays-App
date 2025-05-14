@@ -1,11 +1,12 @@
 package com.rob.main.driven.repositories.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "roles")
 public class RoleMO {
@@ -18,5 +19,5 @@ public class RoleMO {
     @jakarta.validation.constraints.Size(max = 50)
     @jakarta.validation.constraints.NotNull
     @Column(name = "rol", nullable = false, length = 50)
-    private String rol;
+    private String name;
 }

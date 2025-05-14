@@ -1,8 +1,10 @@
 package com.rob.driving.controllers.adapters;
 
 import com.rob.application.ports.driving.RoleServicePort;
+import com.rob.domain.models.Organization;
 import com.rob.domain.models.Role;
 import com.rob.driving.api.RolesApi;
+import com.rob.driving.dtos.OrganizationDTO;
 import com.rob.driving.dtos.RoleDTO;
 import com.rob.driving.mappers.RoleDTOMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +25,24 @@ public class RoleControllerAdapter implements RolesApi {
     private final RoleServicePort roleServicePort;
     private final RoleDTOMapper roleDTOMapper;
 
-//    @GetMapping
-//    public ResponseEntity<List<RoleDTO>> getRoles(
-//            @RequestParam(name = "name", required = false) String name) {
-//        List<RoleDTO> rolesDTO = new ArrayList<>();
-//        List<Role> roles = new ArrayList<>();
-//    }
+    @GetMapping
+    public ResponseEntity<List<RoleDTO>> getAllRoles(
+            @RequestParam(name = "name", required = false) String name) {
+        List<RoleDTO> rolesDtos = new ArrayList<>();
+
+        if(name != null) {
+            List<Role> roles = roleServicePort.getRolesByName(name);
+            for (Role role : roles) {
+                rolesDtos.add(roleDTOMapper.toRoleDTO(role));
+            }
+            return ResponseEntity.ok(rolesDtos);
+        }
+        List<Role> roles = roleServicePort.getAllRoles();
+        for (Role role : roles) {
+            rolesDtos.add(roleDTOMapper.toRoleDTO(role));
+        }
+        return ResponseEntity.ok(rolesDtos);
+        // try catch con el error que lo coga de los use case
+        // ej: error 404 y un mensaje
+    }
 }
