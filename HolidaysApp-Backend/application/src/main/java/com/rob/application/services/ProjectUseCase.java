@@ -16,11 +16,9 @@ public class ProjectUseCase implements ProjectServicePort {
 
     @Override
     public List<Project> getProjectsByName(String name) {
+        if (name == null || name.isEmpty()) {
+            return projectRepositoryPort.findAll();
+        }
         return projectRepositoryPort.findByNameContaining(name);
-    }
-
-    @Override
-    public List<Project> getAllProjects() {
-        return projectRepositoryPort.findAll();
     }
 }

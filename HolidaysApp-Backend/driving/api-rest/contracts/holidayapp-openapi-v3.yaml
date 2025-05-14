@@ -14,6 +14,10 @@ tags: # Opcional: para agrupar endpoints
     description: An API CRUD to manage roles
   - name: Projects
     description: An API CRUD to manage projects
+  - name: Employees
+    description: An API CRUD to manage employees
+  - name: Departments
+    description: An API CRUD to manage departments
 paths: # Todos los endpoints de la API
   /api-rest/organizations:
     get:
@@ -517,6 +521,80 @@ paths: # Todos los endpoints de la API
                 type: array
                 items:
                   $ref: '#/components/schemas/ProjectDTO'
+  /api-rest/departments:
+    get:
+      tags:
+        - Departments
+      summary: Get all departments (optionally filtered by name)
+      description: Get all departments or filter by name using query parameter
+      operationId: getAllDepartments
+      parameters:
+        - name: name
+          in: query
+          description: Optional name to filter departments
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DepartmentDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The Project was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DepartmentDTO'
 
 components:
   schemas:
@@ -566,4 +644,26 @@ components:
         projectState:
           type: string
         projectType:
+          type: string
+    DepartmentDTO:
+      description: This is the Department model
+      type: object
+      properties:
+        id:
+          type: integer
+          #format: int32
+        organizationId:
+          type: integer
+          #format: int32
+        name:
+          type: string
+        businessUnit:
+          type: string
+        division:
+          type: string
+        costCenter:
+          type: string
+        location:
+          type: string
+        timeZone:
           type: string

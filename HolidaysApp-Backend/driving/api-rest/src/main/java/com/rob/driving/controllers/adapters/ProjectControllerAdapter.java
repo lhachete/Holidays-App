@@ -28,15 +28,7 @@ public class ProjectControllerAdapter implements ProjectsApi {
     @GetMapping
     public ResponseEntity<List<ProjectDTO>> getAllProjects(@RequestParam(name = "name", required = false) String name) {
         List<ProjectDTO> projectDTOS = new ArrayList<>();
-
-        if(name != null) {
-            List<Project> projects = projectServicePort.getProjectsByName(name);
-            for (Project project : projects) {
-                projectDTOS.add(projectDTOMapper.toProjectDTO(project));
-            }
-            return ResponseEntity.ok(projectDTOS);
-        }
-        List<Project> projects = projectServicePort.getAllProjects();
+        List<Project> projects = projectServicePort.getProjectsByName(name);
         for (Project project : projects) {
             projectDTOS.add(projectDTOMapper.toProjectDTO(project));
         }

@@ -6,6 +6,4 @@ import java.util.List;
 
 public interface ProjectServicePort {
     List<Project> getProjectsByName(String name);
-
-    List<Project> getAllProjects();
 }

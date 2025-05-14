@@ -5,11 +5,12 @@ import com.rob.domain.models.Project;
 import com.rob.main.driven.repositories.ProjectMOJpaRepository;
 import com.rob.main.driven.repositories.mappers.ProjectMOMapper;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Repository
 public class ProjectJpaRepositoryAdapter implements ProjectRepositoryPort {
 

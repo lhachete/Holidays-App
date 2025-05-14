@@ -17,11 +17,9 @@ public class RoleUseCase implements RoleServicePort {
 
     @Override
     public List<Role> getRolesByName(String name) {
+        if (name == null || name.isEmpty()) {
+            return roleRepositoryPort.findAll();
+        }
         return roleRepositoryPort.findByNameContaining(name);
-    }
-
-    @Override
-    public List<Role> getAllRoles() {
-        return roleRepositoryPort.findAll();
     }
 }

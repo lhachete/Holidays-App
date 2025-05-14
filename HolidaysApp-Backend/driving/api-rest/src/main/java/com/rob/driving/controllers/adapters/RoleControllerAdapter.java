@@ -29,15 +29,7 @@ public class RoleControllerAdapter implements RolesApi {
     public ResponseEntity<List<RoleDTO>> getAllRoles(
             @RequestParam(name = "name", required = false) String name) {
         List<RoleDTO> rolesDtos = new ArrayList<>();
-
-        if(name != null) {
-            List<Role> roles = roleServicePort.getRolesByName(name);
-            for (Role role : roles) {
-                rolesDtos.add(roleDTOMapper.toRoleDTO(role));
-            }
-            return ResponseEntity.ok(rolesDtos);
-        }
-        List<Role> roles = roleServicePort.getAllRoles();
+        List<Role> roles = roleServicePort.getRolesByName(name);
         for (Role role : roles) {
             rolesDtos.add(roleDTOMapper.toRoleDTO(role));
         }

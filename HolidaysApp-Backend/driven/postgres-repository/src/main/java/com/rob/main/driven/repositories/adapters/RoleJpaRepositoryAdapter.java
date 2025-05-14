@@ -6,6 +6,7 @@ import com.rob.main.driven.repositories.RoleMORepositoryJpaRepository;
 import com.rob.main.driven.repositories.mappers.RoleMOMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 import static java.util.Arrays.stream;
 
 @Data
-@Service
+@Repository
 @RequiredArgsConstructor
 public class RoleJpaRepositoryAdapter implements RoleRepositoryPort {
 

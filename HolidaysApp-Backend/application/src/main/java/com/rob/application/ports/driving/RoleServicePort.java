@@ -6,6 +6,4 @@ import java.util.List;
 
 public interface RoleServicePort {
     List<Role> getRolesByName(String name);
-
-    List<Role> getAllRoles();
 }

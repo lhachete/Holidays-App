@@ -43,24 +43,11 @@ public class OrganizationControllerAdapter implements OrganizationsApi {
     @GetMapping
     public ResponseEntity<List<OrganizationDTO>> getAllOrganizations(@RequestParam(name = "name",required = false) String name) {
         List<OrganizationDTO> organizationsDtos = new ArrayList<>();
-
-        if(name != null) {
-            List<Organization> organizations = organizationServicePort.getOrganizationsByName(name);
-            for (Organization organization : organizations) {
-                organizationsDtos.add(organizationDTOMapper.toOrganizationDTO(organization));
-            }
-            return ResponseEntity.ok(organizationsDtos);
-        }
-        List<Organization> organizations = organizationServicePort.getAllOrganizations();
+        List<Organization> organizations = organizationServicePort.getOrganizationsByName(name);
         for (Organization organization : organizations) {
-//            OrganizationDTO organizationDTO = new OrganizationDTO();
-//            organizationDTO.setId(organization.getId());
-//            organizationDTO.setName(organization.getName());
             organizationsDtos.add(organizationDTOMapper.toOrganizationDTO(organization));
         }
         return ResponseEntity.ok(organizationsDtos);
-        // try catch con el error que lo coga de los use case
-        // ej: error 404 y un mensaje
     }
 
     @GetMapping("/{id}")
