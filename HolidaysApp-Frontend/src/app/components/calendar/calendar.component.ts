@@ -1,71 +1,86 @@
-import { Component, OnInit, Input}   from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CalendarModule} from 'angular-calendar';
+import { CalendarModule, CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { addMonths, subMonths } from 'date-fns';
 
 @Component({
   selector: 'app-calendar',
-  
-  imports: [
-    CommonModule,
-    FormsModule,
-    CalendarModule
-  ],
+  standalone: true,
+  imports: [CommonModule, FormsModule, CalendarModule],
   templateUrl: './calendar.component.html',
+  
 })
 export class CalendarComponent implements OnInit {
+  @Input() mode: 'show' | 'add' | 'put' | 'del' = 'show';
+  @Input() events: CalendarEvent[] = [];
 
-  @Input()
-  mode: 'show' | 'add' | 'put' | 'del' = 'show';
+  // Evento que emite todos los detalles del día seleccionado
+  @Output() dayDetails = new EventEmitter<CalendarMonthViewDay<CalendarEvent>>();
 
   viewDate!: Date;
   years: number[] = [];
   viewMonth!: number;
   viewYear!: number;
   months = [
-    'January', 'February', 'March',     'April',
-    'May',     'June',     'July',      'August',
-    'September','October', 'November',  'December'
+    'January', 'February', 'March', 'April',
+    'May', 'June', 'July', 'August',
+    'September','October', 'November', 'December'
   ];
 
-  constructor() {}
-
-  ngOnInit() {
+  /**
+   * Inicializa viewDate y genera años disponibles
+   */
+  ngOnInit(): void {
     const today = new Date();
-    this.viewDate  = today;
+    this.viewDate = today;
     this.viewMonth = today.getMonth();
-    this.viewYear  = today.getFullYear();
+    this.viewYear = today.getFullYear();
+    // Crea un array de 7 años: año anterior, año actual y próximos 5 años
+    this.years = Array.from({ length: 7 }, (_, i) => today.getFullYear() - 1 + i);
+  }
 
-    for (let y = today.getFullYear() - 1; y <= today.getFullYear() + 5; y++) {
-      this.years.push(y);
-    }
-}
+  /**
+   * Emite todos los detalles del día al hacer clic en una celda
+   */
+  onDayClick(event: { day: CalendarMonthViewDay<CalendarEvent>; sourceEvent: MouseEvent | KeyboardEvent }): void {
+    this.dayDetails.emit(event.day);
+  }
 
-  prevMonth() {
+  /**
+   * Navega al mes anterior
+   */
+  prevMonth(): void {
     const prev = subMonths(this.viewDate, 1);
     this.viewDate = prev;
     this.viewMonth = prev.getMonth();
-    this.viewYear  = prev.getFullYear();
+    this.viewYear = prev.getFullYear();
   }
 
-  nextMonth() {
+  /**
+   * Navega al mes siguiente
+   */
+  nextMonth(): void {
     const next = addMonths(this.viewDate, 1);
     this.viewDate = next;
     this.viewMonth = next.getMonth();
-    this.viewYear  = next.getFullYear();
+    this.viewYear = next.getFullYear();
   }
 
-  today() {
+  /**
+   * Establece la fecha actual como vista
+   */
+  todayFn(): void {
     const today = new Date();
-    this.viewDate  = today;
+    this.viewDate = today;
     this.viewMonth = today.getMonth();
-    this.viewYear  = today.getFullYear();
+    this.viewYear = today.getFullYear();
   }
 
-    // Para cuando cambien los selects
-    updateViewDate() {
-      this.viewDate = new Date(this.viewYear, this.viewMonth, 1);
-    }
-
+  /**
+   * Actualiza viewDate al cambiar mes o año
+   */
+  updateViewDate(): void {
+    this.viewDate = new Date(this.viewYear, this.viewMonth, 1);
+  }
 }

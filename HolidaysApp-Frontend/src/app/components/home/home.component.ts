@@ -14,7 +14,7 @@ export class HomeComponent {
     get user(): any {
       return this.authService.user;
     }
-  
+    
     get isAuthenticated(): boolean {
       return this.authService.isLoggedIn;
     }

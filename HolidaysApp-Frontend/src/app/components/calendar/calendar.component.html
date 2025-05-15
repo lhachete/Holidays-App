@@ -1,32 +1,25 @@
+<!-- Controles de mes y año -->
+<div class="d-flex mb-4 align-items-center">
+  <select class="form-select me-2" [(ngModel)]="viewMonth" (ngModelChange)="updateViewDate()">
+    <option *ngFor="let m of months; let i = index" [value]="i">{{ m }}</option>
+  </select>
+  <select class="form-select" [(ngModel)]="viewYear" (ngModelChange)="updateViewDate()">
+    <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+  </select>
+</div>
 
-    <!-- Controles de mes y año -->
-    <div class="d-flex mb-4 align-items-center">
-        <select class="form-select me-2" [(ngModel)]="viewMonth" (ngModelChange)="updateViewDate()">
-            <option *ngFor="let m of months; let i = index" [value]="i">
-                {{ m }}
-            </option>
-        </select>
+<!-- Botones de navegación -->
+<div class="d-flex mb-4 justify-content-between align-items-center">
+  <button class="btn btn-primary bg-lightPurple bg-lightPurple-hover w-25" (click)="prevMonth()">◁</button>
+  <button class="btn btn-primary bg-lightPurple bg-lightPurple-hover mx-2 w-50" (click)="todayFn()">Mes actual</button>
+  <button class="btn btn-primary bg-lightPurple bg-lightPurple-hover w-25" (click)="nextMonth()">▷</button>
+</div>
 
-        <select class="form-select" [(ngModel)]="viewYear" (ngModelChange)="updateViewDate()">
-            <option *ngFor="let y of years" [value]="y">
-                {{ y }}
-            </option>
-        </select>
-    </div>
-
-    <!-- Botones de navegación -->
-    <div class="d-flex mb-4 justify-content-between align-items-center">
-        <button class="btn btn-primary bg-lightPurple bg-lightPurple-hover w-25" (click)="prevMonth()"> ◁ </button>
-        <button class="btn btn-primary bg-lightPurple bg-lightPurple-hover mx-2 w-50" (click)="today()">Current
-            month</button>
-        <button class="btn btn-primary bg-lightPurple bg-lightPurple-hover w-25" (click)="nextMonth()"> ▷ </button>
-    </div>
-
-    <!-- Calendario -->
-    <mwl-calendar-month-view
-    [viewDate]="viewDate"
-    [weekStartsOn]="1"
-    style="height: 600px;"
-    />
-    
-
+<!-- Vista del calendario -->
+<mwl-calendar-month-view
+  [viewDate]="viewDate"
+  [events]="events"
+  [weekStartsOn]="1"
+  (dayClicked)="onDayClick($event)"
+  style="height: 600px;"
+></mwl-calendar-month-view>
