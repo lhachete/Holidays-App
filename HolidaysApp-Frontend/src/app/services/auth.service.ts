@@ -27,7 +27,6 @@ export class AuthService {
   async login( userInput: string, password: string): Promise<'OK' | 'USER_ERROR' | 'PASS_ERROR'> {
     try {
       const users: User[] = await this.userService.getAllUsers();
-      console.log('Users:', users);
       const foundUser = users.find(u =>
         u.username === userInput || u.email === userInput
       );
@@ -40,10 +39,12 @@ export class AuthService {
       }
 
       this.user = {
+        id: foundUser.id,
         username: foundUser.username,
         email: foundUser.email,
         roles: foundUser.roles
       };
+      console.log('User found:', this.user);
       this.isAuthenticated = true;
       localStorage.setItem('userSession', JSON.stringify(this.user));
 
