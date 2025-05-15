@@ -16,7 +16,7 @@
                             <input [type]="field.type" class="form-control outline-purple" [id]="field.key"
                                 [formControlName]="field.key" [placeholder]="'Enter ' + field.label" [class.is-invalid]="
                                     form.get(field.key)?.invalid && isTouched(form.get(field.key))
-                                    || (mode === 'login' && field.key==='userInput' && userNotFound)
+                                    || (mode === 'login' && field.key==='username' && userNotFound)
                                     || (mode === 'login' && field.key==='password' && wrongPassword)" />
 
                                 <!-- Si hay errores los muestro -->

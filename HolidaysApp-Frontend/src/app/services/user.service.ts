@@ -12,12 +12,12 @@ export class UserService {
 
   constructor(private api: ApiService) {
     this.usersUrl  = `${this.api.getApiUrl()}/users`;
-    this.loginUrl  = `${this.api.getApiUrl()}/login`;
+    this.loginUrl  = `${this.api.getApiUrl()}/users/login`;
   }
 
   // === Login via POST /login ===
-  login(userInput: string, password: string): Promise<User> {
-    return this.api.post<User>(this.loginUrl, { userInput, password });
+  login(username: string, password: string): Promise<User> {
+    return this.api.post<User>(this.loginUrl, { username, password });
   }
 
   getAllUsers(): Promise<User[]> {

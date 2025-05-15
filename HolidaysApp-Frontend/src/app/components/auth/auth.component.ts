@@ -20,7 +20,7 @@ export class AuthComponent implements OnInit {
 
   // Campos del formulario
   fields: FieldConfig[] = [
-    { key: 'userInput', label: 'Username or Email', type: 'text', modes: ['login'] },
+    { key: 'username', label: 'Username or Email', type: 'text', modes: ['login'] }, //userInput
     { key: 'email', label: 'Email', type: 'email', modes: ['register'] },
     { key: 'username', label: 'Username', type: 'text', modes: ['register'] },
     { key: 'password', label: 'Password', type: 'password', modes: ['login', 'register'] },
@@ -28,7 +28,7 @@ export class AuthComponent implements OnInit {
   ];
 
   loginForm = new FormGroup({
-    userInput: new FormControl('', [Validators.required]),
+    username: new FormControl('', [Validators.required]), //userInput
     password: new FormControl('', [Validators.required, Validators.minLength(8)])
   });
 
@@ -90,12 +90,12 @@ export class AuthComponent implements OnInit {
   // LOGIN
   async login(): Promise<void> {
 
-    const userInput = this.loginForm.value.userInput ?? '';
+    const username = this.loginForm.value.username ?? ''; // userInput
     const password = this.loginForm.value.password ?? '';
 
     //this.userNotFound = this.wrongPassword = false;
 
-    const result = await this.authService.login(userInput, password);
+    const result = await this.authService.login(username, password);
 
     if (result === 'OK') {
       this.router.navigateByUrl('/');

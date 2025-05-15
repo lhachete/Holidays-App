@@ -22,14 +22,19 @@ export class AuthService {
     }
   }
 
-  /**
-   * Intenta autenticar al usuario contra la API (in-memory para pruebas)
-   */
-  async login(userInput: string, password: string): Promise<'OK' | 'USER_ERROR' | 'PASS_ERROR'> {
+  //utilizado antes userInput aqui
+  async login(username: string, password: string): Promise<'OK' | 'USER_ERROR' | 'PASS_ERROR'> {
     try {
+      console.log("enter login"); // entra en el login
+      console.log('username', username);
+      console.log('password', password);
 
-      const foundUser = await this.userService.login(userInput, password);
+      const foundUser = await this.userService.login(username, password);
       console.log('foundUser', foundUser);
+      if (!foundUser) {
+        console.error('Backend devolvió null o user no encontrado');
+        return 'USER_ERROR';
+      }
       this.user = {
         id: foundUser.id,
         username: foundUser.username,
@@ -42,6 +47,7 @@ export class AuthService {
 
     } catch (err: any) {
       const code = err.status;
+      console.error('Error logging in', err);
       if (code === 404) return 'USER_ERROR';
       if (code === 401) return 'PASS_ERROR';
       return 'USER_ERROR';
@@ -50,7 +56,7 @@ export class AuthService {
 
   //Registra un nuevo usuario en la API (in-memory para pruebas)
 
-  async registerUser(user: {username: string; email: string; password: string;}): Promise<User> {
+  async registerUser(user: { username: string; email: string; password: string; }): Promise<User> {
     const newUser = await this.userService.addUser({
       ...user,
       roles: ['USUARIO']

@@ -15,6 +15,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api-rest/users")
 @RequiredArgsConstructor
+@CrossOrigin(
+        origins      = "http://localhost:4200",
+        methods      = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS },
+        allowedHeaders = "*",
+        allowCredentials = "true"
+)
 public class UserControllerAdapter implements UsersApi {
 
     private final UserServicePort userServicePort;
