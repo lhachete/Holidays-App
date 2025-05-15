@@ -14,10 +14,12 @@ tags: # Opcional: para agrupar endpoints
     description: An API CRUD to manage roles
   - name: Projects
     description: An API CRUD to manage projects
-  - name: Employees
-    description: An API CRUD to manage employees
   - name: Departments
     description: An API CRUD to manage departments
+  - name: Employees
+    description: An API CRUD to manage employees
+  - name: Users
+    description: An API CRUD to manage users
 paths: # Todos los endpoints de la API
   /api-rest/organizations:
     get:
@@ -578,7 +580,7 @@ paths: # Todos los endpoints de la API
                     example: You do not have permission to access this resource
 
         "404":
-          description: Project not found
+          description: Department not found
           content:
             application/json:
               schema:
@@ -586,7 +588,81 @@ paths: # Todos los endpoints de la API
                 properties:
                   error:
                     type: string
-                    example: The Project was not found
+                    example: The Department was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DepartmentDTO'
+  /api-rest/employees:
+    get:
+      tags:
+        - Employees
+      summary: Get all Employees (optionally filtered by name)
+      description: Get all employees or filter by name using query parameter
+      operationId: getAllEmployees
+      parameters:
+        - name: name
+          in: query
+          description: Optional name to filter employees
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmployeeDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: Employee not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The Employee was not found
         '500':
           description: Internal Server Error
           content:
@@ -666,4 +742,53 @@ components:
         location:
           type: string
         timeZone:
+          type: string
+    EmployeeDTO:
+      description: This is the Employee model
+      type: object
+      properties:
+        person_id:
+          type: integer
+          #format: int32
+        dept_id:
+          type: integer
+          #format: int32
+        project_id:
+          type: integer
+          #format: int32
+        user_id:
+          type: integer
+          #format: int32
+        nif:
+          type: string
+        birthday:
+          type: string
+          format: date
+        country_of_birth:
+          type: string
+        birth_city:
+          type: string
+        personal_phone:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        title:
+          type: string
+        gender:
+          type: string
+        marital_status:
+          type: string
+        nationality:
+          type: string
+        second_nationality:
+          type: string
+        primary_residence:
+          type: string
+        personal_email:
+          type: string
+        secondary_email:
+          type: string
+        work_email:
           type: string
