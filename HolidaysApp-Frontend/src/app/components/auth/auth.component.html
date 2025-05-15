@@ -33,7 +33,8 @@
                         @if (mode==='login' && (userNotFound || wrongPassword)) {
                         <div class="d-flex align-items-center justify-content-center mb-1">
                             <p class="alert alert-danger mt-2 fw-bold" role="alert">
-                                {{ userNotFound ? 'Invalid user' : 'Wrong password!' }}
+                                <!-- {{ userNotFound ? 'Invalid user' : 'Wrong password!' }} -->
+                                {{ userNotFound ? 'Invalid credentials' : 'Wrong password!' }}
                             </p>
                         </div>
                         }

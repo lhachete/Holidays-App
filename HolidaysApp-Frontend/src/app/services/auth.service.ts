@@ -22,14 +22,13 @@ export class AuthService {
     }
   }
 
-  //utilizado antes userInput aqui
-  async login(username: string, password: string): Promise<'OK' | 'USER_ERROR' | 'PASS_ERROR'> {
+  async login(userInput: string, password: string): Promise<'OK' | 'USER_ERROR' | 'PASS_ERROR'> {
     try {
       console.log("enter login"); // entra en el login
-      console.log('username', username);
+      console.log('userInput', userInput);
       console.log('password', password);
 
-      const foundUser = await this.userService.login(username, password);
+      const foundUser = await this.userService.login(userInput, password);
       console.log('foundUser', foundUser);
       if (!foundUser) {
         console.error('Backend devolvió null o user no encontrado');
