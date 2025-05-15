@@ -6,7 +6,6 @@ import com.rob.driving.dtos.OrganizationDTO;
 import org.springframework.stereotype.Component;
 import org.mapstruct.Mapper;
 
-@Component
 @Mapper(componentModel = "spring")
 public interface OrganizationDTOMapper {
 

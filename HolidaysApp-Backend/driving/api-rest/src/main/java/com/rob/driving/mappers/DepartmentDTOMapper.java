@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 
-@Component
+
 @Mapper(componentModel = "spring", uses = {OrganizationDTOMapper.class})
 public interface DepartmentDTOMapper {
 
