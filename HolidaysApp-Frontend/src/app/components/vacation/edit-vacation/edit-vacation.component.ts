@@ -12,7 +12,6 @@ import Swal from 'sweetalert2';
   templateUrl: './edit-vacation.component.html'
 })
 export class EditVacationComponent {
-  // Lista de vacaciones del usuario
   userEvents: CalendarEvent[] = [];
 
   get user(): any {
@@ -108,12 +107,12 @@ export class EditVacationComponent {
     today.setHours(0, 0, 0, 0); // eliminar la hora
 
     if (newStart <= today) {
-      Swal.fire('Error', 'La fecha de inicio debe ser posterior a la actual.', 'error');
+      Swal.fire('Error', 'The start date must be later than the current date.', 'error');
       return false;
     }
 
     if (newEnd < newStart) {
-      Swal.fire('Error', 'La fecha de fin no puede ser anterior a la de inicio y viceversa.', 'error');
+      Swal.fire('Error', 'The end date cannot be earlier than the start date, and the start date cannot be later than the end date.', 'error');
       return false;
     }
 console.log(this.userEvents)
@@ -126,7 +125,7 @@ console.log(this.userEvents)
 
       const overlaps = newStart <= existingEnd && newEnd >= existingStart;
       if (overlaps) {
-        Swal.fire('Error', 'El nuevo rango se solapa con otra vacación existente.', 'error');
+        Swal.fire('Error', 'The new rank overlaps with an existing holiday.', 'error');
         return false;
       }
     }
@@ -158,7 +157,7 @@ console.log(this.userEvents)
         ...ev,
         start: values.holiday_start_date,
         end: values.holiday_end_date,
-        title: `Vacación ${values.holiday_start_date.toLocaleDateString()} → ${values.holiday_end_date.toLocaleDateString()}`
+        title: `Holiday ${values.holiday_start_date.toLocaleDateString()} → ${values.holiday_end_date.toLocaleDateString()}`
       } : ev
     );
   };
