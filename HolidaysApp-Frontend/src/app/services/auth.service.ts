@@ -34,7 +34,7 @@ export class AuthService {
         id: foundUser.id,
         username: foundUser.username,
         email: foundUser.email,
-        roles: foundUser.roles
+        role: foundUser.role
       };
       this.isAuthenticated = true;
       localStorage.setItem('userSession', JSON.stringify(this.user));
@@ -53,7 +53,7 @@ export class AuthService {
   async registerUser(user: {username: string; email: string; password: string;}): Promise<User> {
     const newUser = await this.userService.addUser({
       ...user,
-      roles: ['USUARIO']
+      role: { id: 8, name: 'USUARIO' } // Asignar rol de usuario por defecto
     } as User);
     return newUser;
   }
