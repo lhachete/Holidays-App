@@ -1,3 +1,4 @@
+// user.service.ts
 import { Injectable } from '@angular/core';
 import User from '../models/User';
 import { ApiService } from './api.service';
@@ -6,29 +7,36 @@ import { ApiService } from './api.service';
   providedIn: 'root'
 })
 export class UserService {
-  apiUrl: string;
+  private usersUrl: string;
+  private loginUrl: string;
 
   constructor(private api: ApiService) {
-    this.apiUrl = `${this.api.getApiUrl()}/users`;
+    this.usersUrl  = `${this.api.getApiUrl()}/users`;
+    this.loginUrl  = `${this.api.getApiUrl()}/login`;
+  }
+
+  // === Login via POST /login ===
+  login(userInput: string, password: string): Promise<User> {
+    return this.api.post<User>(this.loginUrl, { userInput, password });
   }
 
   getAllUsers(): Promise<User[]> {
-    return this.api.get<User[]>(`${this.apiUrl}`);
+    return this.api.get<User[]>(this.usersUrl);
   }
 
   getUserById(id: number): Promise<User> {
-    return this.api.get<User>(`${this.apiUrl}/${id}`);
+    return this.api.get<User>(`${this.usersUrl}/${id}`);
   }
 
   addUser(user: User): Promise<User> {
-    return this.api.post<User>(this.apiUrl, user);
+    return this.api.post<User>(this.usersUrl, user);
   }
 
   updateUser(user: User): Promise<User> {
-    return this.api.put<User>(`${this.apiUrl}/${user.id}`, user);
+    return this.api.put<User>(`${this.usersUrl}/${user.id}`, user);
   }
 
   deleteUser(id: number): Promise<void> {
-    return this.api.delete<void>(`${this.apiUrl}/${id}`);
+    return this.api.delete<void>(`${this.usersUrl}/${id}`);
   }
 }

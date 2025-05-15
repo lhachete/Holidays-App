@@ -27,7 +27,7 @@ bootstrapApplication(AppComponent, {
 
       InMemoryWebApiModule.forRoot(InMemoryDataService, {
         dataEncapsulation: false,    // devuelve el array “directo”, no { data: [...] }
-        passThruUnknownUrl:  false,    // deja pasar otras URLs reales
+        passThruUnknownUrl:  true,    // deja pasar otras URLs reales
         apiBase: "api/"
       })
     ),
