@@ -36,8 +36,9 @@ export class CalendarComponent implements OnInit {
     this.viewDate = today;
     this.viewMonth = today.getMonth();
     this.viewYear = today.getFullYear();
-    // Crea un array de 7 años: año anterior, año actual y próximos 5 años
-    this.years = Array.from({ length: 7 }, (_, i) => today.getFullYear() - 1 + i);
+    for (let y = today.getFullYear() - 1; y <= today.getFullYear() + 5; y++) {
+      this.years.push(y);
+    }
   }
 
   /**
