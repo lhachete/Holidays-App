@@ -28,10 +28,10 @@ export class EditVacationComponent {
   private loadUserHolidays = async (): Promise<void> => {
     const userId = this.user.id;
     const holidays = await this.holidayService.getHolidaysById(userId);
-    console.log('Holidays:', holidays);
     this.userEvents = holidays.map(holiday => {
       return this.mapToCalendarEvent(holiday)
     });
+    console.log('userEvents', this.userEvents);
   };
 
   // Mapeo las holidays, y le doy formato.
@@ -47,16 +47,24 @@ export class EditVacationComponent {
    */
   onDayDetails = async (day: CalendarMonthViewDay<CalendarEvent>): Promise<void> => {
     const events = day.events;
+    console.log('events', events);
+
+    console.log('events', day);
     if (events.length) {
       const data = this.prepareEditData(events[0]);
 
       if (data) {
         const formValues = await this.openEditModal(data);
-
         if (formValues) {
-          await this.saveChanges(data, formValues);
-          this.refreshCalendar(data.id, formValues);
-          this.showSuccessToast();
+          const newStart = formValues.holiday_start_date;
+          const newEnd = formValues.holiday_end_date;
+
+          if (this.isValidVacationRange(newStart, newEnd, data.id)) {
+
+            await this.saveChanges(data, formValues);
+            this.refreshCalendar(data.id, formValues);
+            this.showSuccessToast();
+          }
         }
       }
     }
@@ -90,13 +98,11 @@ export class EditVacationComponent {
       focusConfirm: false,
       preConfirm: () => this.parseModalDates()
     });
-
     return result.value; // { holiday_start_date, holiday_end_date }
   };
 
-  /**
-   * Convierte Date a YYYY-MM-DD para input
-   */
+  //!Convierte Date a YYYY-MM-DD para input
+
   private toDateInputValue = (date: Date): string => {
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -104,9 +110,9 @@ export class EditVacationComponent {
     return `${y}-${m}-${d}`;
   };
 
-  /**
-   * Valida y parsea fechas del modal
-   */
+
+  //!Valida y parsea fechas del modal
+
   private parseModalDates = (): { holiday_start_date: Date; holiday_end_date: Date } | void => {
     const start = (document.getElementById('start') as HTMLInputElement).value;
     const end = (document.getElementById('end') as HTMLInputElement).value;
@@ -122,9 +128,40 @@ export class EditVacationComponent {
     };
   };
 
-  /**
-   * Envia PUT al servidor con los nuevos datos
-   */
+  //Función para comprobar la fecha editada
+  private isValidVacationRange = (newStart: Date, newEnd: Date, holidayId: number): boolean => {
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // eliminar la hora
+
+    if (newStart <= today) {
+      Swal.fire('Error', 'La fecha de inicio debe ser posterior a la actual.', 'error');
+      return false;
+    }
+
+    if (newEnd < newStart) {
+      Swal.fire('Error', 'La fecha de fin no puede ser anterior a la de inicio.', 'error');
+      return false;
+    }
+console.log(this.userEvents)
+    // Verificar solapamiento con otras vacaciones
+    for (const event of this.userEvents) {
+      if (event.meta?.id === holidayId) continue; // Ignorar la vacación actual
+      
+      const existingStart = new Date(event.start);
+      const existingEnd = new Date(event.end!);
+
+      const overlaps = newStart <= existingEnd && newEnd >= existingStart;
+      if (overlaps) {
+        Swal.fire('Error', 'El nuevo rango se solapa con otra vacación existente.', 'error');
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+
   private saveChanges = async (
     data: { id: number; user_id: number },
     values: { holiday_start_date: Date; holiday_end_date: Date }
@@ -138,9 +175,7 @@ export class EditVacationComponent {
     });
   };
 
-  /**
-   * Actualiza el array local para reflejar los cambios
-   */
+  
   private refreshCalendar = (
     id: number,
     values: { holiday_start_date: Date; holiday_end_date: Date }
@@ -155,9 +190,6 @@ export class EditVacationComponent {
     );
   };
 
-  /**
-   * Muestra toast de éxito tras guardar
-   */
   private showSuccessToast = (): void => {
     Swal.fire({
       toast: true,
