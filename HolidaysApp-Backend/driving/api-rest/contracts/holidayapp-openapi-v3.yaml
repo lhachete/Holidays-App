@@ -670,7 +670,81 @@ paths: # Todos los endpoints de la API
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DepartmentDTO'
+                  $ref: '#/components/schemas/EmployeeDTO'
+  /api-rest/users:
+    get:
+      tags:
+        - Users
+      summary: Get all Users (optionally filtered by name)
+      description: Get all users or filter by name using query parameter
+      operationId: getAllUsers
+      parameters:
+        - name: username
+          in: query
+          description: Optional username to filter users
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The User was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
 
 components:
   schemas:
@@ -747,16 +821,16 @@ components:
       description: This is the Employee model
       type: object
       properties:
-        person_id:
+        personId:
           type: integer
           #format: int32
-        dept_id:
+        deptId:
           type: integer
           #format: int32
-        project_id:
+        projectId:
           type: integer
           #format: int32
-        user_id:
+        userId:
           type: integer
           #format: int32
         nif:
@@ -792,3 +866,18 @@ components:
           type: string
         work_email:
           type: string
+    UserDTO:
+        description: This is the User model
+        type: object
+        properties:
+          id:
+            type: integer
+          role:
+            type: object
+            $ref: '#/components/schemas/RoleDTO'
+          username:
+            type: string
+          password:
+            type: string
+          enabled:
+            type: boolean

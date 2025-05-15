@@ -1,9 +1,6 @@
 package com.rob.main.driven.repositories.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -21,6 +18,11 @@ public class UserMO {
     @Column(name = "user_id", nullable = false)
     private Integer id;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "rol_id", nullable = false)
+    private RoleMO rol;
+
     @Size(max = 255)
     @NotNull
     @Column(name = "username", nullable = false)
@@ -33,10 +35,6 @@ public class UserMO {
 
     @NotNull
     @Column(name = "enabled", nullable = false)
-    private Boolean enabled = false;
-
-    @Size(max = 255)
-    @Column(name = "profile")
-    private String profile;
+    private Boolean enabled;
 
 }
