@@ -35,4 +35,9 @@ public class UserJpaRepositoryAdapter implements UserRepositoryPort {
                 .map(userMOMapper::toUser)
                 .toList();
     }
+
+    @Override
+    public User findByUsernameAndPassword(String username, String password) {
+        return userMOMapper.toUser(userMOJpaRepository.findByUsernameAndPassword(username, password));
+    }
 }

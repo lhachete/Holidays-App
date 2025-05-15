@@ -21,4 +21,9 @@ public class UserUseCase implements UserServicePort {
         }
         return userRepositoryPort.findByNameContaining(username);
     }
+
+    @Override
+    public User getUserByUsernameAndPassword(String username, String password) {
+        return userRepositoryPort.findByUsernameAndPassword(username, password);
+    }
 }

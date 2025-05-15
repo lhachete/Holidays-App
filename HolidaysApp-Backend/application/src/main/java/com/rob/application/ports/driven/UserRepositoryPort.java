@@ -11,4 +11,6 @@ public interface UserRepositoryPort {
     List<User> findByNameContaining(String name);
 
     List<User> findAll();
+
+    User findByUsernameAndPassword(String username, String password);
 }

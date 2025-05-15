@@ -3,14 +3,12 @@ package com.rob.driving.controllers.adapters;
 import com.rob.application.ports.driving.UserServicePort;
 import com.rob.domain.models.User;
 import com.rob.driving.api.UsersApi;
+import com.rob.driving.dtos.LoginRequest;
 import com.rob.driving.dtos.UserDTO;
 import com.rob.driving.mappers.UserDTOMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,5 +31,10 @@ public class UserControllerAdapter implements UsersApi {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserDTO> getUserByUsernameAndPassword(@RequestBody LoginRequest loginRequest) {
+        return ResponseEntity.ok(userDTOMapper.toUserDTO(userServicePort.getUserByUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword())));
     }
 }

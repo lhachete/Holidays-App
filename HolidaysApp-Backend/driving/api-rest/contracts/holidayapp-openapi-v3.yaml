@@ -745,6 +745,79 @@ paths: # Todos los endpoints de la API
                 type: array
                 items:
                   $ref: '#/components/schemas/UserDTO'
+  /api-rest/users/login:
+    post:
+      tags:
+        - Users
+      summary: Login with the User's username and password
+      description: Login with the User's username and password using a request body
+      operationId: getUserByUsernameAndPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/UserDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The User was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
 
 components:
   schemas:
@@ -881,3 +954,11 @@ components:
             type: string
           enabled:
             type: boolean
+    LoginRequest:
+      description: This is the Login Request model
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
