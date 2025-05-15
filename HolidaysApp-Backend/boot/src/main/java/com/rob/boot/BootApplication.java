@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = "com.rob.main.driven.repositories")
 @EntityScan(basePackages = "com.rob.main.driven.repositories.models")
 @ComponentScan(basePackages = {
-        "com.rob.driving.controllers",
         "com.rob.driving.mappers",
+        "com.rob.driving.controllers",
         "com.rob.driving.dtos",
         "com.rob.driving.api",
         "com.rob.main.driven.repositories",

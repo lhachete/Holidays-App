@@ -1,0 +1,4 @@
+ALTER TABLE employees
+    ALTER COLUMN title TYPE TEXT,
+    ALTER COLUMN gender TYPE TEXT,
+    ALTER COLUMN marital_status TYPE TEXT

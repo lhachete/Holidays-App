@@ -1,7 +1,7 @@
 package com.rob.main.driven.repositories.models;
 
 import jakarta.persistence.*;
-import org.jetbrains.annotations.NotNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -10,23 +10,320 @@ servers: # URLs base del servidor
 tags: # Opcional: para agrupar endpoints
   - name: Organizations
     description: An API CRUD to manage organizations
+  - name: Roles
+    description: An API CRUD to manage roles
+  - name: Projects
+    description: An API CRUD to manage projects
+  - name: Departments
+    description: An API CRUD to manage departments
+  - name: Employees
+    description: An API CRUD to manage employees
+  - name: Users
+    description: An API CRUD to manage users
 paths: # Todos los endpoints de la API
   /api-rest/organizations:
     get:
       tags:
         - Organizations
-      summary: Get all organizations
-      description: Get all organizations of Organizations APIs
+      summary: Get all organizations (optionally filtered by name)
+      description: Get all organizations or filter by name using query parameter
       operationId: getAllOrganizations
+      parameters:
+        - name: name
+          in: query
+          description: Optional name to filter organizations
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: OK
           content:
-            application/hal+json:
+            application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/OrganizationDTO'
+        '400':
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+        '401':
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+        '403':
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+        "404":
+          description: Organization not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The Organization was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unexpected error occurred
+    post:
+      tags:
+        - Organizations
+      summary: Create a new organization
+      description: Creates a new organization and returns the created resource
+      operationId: createOrganization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreateDTO'
+      responses:
+        '201':
+          description: Organization created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationDTO'
+        '400':
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+        '401':
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+        "404":
+          description: Organization not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The Organization was not found
+        '403':
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unexpected error occurred
+    put:
+      tags:
+        - Organizations
+      summary: Update an existing organization
+      description: Updates an organization by its ID, which must be included in the request body
+      operationId: updateOrganization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationDTO'
+      responses:
+        '200':
+          description: Organization updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationDTO'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid data
+        '401':
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+        '403':
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+        '404':
+          description: Organization not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The specified ID does not exist
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unexpected error occurred
+
+  /api-rest/organizations/{organizationId}:
+    get:
+      tags:
+        - Organizations
+      summary: Get Organization by ID
+      description: Get a Organization of Organizations APIs by ID
+      operationId: getOrganizationById
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: Organization not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The Organization was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationDTO'
+    delete:
+      tags:
+        - Organizations
+      summary: Delete an organization
+      description: Deletes an organization by its ID
+      operationId: deleteOrganizationById
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          description: ID of the organization to delete
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationDTO'
         "400":
           description: Wrong Request – invalid parameters
           content:
@@ -78,6 +375,450 @@ paths: # Todos los endpoints de la API
                 type: array
                 items:
                   $ref: '#/components/schemas/OrganizationDTO'
+  /api-rest/roles:
+    get:
+      tags:
+        - Roles
+      summary: Get all roles (optionally filtered by name)
+      description: Get all roles or filter by name using query parameter
+      operationId: getAllRoles
+      parameters:
+        - name: name
+          in: query
+          description: Optional name to filter roles
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: Role not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The Role was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleDTO'
+  /api-rest/projects:
+    get:
+      tags:
+        - Projects
+      summary: Get all projects (optionally filtered by name)
+      description: Get all projects or filter by name using query parameter
+      operationId: getAllProjects
+      parameters:
+        - name: name
+          in: query
+          description: Optional name to filter projects
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The Project was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectDTO'
+  /api-rest/departments:
+    get:
+      tags:
+        - Departments
+      summary: Get all departments (optionally filtered by name)
+      description: Get all departments or filter by name using query parameter
+      operationId: getAllDepartments
+      parameters:
+        - name: name
+          in: query
+          description: Optional name to filter departments
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DepartmentDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: Department not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The Department was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DepartmentDTO'
+  /api-rest/employees:
+    get:
+      tags:
+        - Employees
+      summary: Get all Employees (optionally filtered by name)
+      description: Get all employees or filter by name using query parameter
+      operationId: getAllEmployees
+      parameters:
+        - name: name
+          in: query
+          description: Optional name to filter employees
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmployeeDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: Employee not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The Employee was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmployeeDTO'
+  /api-rest/users:
+    get:
+      tags:
+        - Users
+      summary: Get all Users (optionally filtered by name)
+      description: Get all users or filter by name using query parameter
+      operationId: getAllUsers
+      parameters:
+        - name: username
+          in: query
+          description: Optional username to filter users
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The User was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+  /api-rest/users/login:
+    post:
+      tags:
+        - Users
+      summary: Login with the User's username and password
+      description: Login with the User's username and password using a request body
+      operationId: getUserByUsernameAndPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/UserDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The User was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+
 components:
   schemas:
     OrganizationDTO:
@@ -86,6 +827,138 @@ components:
       properties:
         id:
           type: integer
+        name:
+          type: string
+    OrganizationCreateDTO:
+      description: This is the Organization model to create
+      type: object
+      properties:
+        name:
+          type: string
+    RoleDTO:
+      description: This is the Role model
+      type: object
+      properties:
+        id:
+          type: integer
           #format: int32
         name:
+          type: string
+    ProjectDTO:
+      description: This is the Project model
+      type: object
+      properties:
+        id:
+          type: integer
+          #format: int32
+        name:
+          type: string
+        description:
+          type: string
+        startDate:
+          type: string
+          format: date
+        expectedEndDate:
+          type: string
+          format: date
+        realEndDate:
+          type: string
+          format: date
+        projectState:
+          type: string
+        projectType:
+          type: string
+    DepartmentDTO:
+      description: This is the Department model
+      type: object
+      properties:
+        id:
+          type: integer
+          #format: int32
+        organizationId:
+          type: integer
+          #format: int32
+        name:
+          type: string
+        businessUnit:
+          type: string
+        division:
+          type: string
+        costCenter:
+          type: string
+        location:
+          type: string
+        timeZone:
+          type: string
+    EmployeeDTO:
+      description: This is the Employee model
+      type: object
+      properties:
+        personId:
+          type: integer
+          #format: int32
+        deptId:
+          type: integer
+          #format: int32
+        projectId:
+          type: integer
+          #format: int32
+        userId:
+          type: integer
+          #format: int32
+        nif:
+          type: string
+        birthday:
+          type: string
+          format: date
+        country_of_birth:
+          type: string
+        birth_city:
+          type: string
+        personal_phone:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        title:
+          type: string
+        gender:
+          type: string
+        marital_status:
+          type: string
+        nationality:
+          type: string
+        second_nationality:
+          type: string
+        primary_residence:
+          type: string
+        personal_email:
+          type: string
+        secondary_email:
+          type: string
+        work_email:
+          type: string
+    UserDTO:
+        description: This is the User model
+        type: object
+        properties:
+          id:
+            type: integer
+          role:
+            type: object
+            $ref: '#/components/schemas/RoleDTO'
+          username:
+            type: string
+          password:
+            type: string
+          enabled:
+            type: boolean
+    LoginRequest:
+      description: This is the Login Request model
+      type: object
+      properties:
+        username:
+          type: string
+        password:
           type: string
