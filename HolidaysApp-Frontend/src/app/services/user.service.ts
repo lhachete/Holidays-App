@@ -17,7 +17,10 @@ export class UserService {
 
   // === Login via POST /login ===
   login(userInput: string, password: string): Promise<User> {
-    return this.api.post<User>(this.loginUrl, { userInput, password });
+    let user: Promise<User> = this.api.post<User>(this.loginUrl, { userInput, password });
+    console.log(user);
+    return user;
+    //return this.api.post<User>(this.loginUrl, { userInput, password });
   }
 
   getAllUsers(): Promise<User[]> {
