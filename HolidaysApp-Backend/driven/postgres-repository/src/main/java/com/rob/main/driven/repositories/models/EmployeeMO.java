@@ -28,6 +28,11 @@ public class EmployeeMO {
     @JoinColumn(name = "project_id", nullable = false)
     private ProjectMO project;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @Size(max = 255)
     @NotNull
     @Column(name = "nif", nullable = false)
