@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Injectable } from '@angular/core';
 import { catchError, firstValueFrom, map, Observable, of } from 'rxjs';
+import User from '../models/User';
 
 @Injectable({ providedIn: 'root' })
 
@@ -20,6 +21,22 @@ export class UserService {
     y sino la esperan dara error porque la funcion no habra devuelto nada
   */
   // La funcion es asincrona porque hace una peticion http y se sabe que puede tardar un tiempo en completarse
+  login2(usernameOrEmail: string, password: string): Observable<User> { 
+    try {
+      const loginRequest = {
+        uername: usernameOrEmail,
+        password: password
+      }
+      let User: Observable<User> = this.httpClient.get<User>('https://dummyjson.com/users', loginRequest); // esto devuelve un objeto que dentro
+      console.log('respuesta:');
+      console.log(User);
+      return User;
+    } catch (error) {
+      console.error('Error during login:', error);
+      return of({} as User);
+    }
+  } // El promise es como el future de Flutter, es una promesa que se resuelve en el futuro y
+  
   async login(usernameOrEmail: string, password: string): Promise<boolean> { // El promise es como el future de Flutter, es una promesa que se resuelve en el futuro y 
     // hasta entonces no tiene valor
 

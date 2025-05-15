@@ -53,32 +53,34 @@ export class LoginComponent {
       console.log(this.formValidationErrors);
 
       console.log('Formulario inválido');
-    } else {
-      if (await this.userService.login(form.value.usernameOrEmail, form.value.password)) {
-        this.username = this.userService.username; // Guardar el nombre de usuario en la variable de clase
-        console.log('username:', this.username);
-        console.log('true')
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Login successful",
-          showConfirmButton: false,
-          timer: 1500
-        });
-        // Aquí puedes redirigir al usuario a otra página o realizar cualquier otra acción
-        // Por ejemplo, redirigir a la página de inicio:
-        this.router.navigate(['/home']); // Asegúrate de importar Router y agregarlo en el constructor
-      } else {
-        this.formValidationErrors = this.getFormValidationErrors();
-        console.log('false')
-        Swal.fire({
-          icon: "error",
-          title: "Error with credentials",
-          text: "Password or email is incorrect",
-          //footer: '<a href="#">Why do I have this issue?</a>'
-        });
-      }
-    }
+    } 
+    
+    // else {
+    //   if (await this.userService.login(form.value.usernameOrEmail, form.value.password)) {
+    //     this.username = this.userService.username; // Guardar el nombre de usuario en la variable de clase
+    //     console.log('username:', this.username);
+    //     console.log('true')
+    //     Swal.fire({
+    //       position: "center",
+    //       icon: "success",
+    //       title: "Login successful",
+    //       showConfirmButton: false,
+    //       timer: 1500
+    //     });
+    //     // Aquí puedes redirigir al usuario a otra página o realizar cualquier otra acción
+    //     // Por ejemplo, redirigir a la página de inicio:
+    //     this.router.navigate(['/home']); // Asegúrate de importar Router y agregarlo en el constructor
+    //   } else {
+    //     this.formValidationErrors = this.getFormValidationErrors();
+    //     console.log('false')
+    //     Swal.fire({
+    //       icon: "error",
+    //       title: "Error with credentials",
+    //       text: "Password or email is incorrect",
+    //       //footer: '<a href="#">Why do I have this issue?</a>'
+    //     });
+    //   }
+    // }
   }
 
   getFormValidationErrors(): string[] {
