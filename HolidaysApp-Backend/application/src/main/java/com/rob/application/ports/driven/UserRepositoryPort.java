@@ -13,4 +13,6 @@ public interface UserRepositoryPort {
     List<User> findAll();
 
     User findByUsernameAndPassword(String username, String password);
+
+    User save(User user);
 }

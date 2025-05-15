@@ -4,6 +4,7 @@ import com.rob.application.ports.driving.UserServicePort;
 import com.rob.domain.models.User;
 import com.rob.driving.api.UsersApi;
 import com.rob.driving.dtos.LoginRequest;
+import com.rob.driving.dtos.RegisterRequest;
 import com.rob.driving.dtos.UserDTO;
 import com.rob.driving.mappers.UserDTOMapper;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +43,11 @@ public class UserControllerAdapter implements UsersApi {
     @PostMapping("/login")
     public ResponseEntity<UserDTO> getUserByUsernameAndPassword(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(userDTOMapper.toUserDTO(userServicePort.getUserByUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword())));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserDTO> register(@RequestBody RegisterRequest req) {
+        User newUser = userServicePort.register(req.getUsername(), req.getPassword());
+        return ResponseEntity.ok(userDTOMapper.toUserDTO(newUser));
     }
 }

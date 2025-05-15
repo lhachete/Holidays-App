@@ -818,6 +818,28 @@ paths: # Todos los endpoints de la API
                 type: array
                 items:
                   $ref: '#/components/schemas/UserDTO'
+  /api-rest/users/register:
+    post:
+      tags:
+        - Users
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '200':
+          description: Usuario creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '400':
+          description: Bad Request – datos inválidos
+        '500':
+          description: Internal Server Error
 
 components:
   schemas:
@@ -957,6 +979,17 @@ components:
     LoginRequest:
       description: This is the Login Request model
       type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    RegisterRequest:
+      description: This is the Register Request model
+      type: object
+      required:
+        - username
+        - password
       properties:
         username:
           type: string
