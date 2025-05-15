@@ -101,33 +101,6 @@ export class EditVacationComponent {
     return result.value; // { holiday_start_date, holiday_end_date }
   };
 
-  //!Convierte Date a YYYY-MM-DD para input
-
-  private toDateInputValue = (date: Date): string => {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
-  };
-
-
-  //!Valida y parsea fechas del modal
-
-  private parseModalDates = (): { holiday_start_date: Date; holiday_end_date: Date } | void => {
-    const start = (document.getElementById('start') as HTMLInputElement).value;
-    const end = (document.getElementById('end') as HTMLInputElement).value;
-    if (!start || !end) {
-      Swal.showValidationMessage('You must select both start and end dates');
-      return;
-    }
-    const [sy, sm, sd] = start.split('-').map(Number);
-    const [ey, em, ed] = end.split('-').map(Number);
-    return {
-      holiday_start_date: new Date(sy, sm - 1, sd),
-      holiday_end_date: new Date(ey, em - 1, ed)
-    };
-  };
-
   //Función para comprobar la fecha editada
   private isValidVacationRange = (newStart: Date, newEnd: Date, holidayId: number): boolean => {
 
@@ -140,7 +113,7 @@ export class EditVacationComponent {
     }
 
     if (newEnd < newStart) {
-      Swal.fire('Error', 'La fecha de fin no puede ser anterior a la de inicio.', 'error');
+      Swal.fire('Error', 'La fecha de fin no puede ser anterior a la de inicio y viceversa.', 'error');
       return false;
     }
 console.log(this.userEvents)
@@ -188,6 +161,31 @@ console.log(this.userEvents)
         title: `Vacación ${values.holiday_start_date.toLocaleDateString()} → ${values.holiday_end_date.toLocaleDateString()}`
       } : ev
     );
+  };
+
+    // Convierte la fecha a un formato de entrada de fecha HTML sin errores.
+  private toDateInputValue = (date: Date): string => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  };
+
+  // Para asegurarnos de guardar las fechas en el formato correcto en cualquier zona horaria.
+  private parseModalDates = (): { holiday_start_date: Date; holiday_end_date: Date } | void => {
+    const start = (document.getElementById('start') as HTMLInputElement).value;
+    const end = (document.getElementById('end') as HTMLInputElement).value;
+    if (!start || !end) {
+      Swal.showValidationMessage('You must select both start and end dates');
+      return;
+    }
+      const [startYear, startMonth, startDay] = start.split('-').map(Number);
+  const [endYear, endMonth, endDay] = end.split('-').map(Number);
+
+  return {
+    holiday_start_date: new Date(startYear, startMonth - 1, startDay), // Mes -1 porque enero es 0
+    holiday_end_date: new Date(endYear, endMonth - 1, endDay)
+  };
   };
 
   private showSuccessToast = (): void => {
