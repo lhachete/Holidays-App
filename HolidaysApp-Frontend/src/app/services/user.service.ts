@@ -9,10 +9,12 @@ import { ApiService } from './api.service';
 export class UserService {
   private usersUrl: string;
   private loginUrl: string;
+  private registerUrl: string;
 
   constructor(private api: ApiService) {
     this.usersUrl  = `${this.api.getApiUrl()}/users`;
     this.loginUrl  = `${this.api.getApiUrl()}/users/login`;
+    this.registerUrl  = `${this.api.getApiUrl()}/users/register`;
   }
 
   // === Login via POST /login ===
@@ -29,7 +31,7 @@ export class UserService {
   }
 
   addUser(user: User): Promise<User> {
-    return this.api.post<User>(this.usersUrl, user);
+    return this.api.post<User>(this.registerUrl, user);
   }
 
   updateUser(user: User): Promise<User> {

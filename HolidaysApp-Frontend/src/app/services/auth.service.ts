@@ -37,7 +37,7 @@ export class AuthService {
       this.user = {
         id: foundUser.id,
         username: foundUser.username,
-        email: foundUser.email,
+        /* email: foundUser.email, */
         roles: foundUser.roles
       };
       this.isAuthenticated = true;
@@ -53,9 +53,9 @@ export class AuthService {
     }
   }
 
-  //Registra un nuevo usuario en la API (in-memory para pruebas)
+  //Registra un nuevo usuario en la API (in-memory para pruebas) email: string; < eliminado
 
-  async registerUser(user: { username: string; email: string; password: string; }): Promise<User> {
+  async registerUser(user: { username: string; password: string; }): Promise<User> {
     const newUser = await this.userService.addUser({
       ...user,
       roles: ['USUARIO']
@@ -94,20 +94,19 @@ export class AuthService {
     return users.some(u => u.username === username);
   }
 
-  /**
-   * Comprueba si ya existe un email
-   */
-  async isEmailTaken(email: string): Promise<boolean> {
+  //Comprueba si ya existe un email
+   
+  /* async isEmailTaken(email: string): Promise<boolean> {
     const users = await this.userService.getAllUsers();
     return users.some(u => u.email === email);
-  }
+  } */
 
   /**
    * Valida todos los datos de registro y devuelve posibles errores
    */
   async validateRegistration(data: {
     username: string;
-    email: string;
+    /* email: string; */
     password: string;
     confirmPassword: string;
   }): Promise<{ valid: boolean; errors: Record<string, string> }> {
@@ -116,9 +115,9 @@ export class AuthService {
     if (await this.isUsernameTaken(data.username)) {
       errs['username'] = 'Username is already taken.';
     }
-    if (await this.isEmailTaken(data.email)) {
+/*     if (await this.isEmailTaken(data.email)) {
       errs['email'] = 'Email is already registered.';
-    }
+    } */
     if (data.password !== data.confirmPassword) {
       errs['password'] = 'Passwords do not match.';
     }

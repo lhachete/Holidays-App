@@ -20,8 +20,8 @@ export class AuthComponent implements OnInit {
 
   // Campos del formulario
   fields: FieldConfig[] = [
-    { key: 'userInput', label: 'Username or Email', type: 'text', modes: ['login'] },
-    { key: 'email', label: 'Email', type: 'email', modes: ['register'] },
+    { key: 'userInput', label: 'Username', type: 'text', modes: ['login'] },
+    /* { key: 'email', label: 'Email', type: 'email', modes: ['register'] }, */
     { key: 'username', label: 'Username', type: 'text', modes: ['register'] },
     { key: 'password', label: 'Password', type: 'password', modes: ['login', 'register'] },
     { key: 'confirmPassword', label: 'Confirm Password', type: 'password', modes: ['register'] },
@@ -34,7 +34,7 @@ export class AuthComponent implements OnInit {
 
   registerForm = new FormGroup({
     username: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    /* email: new FormControl('', [Validators.required, Validators.email]), */
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)])
   }, { validators: this.passwordsMatchValidator() });
@@ -114,12 +114,12 @@ export class AuthComponent implements OnInit {
 
     this.registerErrors = {};  // limpieza de errores
     const username = this.registerForm.value.username ?? '';
-    const email = this.registerForm.value.email ?? '';
+    /* const email = this.registerForm.value.email ?? ''; */
     const password = this.registerForm.value.password ?? '';
     const confirmPassword = this.registerForm.value.confirmPassword ?? '';
 
     const { valid, errors } = await this.authService.validateRegistration({
-      username, email, password, confirmPassword
+      username, password, confirmPassword
     });
 
     if (!valid) {
@@ -128,7 +128,7 @@ export class AuthComponent implements OnInit {
     }
 
     // si todo OK, creamos el usuario
-    await this.authService.registerUser({ username, email, password });
+    await this.authService.registerUser({ username, password });
     Swal.fire({
       icon: 'success',
       title: 'Registration successful!',

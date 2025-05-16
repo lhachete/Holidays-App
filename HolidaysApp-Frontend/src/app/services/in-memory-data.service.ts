@@ -14,9 +14,14 @@ export class InMemoryDataService implements InMemoryDbService {
         ];
 
         const users: User[] = [
+            { id: 1, username: 'admin',  password: '12345678', roles: ['USUARIO', 'ADMIN'] },
+            { id: 2, username: 'user1',  password: '12345678', roles: ['USUARIO'] }
+        ];
+
+        /*  const users: User[] = [
             { id: 1, username: 'admin', email: 'admin@example.com', password: '12345678', roles: ['USUARIO', 'ADMIN'] },
             { id: 2, username: 'user1', email: 'user1@example.com', password: '12345678', roles: ['USUARIO'] }
-        ];
+        ]; */
 
         return { holidays, users };
     }
@@ -54,7 +59,7 @@ export class InMemoryDataService implements InMemoryDbService {
         const users: User[] = db.users;
 
         const found = users.find(u =>
-            u.username === userInput || u.email === userInput
+            u.username === userInput /* || u.email === userInput */
         );
 
         return reqInfo.utils.createResponse$(() => {
