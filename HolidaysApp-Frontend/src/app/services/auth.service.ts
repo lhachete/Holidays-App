@@ -1,4 +1,3 @@
-// auth.service.ts
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
@@ -54,7 +53,6 @@ export class AuthService {
   }
 
   //Registra un nuevo usuario en la API (in-memory para pruebas) email: string; < eliminado
-
   async registerUser(user: { username: string; password: string; }): Promise<User> {
     const newUser = await this.userService.addUser({
       ...user
@@ -62,7 +60,6 @@ export class AuthService {
     return newUser;
   }
 
-  //Cierra sesión del usuario
 
   logout(): void {
     this.isAuthenticated = false;
@@ -71,38 +68,31 @@ export class AuthService {
     this.router.navigateByUrl('/login');
   }
 
-  /**
-   * Indica si el usuario está logueado
-   */
   get isLoggedIn(): boolean {
     return this.isAuthenticated;
   }
 
-  /**
-   * Comprueba si el usuario tiene el rol indicado
-   */
+  //Compruebo si el usuario tiene el rol indicado
   hasRole(role: string): boolean {
   return this.user?.role?.name === role;
 }
 
-  /**
-   * Comprueba si ya existe un username
-   */
+  //Comprueba si ya existe un usuario (para pruebas con mock)
   async isUsernameTaken(username: string): Promise<boolean> {
     const users = await this.userService.getAllUsers();
     return users.some(u => u.username === username);
   }
 
-  //Comprueba si ya existe un email
+
+  //Comprueba si ya existe un email (para pruebas con mock) 
    
   /* async isEmailTaken(email: string): Promise<boolean> {
     const users = await this.userService.getAllUsers();
     return users.some(u => u.email === email);
   } */
 
-  /**
-   * Valida todos los datos de registro y devuelve posibles errores
-   */
+
+  // Valida todos los datos de registro y devuelve posibles errores
   async validateRegistration(data: {
     username: string;
     /* email: string; */

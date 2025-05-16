@@ -1,4 +1,4 @@
-import { Role } from './Role'; // si lo pones en otro archivo
+import { Role } from './Role';
 
 export default interface User {
     id: number; 
