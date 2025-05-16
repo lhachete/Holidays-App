@@ -14,6 +14,7 @@ export class HomeComponent {
   
   constructor(private userService: UserService) {
     // Aquí puedes inicializar el nombre de usuario o cualquier otra lógica que necesites
+    console.log('User service username: ', userService.username)
     this.username = userService.username; // Cambia esto por la lógica que necesites para obtener el nombre de usuario
   }
 }

@@ -36,7 +36,7 @@ public class UserControllerAdapter implements UsersApi {
 
     @PostMapping("/login")
     public ResponseEntity<UserDTO> getUserByUsernameAndPassword(@RequestBody LoginRequest loginRequest) {
-        System.out.println("👉 Petición de login recibida para el usuario y su contraseña: " + loginRequest.getUsername() + ", " + loginRequest.getPassword());
+        System.out.println("Petición de login recibida para el usuario y su contraseña: " + loginRequest.getUsername() + ", " + loginRequest.getPassword());
         return ResponseEntity.ok(userDTOMapper.toUserDTO(userServicePort.getUserByUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword())));
     }
 }
