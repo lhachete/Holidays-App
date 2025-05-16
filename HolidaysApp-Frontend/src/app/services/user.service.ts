@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Injectable } from '@angular/core';
-import { catchError, firstValueFrom, map, Observable, of } from 'rxjs';
+import { catchError, firstValueFrom, map, Observable, of, tap } from 'rxjs';
 import User from '../models/User';
 
 @Injectable({ providedIn: 'root' })
@@ -24,16 +24,25 @@ export class UserService {
   login2(usernameOrEmail: string, password: string): Observable<User> { 
     try {
       const loginRequest = {
-        uername: usernameOrEmail,
+        username: usernameOrEmail,
         password: password
       }
-      let User: Observable<User> = this.httpClient.get<User>('https://dummyjson.com/users', loginRequest); // esto devuelve un objeto que dentro
-      console.log('respuesta:');
-      console.log(User);
-      return User;
+      console.log('loginRequest:', loginRequest);
+      let user: Observable<User> = this.httpClient.post<User>('http://localhost:8080/api-rest/users/login', loginRequest); // esto devuelve un objeto que dentro
+      //console.log('respuesta:', user);
+      //this.username = loginRequest.username; // Guardar el nombre de usuario en la variable de clase
+      user.subscribe({
+        next: (user: User) => {
+          this.username = user.username; // Guardar el nombre de usuario en la variable de clase
+        }, error: (error) => {
+          console.error('Error during login:', error);
+        }
+      });
+      console.log('username of service:', this.username);
+      return user;
     } catch (error) {
       console.error('Error during login:', error);
-      return of({} as User);
+      throw error; // Lanza el error para que pueda ser manejado por el llamador
     }
   } // El promise es como el future de Flutter, es una promesa que se resuelve en el futuro y
   

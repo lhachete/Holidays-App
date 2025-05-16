@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api-rest/users")
 @RequiredArgsConstructor
@@ -35,6 +36,7 @@ public class UserControllerAdapter implements UsersApi {
 
     @PostMapping("/login")
     public ResponseEntity<UserDTO> getUserByUsernameAndPassword(@RequestBody LoginRequest loginRequest) {
+        System.out.println("👉 Petición de login recibida para el usuario y su contraseña: " + loginRequest.getUsername() + ", " + loginRequest.getPassword());
         return ResponseEntity.ok(userDTOMapper.toUserDTO(userServicePort.getUserByUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword())));
     }
 }

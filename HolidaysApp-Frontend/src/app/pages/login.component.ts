@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 import { UserService } from '../services/user.service';
 import { Router, RouterLink } from '@angular/router';
+import User from '../models/User';
 
 @Component({
   selector: 'app-login',
@@ -14,14 +15,13 @@ import { Router, RouterLink } from '@angular/router';
 export class LoginComponent {
   isInvalidEmail: boolean = false;
   isInvalidPassword: boolean = false;
-  username: string = '';
   formValidationErrors: string[] = [];
   formLogin = signal<FormGroup>(
     new FormGroup({
       // Define your form controls here
       // Example: name: new FormControl('')
-      usernameOrEmail: new FormControl('emily.johnson@x.dummyjson.com', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-      password: new FormControl('emilyspass', [Validators.required, Validators.minLength(8), Validators.maxLength(25)]),
+      usernameOrEmail: new FormControl('rrodes', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
+      password: new FormControl('password123', [Validators.required, Validators.minLength(8), Validators.maxLength(25)]),
     })
   );
 
@@ -53,8 +53,37 @@ export class LoginComponent {
       console.log(this.formValidationErrors);
 
       console.log('Formulario inválido');
-    } 
-    
+    } else {
+      const respuesta = this.userService.login2(form.value.usernameOrEmail, form.value.password)
+      respuesta.subscribe({
+        next: (user: User) => {
+          console.log('User:', user);
+          console.log('user.username:', user.username);
+          //this.username = user.username; // Guardar el nombre de usuario en la variable de clase
+          if (user != null) {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Login successful",
+              showConfirmButton: false,
+              timer: 1500
+            });
+            // Aquí puedes redirigir al usuario a otra página o realizar cualquier otra acción
+            // Por ejemplo, redirigir a la página de inicio:
+            this.router.navigate(['/home']); // Asegúrate de importar Router y agregarlo en el constructor
+          }
+        },
+        error: (error: any) => {
+          console.error('Error:', error);
+          Swal.fire({
+            icon: "error",
+            title: "Error with credentials",
+            text: "Password or email is incorrect",
+          });
+        }
+      });
+    }
+
     // else {
     //   if (await this.userService.login(form.value.usernameOrEmail, form.value.password)) {
     //     this.username = this.userService.username; // Guardar el nombre de usuario en la variable de clase

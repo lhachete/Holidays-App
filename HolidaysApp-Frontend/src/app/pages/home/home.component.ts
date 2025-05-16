@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { UserService } from '../../services/user.service';
+import { LoginComponent } from '../login.component';
 
 @Component({
   selector: 'app-home',
