@@ -1,4 +1,3 @@
-// user.service.ts
 import { Injectable } from '@angular/core';
 import User from '../models/User';
 import { ApiService } from './api.service';
