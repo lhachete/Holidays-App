@@ -14,8 +14,15 @@ import org.hibernate.annotations.ColumnDefault;
 @Table(name = "users")
 public class UserMO {
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ColumnDefault("nextval('users_user_id_seq')")
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "users_user_id_seq"
+    )
+    @SequenceGenerator(
+            name = "users_user_id_seq",
+            sequenceName = "users_user_id_seq",
+            allocationSize = 1
+    )
     @Column(name = "user_id", nullable = false)
     private Integer id;
 
