@@ -24,9 +24,6 @@ export class AuthService {
 
   async login(userInput: string, password: string): Promise<'OK' | 'USER_ERROR' | 'PASS_ERROR'> {
     try {
-      console.log("enter login"); // entra en el login
-      console.log('userInput', userInput);
-      console.log('password', password);
 
       const foundUser = await this.userService.login(userInput, password);
       console.log('foundUser', foundUser);
@@ -34,12 +31,15 @@ export class AuthService {
         console.error('Backend devolvió null o user no encontrado');
         return 'USER_ERROR';
       }
+
       this.user = {
         id: foundUser.id,
         username: foundUser.username,
         /* email: foundUser.email, */
-        roles: foundUser.roles
+        role: foundUser.role
       };
+
+      
       this.isAuthenticated = true;
       localStorage.setItem('userSession', JSON.stringify(this.user));
       return 'OK';
@@ -57,8 +57,7 @@ export class AuthService {
 
   async registerUser(user: { username: string; password: string; }): Promise<User> {
     const newUser = await this.userService.addUser({
-      ...user,
-      roles: ['USUARIO']
+      ...user
     } as User);
     return newUser;
   }
@@ -83,8 +82,8 @@ export class AuthService {
    * Comprueba si el usuario tiene el rol indicado
    */
   hasRole(role: string): boolean {
-    return this.user?.roles.includes(role) ?? false;
-  }
+  return this.user?.role?.name === role;
+}
 
   /**
    * Comprueba si ya existe un username
