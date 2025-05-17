@@ -21,7 +21,7 @@ public class DepartmentMO {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "organization_id", nullable = false)
+    @JoinColumn(name = "org_id", nullable = false)
     private OrganizationMO organization;
 
     @Size(max = 255)
