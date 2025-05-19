@@ -3,6 +3,7 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { HolidayService } from '../../../services/holiday.service';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-show-vacation',
@@ -11,12 +12,16 @@ import Swal from 'sweetalert2';
   templateUrl: './show-vacation.component.html',
 })
 export class ShowVacationComponent {
+  get user(): any {
+    return this.authService.user;
+  }
+
   // Lista de vacaciones del usuario
   usersEvents: CalendarEvent[] = [];
   // Detalles completos del día clicado
   selectedDayDetail: CalendarMonthViewDay<CalendarEvent> | null = null;
-
-  constructor(private holidayService: HolidayService) {}
+  
+  constructor(private holidayService: HolidayService, private authService: AuthService) {}
 
   // Carga las vacaciones al iniciar el componente
   async ngOnInit(): Promise<void> {
@@ -25,12 +30,14 @@ export class ShowVacationComponent {
 
   private loadAllHolidays = async (): Promise<void> => {
     try {
-      const holidays = await this.holidayService.getAllHolidays();
+      /* const holidays = await this.holidayService.getAllHolidays(); */
+      const userId = this.user.id;
+      const holidays = await this.holidayService.getHolidaysById(userId);
       console.log('holidays', holidays);
       this.usersEvents = holidays.map(h => ({
         start: new Date(h.holiday_start_date),
         end:   new Date(h.holiday_end_date),
-        title: `User ${h.user_id}: ${new Date(h.holiday_start_date).toLocaleDateString()} → ${new Date(h.holiday_end_date).toLocaleDateString()}`,
+        title: `Holidays: ${new Date(h.holiday_start_date).toLocaleDateString()} – ${new Date(h.holiday_end_date).toLocaleDateString()}`,
         meta: { id: h.holiday_id }
       } as CalendarEvent));
     } catch (err) {

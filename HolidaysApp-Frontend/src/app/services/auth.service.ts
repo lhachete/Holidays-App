@@ -27,7 +27,6 @@ export class AuthService {
       const foundUser = await this.userService.login(userInput, password);
       console.log('foundUser', foundUser);
       if (!foundUser) {
-        console.error('Backend devolvió null o user no encontrado');
         return 'USER_ERROR';
       }
 

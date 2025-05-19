@@ -37,7 +37,7 @@ export class EditVacationComponent {
   private mapToCalendarEvent = (holidy: Holiday): CalendarEvent => ({
     start: new Date(holidy.holiday_start_date),
     end: new Date(holidy.holiday_end_date),
-    title: `Holiday ${new Date(holidy.holiday_start_date).toLocaleDateString()} → ${new Date(holidy.holiday_end_date).toLocaleDateString()}`,
+    title: `Holidays: ${new Date(holidy.holiday_start_date).toLocaleDateString()} – ${new Date(holidy.holiday_end_date).toLocaleDateString()}`,
     meta: { id: holidy.holiday_id ?? holidy.id, user_id: holidy.user_id }
   });
 

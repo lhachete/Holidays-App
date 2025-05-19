@@ -137,7 +137,7 @@ export class BookVacationComponent {
         holiday_start_date: this.selectedStart,
         holiday_end_date: this.selectedEnd,
       });
-
+      /* console.log('Nueva holiday:', newHoliday); */
       this.userEvents = [...this.userEvents,
       {
         start: new Date(newHoliday.holiday_start_date),
