@@ -1,0 +1,23 @@
+package com.rob.main.driven.repositories.adapters;
+
+import com.rob.application.ports.driven.HolidayRepositoryPort;
+import com.rob.domain.models.Holiday;
+import com.rob.main.driven.repositories.HolidayMOJpaRepository;
+import com.rob.main.driven.repositories.mappers.HolidayMOMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+@RequiredArgsConstructor
+public class HolidayRepositoryJpaAdapter implements HolidayRepositoryPort {
+
+    private final HolidayMOJpaRepository holidayMOJpaRepository;
+    private final HolidayMOMapper holidayMOMapper;
+
+    @Override
+    public List<Holiday> findAllHolidays() {
+        return holidayMOJpaRepository.findAll().stream().map(holidayMOMapper::toHoliday).toList();
+    }
+}

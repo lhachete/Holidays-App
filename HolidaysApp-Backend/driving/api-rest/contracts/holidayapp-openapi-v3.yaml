@@ -20,6 +20,8 @@ tags: # Opcional: para agrupar endpoints
     description: An API CRUD to manage employees
   - name: Users
     description: An API CRUD to manage users
+  - name: Holidays
+    description: An API CRUD to manage holidays
 paths: # Todos los endpoints de la API
   /api-rest/organizations:
     get:
@@ -818,6 +820,147 @@ paths: # Todos los endpoints de la API
                 type: array
                 items:
                   $ref: '#/components/schemas/UserDTO'
+  /api-rest/users/register:
+    post:
+      tags:
+        - Users
+      summary: Login with the User's username and password
+      description: Login with the User's username and password using a request body
+      operationId: getUserByUsernameAndPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/UserDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The User was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+  /api-rest/holidays:
+    get:
+      tags:
+        - Holidays
+      summary: Get all Holidays
+      description: Get all holidays
+      operationId: getAllHolidays
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HolidayDTO'
+        "400":
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: invalid parameters
+
+        "401":
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No valid token provided
+
+        "403":
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You do not have permission to access this resource
+
+        "404":
+          description: Holiday not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The Holiday was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HolidayDTO'
 
 components:
   schemas:
@@ -876,7 +1019,6 @@ components:
           type: integer
           #format: int32
         organization:
-          type: Object
           $ref: '#/components/schemas/OrganizationDTO'
           #format: int32
         name:
@@ -899,15 +1041,12 @@ components:
           type: integer
           #format: int32
         dept:
-          type: Object
           $ref: '#/components/schemas/DepartmentDTO'
           #format: int32
         project:
-          type: Object
           $ref: '#/components/schemas/ProjectDTO'
           #format: int32
         user:
-          type: Object
           $ref: '#/components/schemas/UserDTO'
           #format: int32
         nif:
@@ -944,20 +1083,19 @@ components:
         work_email:
           type: string
     UserDTO:
-        description: This is the User model
-        type: object
-        properties:
-          id:
-            type: integer
-          role:
-            type: object
-            $ref: '#/components/schemas/RoleDTO'
-          username:
-            type: string
-          password:
-            type: string
-          enabled:
-            type: boolean
+      description: This is the User model
+      type: object
+      properties:
+        id:
+          type: integer
+        role:
+          $ref: '#/components/schemas/RoleDTO'
+        username:
+          type: string
+        password:
+          type: string
+        enabled:
+          type: boolean
     LoginRequest:
       description: This is the Login Request model
       type: object
@@ -966,3 +1104,47 @@ components:
           type: string
         password:
           type: string
+    HolidayDTO:
+      type: object
+      description: This is the Holiday model
+      properties:
+        holidayId:
+          type: integer
+        user:
+          $ref: '#/components/schemas/UserDTO'
+        reviewedByAdmin:
+          $ref: '#/components/schemas/UserDTO'
+        reviewDate:
+          type: string
+          format: date
+        reviewComment:
+          type: string
+        holidayStartDate:
+          type: string
+          format: date
+        holidayEndDate:
+          type: string
+          format: date
+        vacationType:
+          type: string
+        vacationState:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        deletedAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        createdBy:
+          $ref: '#/components/schemas/UserDTO'
+        updatedBy:
+          $ref: '#/components/schemas/UserDTO'
+        deletedBy:
+          $ref: '#/components/schemas/UserDTO'
+        isDeleted:
+          type: boolean
+
+
