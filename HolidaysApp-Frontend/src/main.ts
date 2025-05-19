@@ -7,8 +7,8 @@ import { provideHttpClient }      from '@angular/common/http';
 import { AppComponent } from './app/app.component';
 import { appConfig }    from './app/app.config';
 
-import { InMemoryWebApiModule }        from 'angular-in-memory-web-api';
-import { InMemoryDataService }         from './app/services/in-memory-data.service';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { InMemoryDataService } from './app/services/in-memory-data.service';
 
 bootstrapApplication(AppComponent, {
   providers: [
