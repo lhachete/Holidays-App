@@ -23,15 +23,11 @@ public class UserControllerAdapter implements UsersApi {
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam(value = "username", required = false) String username) {
-        try {
             List<User> users = userServicePort.getUsersByUsername(username);
             return ResponseEntity.ok(userServicePort.getUsersByUsername(username)
                     .stream()
                     .map(userDTOMapper::toUserDTO)
                     .toList());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
     }
 
     @PostMapping("/login")

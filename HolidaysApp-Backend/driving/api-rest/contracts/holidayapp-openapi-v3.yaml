@@ -898,14 +898,17 @@ components:
         personId:
           type: integer
           #format: int32
-        deptId:
-          type: integer
+        dept:
+          type: Object
+          $ref: '#/components/schemas/DepartmentDTO'
           #format: int32
-        projectId:
-          type: integer
+        project:
+          type: Object
+          $ref: '#/components/schemas/ProjectDTO'
           #format: int32
-        userId:
-          type: integer
+        user:
+          type: Object
+          $ref: '#/components/schemas/UserDTO'
           #format: int32
         nif:
           type: string
