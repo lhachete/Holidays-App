@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 @Mapper(componentModel = "spring", uses = {OrganizationDTOMapper.class})
 public interface DepartmentDTOMapper {
 
-    @Mapping(source = "organization.id", target = "organizationId")
+    @Mapping(source = "organization", target = "organization")
     DepartmentDTO toDepartmentDTO(Department department);
 
-    @Mapping(source = "organizationId", target = "organization.id")
+    @Mapping(source = "organization", target = "organization")
     Department toDepartment(DepartmentDTO departmentDTO);
 }
