@@ -875,8 +875,9 @@ components:
         id:
           type: integer
           #format: int32
-        organizationId:
-          type: integer
+        organization:
+          type: Object
+          $ref: '#/components/schemas/OrganizationDTO'
           #format: int32
         name:
           type: string
