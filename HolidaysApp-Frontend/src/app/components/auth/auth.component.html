@@ -16,7 +16,7 @@
                             <input [type]="field.type" class="form-control outline-purple" [id]="field.key"
                                 [formControlName]="field.key" [placeholder]="'Enter ' + field.label" [class.is-invalid]="
                                     form.get(field.key)?.invalid && isTouched(form.get(field.key))
-                                    || (mode === 'login' && field.key==='userInput' && userNotFound)
+                                    || (mode === 'login' && field.key==='username' && userNotFound)
                                     || (mode === 'login' && field.key==='password' && wrongPassword)" />
 
                                 <!-- Si hay errores los muestro -->
@@ -33,7 +33,8 @@
                         @if (mode==='login' && (userNotFound || wrongPassword)) {
                         <div class="d-flex align-items-center justify-content-center mb-1">
                             <p class="alert alert-danger mt-2 fw-bold" role="alert">
-                                {{ userNotFound ? 'Invalid user' : 'Wrong password!' }}
+                                <!-- {{ userNotFound ? 'Invalid user' : 'Wrong password!' }} -->
+                                {{ userNotFound ? 'Invalid credentials' : 'Wrong password!' }}
                             </p>
                         </div>
                         }

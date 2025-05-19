@@ -1,4 +1,3 @@
-// user.service.ts
 import { Injectable } from '@angular/core';
 import User from '../models/User';
 import { ApiService } from './api.service';
@@ -9,18 +8,17 @@ import { ApiService } from './api.service';
 export class UserService {
   private usersUrl: string;
   private loginUrl: string;
+  private registerUrl: string;
 
   constructor(private api: ApiService) {
     this.usersUrl  = `${this.api.getApiUrl()}/users`;
-    this.loginUrl  = `${this.api.getApiUrl()}/login`;
+    this.loginUrl  = `${this.api.getApiUrl()}/users/login`;
+    this.registerUrl  = `${this.api.getApiUrl()}/users/register`;
   }
 
   // === Login via POST /login ===
-  login(userInput: string, password: string): Promise<User> {
-    let user: Promise<User> = this.api.post<User>(this.loginUrl, { userInput, password });
-    console.log(user);
-    return user;
-    //return this.api.post<User>(this.loginUrl, { userInput, password });
+  login(username: string, password: string): Promise<User> {
+    return this.api.post<User>(this.loginUrl, { username, password });
   }
 
   getAllUsers(): Promise<User[]> {
@@ -32,7 +30,7 @@ export class UserService {
   }
 
   addUser(user: User): Promise<User> {
-    return this.api.post<User>(this.usersUrl, user);
+    return this.api.post<User>(this.registerUrl, user);
   }
 
   updateUser(user: User): Promise<User> {
