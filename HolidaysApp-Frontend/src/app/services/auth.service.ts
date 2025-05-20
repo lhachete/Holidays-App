@@ -33,7 +33,7 @@ export class AuthService {
       this.user = {
         id: foundUser.id,
         username: foundUser.username,
-        /* email: foundUser.email, */
+        email: foundUser.email,
         role: foundUser.role
       };
 
@@ -94,7 +94,7 @@ export class AuthService {
   // Valida todos los datos de registro y devuelve posibles errores
   async validateRegistration(data: {
     username: string;
-    /* email: string; */
+    email: string;
     password: string;
     confirmPassword: string;
   }): Promise<{ valid: boolean; errors: Record<string, string> }> {

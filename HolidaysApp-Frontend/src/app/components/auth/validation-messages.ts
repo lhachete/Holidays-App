@@ -2,7 +2,7 @@ export const VALIDATION_MESSAGES: {
   [controlName: string]: { [errorKey: string]: string }
 } = {
   userInput: {
-    required: 'User is required.'
+    required: 'User or email is required.'
   },
   username: {
     required: 'Username is required.',
