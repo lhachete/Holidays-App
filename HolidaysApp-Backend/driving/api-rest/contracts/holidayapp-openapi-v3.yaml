@@ -677,8 +677,8 @@ paths: # Todos los endpoints de la API
     get:
       tags:
         - Users
-      summary: Get all Users (optionally filtered by name)
-      description: Get all users or filter by name using query parameter
+      summary: Get all Users (optionally filtered by name or last name)
+      description: Get all users or filter by name or last name using query parameter
       operationId: getAllUsers
       parameters:
         - name: username
@@ -751,9 +751,9 @@ paths: # Todos los endpoints de la API
     post:
       tags:
         - Users
-      summary: Login with the User's username and password
+      summary: Login with the User's username or email and password
       description: Login with the User's username and password using a request body
-      operationId: getUserByUsernameAndPassword
+      operationId: getUserByUsernameOrEmailAndPassword
       requestBody:
         required: true
         content:
@@ -767,7 +767,6 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                type: object
                 $ref: '#/components/schemas/UserDTO'
         "400":
           description: Wrong Request – invalid parameters
@@ -817,22 +816,20 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserDTO'
+                $ref: '#/components/schemas/UserDTO'
   /api-rest/users/register:
     post:
       tags:
         - Users
-      summary: Login with the User's username and password
+      summary: Register with the User's username, password and repeated password
       description: Login with the User's username and password using a request body
-      operationId: getUserByUsernameAndPassword
+      operationId: registerByUsernameEmailAndPassword
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: '#/components/schemas/RegisterRequest'
 
       responses:
         '200':
@@ -840,7 +837,6 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                type: object
                 $ref: '#/components/schemas/UserDTO'
         "400":
           description: Wrong Request – invalid parameters
@@ -890,9 +886,7 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserDTO'
+                $ref: '#/components/schemas/UserDTO'
   /api-rest/holidays:
     get:
       tags:
@@ -1092,6 +1086,8 @@ components:
           $ref: '#/components/schemas/RoleDTO'
         username:
           type: string
+        email:
+          type: string
         password:
           type: string
         enabled:
@@ -1099,11 +1095,53 @@ components:
     LoginRequest:
       description: This is the Login Request model
       type: object
+      required:
+        - usernameOrEmail
+        - password
+      properties:
+        usernameOrEmail:
+          type: string
+          minLength: 3
+          maxLength: 30
+        password:
+          type: string
+          minLength: 8
+          maxLength: 30
+          pattern: '^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$'
+          description: >
+            Must contain at least one uppercase letter and one special character
+    RegisterRequest:
+      description: This is the Register Request model
+      type: object
+      required:
+        - username
+        - email
+        - password
+        - repeatPassword
       properties:
         username:
           type: string
+          minLength: 3
+          maxLength: 30
+        email:
+          type: string
+          format: email
+          minLength: 8
+          maxLength: 30
         password:
           type: string
+          minLength: 8
+          maxLength: 30
+          pattern: '^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$'
+          description: >
+            Must contain at least one uppercase letter and one special character
+        repeatPassword:
+          type: string
+          minLength: 8
+          maxLength: 30
+          pattern: '^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$'
+          description: >
+            Must contain at least one uppercase letter and one special character
     HolidayDTO:
       type: object
       description: This is the Holiday model
@@ -1146,5 +1184,3 @@ components:
           $ref: '#/components/schemas/UserDTO'
         isDeleted:
           type: boolean
-
-

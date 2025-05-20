@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface UserServicePort {
     List<User> getUsersByUsername(String username);
-    User getUserByUsernameAndPassword(String username, String password);
+    User getUserByUsernameOrEmailAndPassword(String usernameOrEmail, String password);
 }

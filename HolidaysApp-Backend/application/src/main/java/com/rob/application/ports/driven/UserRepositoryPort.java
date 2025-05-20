@@ -12,5 +12,5 @@ public interface UserRepositoryPort {
 
     List<User> findAll();
 
-    User findByUsernameAndPassword(String username, String password);
+    User findByUsernameOrEmailAndPassword(String usernameOrEmail, String password);
 }

@@ -23,7 +23,7 @@ public class UserUseCase implements UserServicePort {
     }
 
     @Override
-    public User getUserByUsernameAndPassword(String username, String password) {
-        return userRepositoryPort.findByUsernameAndPassword(username, password);
+    public User getUserByUsernameOrEmailAndPassword(String usernameOrEmail, String password) {
+        return userRepositoryPort.findByUsernameOrEmailAndPassword(usernameOrEmail, password);
     }
 }

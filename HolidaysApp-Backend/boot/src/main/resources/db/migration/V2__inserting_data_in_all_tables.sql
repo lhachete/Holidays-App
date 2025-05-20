@@ -44,9 +44,9 @@ INSERT INTO departments (
       (9, 'Product', 'Tech', 'Management', 'CC109', 'Málaga', 'CET'),
       (10, 'Customer Success', 'Business', 'Support', 'CC110', 'Murcia', 'CET');
 
-INSERT INTO users (rol_id, username, password, enabled) VALUES
-                                                            (1, 'rrodes', 'pass12345678', true),
-                                                            (2, 'mhernandez', 'pass12345678', true);
+INSERT INTO users (rol_id, username, email, password, enabled) VALUES
+                                                            (1, 'rrodes', 'rtrh@gft.com',  'pass12345678', true),
+                                                            (2, 'mhernandez', 'm.hernandez@gft.com', 'pass12345678', true);
 
 INSERT INTO employees (
     dept_id, project_id, user_id, nif, birthday,

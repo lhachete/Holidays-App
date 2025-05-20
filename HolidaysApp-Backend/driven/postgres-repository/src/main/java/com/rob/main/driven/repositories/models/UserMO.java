@@ -37,4 +37,9 @@ public class UserMO {
     @Column(name = "enabled", nullable = false)
     private Boolean enabled;
 
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "email", nullable = false)
+    private String email;
+
 }

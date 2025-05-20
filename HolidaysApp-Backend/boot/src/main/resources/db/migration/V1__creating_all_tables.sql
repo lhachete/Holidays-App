@@ -36,6 +36,7 @@ CREATE TABLE users (
                        user_id SERIAL PRIMARY KEY,
                        rol_id INTEGER NOT NULL,
                        username VARCHAR(255) NOT NULL UNIQUE,
+                       email VARCHAR(255) NOT NULL UNIQUE,
                        password VARCHAR(255) NOT NULL,
                        enabled BOOLEAN NOT NULL,
 

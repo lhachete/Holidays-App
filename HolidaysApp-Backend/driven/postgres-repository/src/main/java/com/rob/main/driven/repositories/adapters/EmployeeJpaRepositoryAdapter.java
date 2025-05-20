@@ -24,7 +24,7 @@ public class EmployeeJpaRepositoryAdapter implements EmployeeRepositoryPort {
 
     @Override
     public List<Employee> findAllEmployeesByName(String name) {
-        return employeeMOJpaRepository.findByFirstNameContaining(name)
+        return employeeMOJpaRepository.findByFirstNameOrLastNameContaining(name, name)
                 .stream()
                 .map(employeeMOMapper::toEmployee)
                 .toList();

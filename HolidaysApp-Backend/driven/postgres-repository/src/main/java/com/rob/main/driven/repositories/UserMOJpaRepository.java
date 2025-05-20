@@ -9,5 +9,5 @@ import java.util.List;
 public interface UserMOJpaRepository extends JpaRepository<UserMO, Integer> {
     List<UserMO> findByUsernameContaining(String username);
     @NonNull List<UserMO> findAll();
-    UserMO findByUsernameAndPassword(String username, String password);
+    UserMO findByUsernameOrEmailAndPassword(String username, String email, String password);
 }
