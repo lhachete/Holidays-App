@@ -15,7 +15,10 @@ public class HolidayUseCase implements HolidayServicePort {
     private final HolidayRepositoryPort holidayRepositoryPort;
 
     @Override
-    public List<Holiday> getAllHolidays() {
+    public List<Holiday> getHolidaysByUserId(Integer userId) {
+        if(userId != null) {
+            return holidayRepositoryPort.findByUserId(userId);
+        }
         return holidayRepositoryPort.findAllHolidays();
     }
 }

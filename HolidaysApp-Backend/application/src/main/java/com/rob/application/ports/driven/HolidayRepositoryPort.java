@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface HolidayRepositoryPort {
     List<Holiday> findAllHolidays();
+
+    List<Holiday> findByUserId(Integer userId);
 }

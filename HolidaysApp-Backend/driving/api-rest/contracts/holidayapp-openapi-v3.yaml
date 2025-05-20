@@ -924,9 +924,16 @@ paths: # Todos los endpoints de la API
     get:
       tags:
         - Holidays
-      summary: Get all Holidays
-      description: Get all holidays
+      summary: Get all Holidays (optionally filtered by UserId)
+      description: Get all holidays or filter by userId using query parameter
       operationId: getAllHolidays
+      parameters:
+        - name: userId
+          in: query
+          description: Optional userId to filter users
+          required: false
+          schema:
+            type: integer
 
       responses:
         '200':
@@ -990,6 +997,7 @@ paths: # Todos los endpoints de la API
                 timestamp: '2025-05-20T19:00:00Z'
                 status: 500
                 message: Unexpected error occurred
+
 
 components:
   schemas:
@@ -1163,7 +1171,7 @@ components:
       properties:
         username:
           type: string
-          x-field-extra-annotation: "@NotBlank\n@Size(min=8, max=30)"
+          x-field-extra-annotation: "@NotBlank\n@Size(min=3, max=30)"
           minLength: 3
           maxLength: 30
         email:
