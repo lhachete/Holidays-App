@@ -53,11 +53,19 @@ export class AuthService {
 
   //Registra un nuevo usuario en la API (in-memory para pruebas) email: string; < eliminado
   async registerUser(user: { username: string; password: string; repeatPassword: string; email: string; }): Promise<User> {
-    const newUser = await this.userService.addUser({
-      ...user
-    } as User);
+  try {
+    const newUser = await this.userService.addUser(user as User);
     return newUser;
+  } catch (err: any) {
+    console.error('Error registering user', err);
+    // Aquí capturas los errores de validación del backend
+    if (err.error && err.error.message) {
+      throw err.error.message; // puedes lanzar directamente el string, o mapearlo a un objeto si prefieres
+    } else {
+      throw 'Unknown error occurred';
+    }
   }
+}
 
 
   logout(): void {

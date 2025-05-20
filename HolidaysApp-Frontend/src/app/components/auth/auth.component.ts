@@ -124,11 +124,10 @@ export class AuthComponent implements OnInit {
 
     if (!valid) {
       this.registerErrors = errors;
-      return;
-    }
-
-    // si todo OK, creamos el usuario
+    } else {
+  try {
     await this.authService.registerUser({ username, password, repeatPassword, email });
+
     Swal.fire({
       icon: 'success',
       title: 'Registration successful!',
@@ -137,7 +136,14 @@ export class AuthComponent implements OnInit {
       confirmButtonText: 'OK',
       confirmButtonColor: '#c490ff',
     });
+
     this.router.navigateByUrl('/login');
+
+  } catch (serverMessage: any) {
+    // Aquí parseas el string y extraes los campos con errores (como `username`, `email`, etc.)
+    this.registerErrors = this.parseServerErrors(serverMessage);
+  }
+}
   }
 
   submit(): void {
@@ -165,4 +171,34 @@ export class AuthComponent implements OnInit {
       return null;
     };
   }
+
+  // Parsear errores del servidor
+  private parseServerErrors(message: string): { [key: string]: string } {
+  const errors: { [key: string]: string } = {};
+  const entries = message.split(';');
+
+  entries.forEach(entry => {
+    const parts = entry.split(':');
+
+    if (parts.length >= 2) {
+      const field = parts[0].trim();
+      const msg = parts.slice(1).join(':').trim(); // por si el mensaje contiene ":"
+      errors[field] = msg;
+    } else {
+      const trimmed = entry.trim();
+      if (!trimmed) return;
+
+      if (trimmed.startsWith('U')) {
+        errors['username'] = trimmed;
+      } else if (trimmed.startsWith('E')) {
+        errors['email'] = trimmed;
+      }
+    }
+  });
+
+  return errors;
+}
+
+
+
 }
