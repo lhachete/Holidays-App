@@ -8,5 +8,5 @@ import java.util.List;
 @Service
 public interface HolidayServicePort {
 
-    List<Holiday> getAllHolidays();
+    List<Holiday> getHolidaysByUserId(Integer id);
 }

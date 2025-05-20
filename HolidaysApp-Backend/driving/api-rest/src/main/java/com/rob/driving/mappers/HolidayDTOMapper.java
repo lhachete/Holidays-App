@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {UserDTOMapper.class})
 public interface HolidayDTOMapper {
 
+    @Mapping(source = "id", target = "holidayId")
     @Mapping(source = "user", target = "user")
     @Mapping(source = "reviewedByAdmin", target = "reviewedByAdmin")
     @Mapping(source = "createdBy", target = "createdBy")
@@ -17,6 +18,7 @@ public interface HolidayDTOMapper {
     @Mapping(source = "deletedBy", target = "deletedBy")
     HolidayDTO toHolidayDTO(Holiday holiday);
 
+    @Mapping(source = "holidayId", target = "id")
     @Mapping(source = "user", target = "user")
     @Mapping(source = "reviewedByAdmin", target = "reviewedByAdmin")
     @Mapping(source = "createdBy", target = "createdBy")

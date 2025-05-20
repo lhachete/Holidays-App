@@ -20,4 +20,9 @@ public class HolidayRepositoryJpaAdapter implements HolidayRepositoryPort {
     public List<Holiday> findAllHolidays() {
         return holidayMOJpaRepository.findAll().stream().map(holidayMOMapper::toHoliday).toList();
     }
+
+    @Override
+    public List<Holiday> findByUserId(Integer userId) {
+        return holidayMOJpaRepository.findByUser_Id(userId).stream().map(holidayMOMapper::toHoliday).toList();
+    }
 }

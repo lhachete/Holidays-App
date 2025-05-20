@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -21,8 +22,8 @@ public class HolidayControllerAdapter implements HolidaysApi {
     private final HolidayDTOMapper holidayDTOMapper;
 
     @GetMapping
-    public ResponseEntity<List<HolidayDTO>> getAllHolidays() {
-        List<HolidayDTO> holidays = holidayServicePort.getAllHolidays().stream()
+    public ResponseEntity<List<HolidayDTO>> getAllHolidays(@RequestParam(value = "userId", required = false) Integer userId) {
+        List<HolidayDTO> holidays = holidayServicePort.getHolidaysByUserId(userId).stream()
                 .map(holidayDTOMapper::toHolidayDTO)
                 .toList();
         return ResponseEntity.ok(holidays);

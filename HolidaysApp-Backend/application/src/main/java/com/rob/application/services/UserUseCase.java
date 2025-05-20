@@ -41,7 +41,7 @@ public class UserUseCase implements UserServicePort {
     public boolean usernameExists(String username) {
         User user = userRepositoryPort.findByUsername(username);
         if(user != null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username already in use", null);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Nombre de usuario ya en uso", null);
         }
         return false;
     }
@@ -50,7 +50,7 @@ public class UserUseCase implements UserServicePort {
     public boolean emailExists(String email) {
         User user = userRepositoryPort.findByEmail(email);
         if(user != null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email already in use", null);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email ya en uso", null);
         }
         return false;
     }
