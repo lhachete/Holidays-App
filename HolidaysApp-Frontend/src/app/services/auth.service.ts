@@ -108,7 +108,7 @@ export class AuthService {
 
 
     const errs: Record<string, string> = {};
-    console.log('validateRegistration', data);
+
 /*     if (await this.isUsernameTaken(data.username)) {
       errs['username'] = 'Username is already taken.';
     } */
