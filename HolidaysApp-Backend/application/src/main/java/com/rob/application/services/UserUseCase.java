@@ -27,7 +27,7 @@ public class UserUseCase implements UserServicePort {
     @Override
     public User getUserByUsernameOrEmailAndPassword(String usernameOrEmail, String password) {
         User user = userRepositoryPort.findByUsernameOrEmailAndPassword(usernameOrEmail, password);
-        if(user == null) {
+        if(user == null || !user.getPassword().equals(password)) {
             throw new org.springframework.web.server.ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username/email or password", null);
         }
         return user;

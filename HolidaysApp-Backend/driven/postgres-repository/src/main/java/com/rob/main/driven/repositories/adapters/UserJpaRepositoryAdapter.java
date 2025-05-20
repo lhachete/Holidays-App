@@ -38,6 +38,6 @@ public class UserJpaRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public User findByUsernameOrEmailAndPassword(String usernameOrEmail, String password) {
-        return userMOMapper.toUser(userMOJpaRepository.findByUsernameOrEmailAndPassword(usernameOrEmail,usernameOrEmail,password));
+        return userMOMapper.toUser(userMOJpaRepository.findByUsernameOrEmailAndPassword(usernameOrEmail,usernameOrEmail,password).get());
     }
 }
