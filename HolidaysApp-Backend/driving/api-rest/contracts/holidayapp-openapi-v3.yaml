@@ -1163,15 +1163,21 @@ components:
       properties:
         username:
           type: string
+          x-field-extra-annotation: "@NotBlank\n@Size(min=8, max=30)"
           minLength: 3
           maxLength: 30
         email:
           type: string
+          x-field-extra-annotation: "@NotBlank\n@Size(min=8, max=30)\n@Email"
           format: email
           minLength: 8
           maxLength: 30
         password:
           type: string
+          x-field-extra-annotation: |
+            @NotBlank
+            @Size(min=8, max=30)
+            @Pattern(regexp="^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$", message = "Must contain one uppercase letter and one special character")
           minLength: 8
           maxLength: 30
           pattern: '^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$'
@@ -1179,11 +1185,17 @@ components:
             Must contain at least one uppercase letter and one special character
         repeatPassword:
           type: string
+          x-field-extra-annotation: |
+            @NotBlank
+            @Size(min=8, max=30)
+            @Pattern(regexp="^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$", message = "Must contain one uppercase letter and one special character")
           minLength: 8
           maxLength: 30
           pattern: '^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$'
           description: >
             Must contain at least one uppercase letter and one special character
+        role:
+          $ref: '#/components/schemas/RoleDTO'
     HolidayDTO:
       type: object
       description: This is the Holiday model

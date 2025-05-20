@@ -1,16 +1,21 @@
 package com.rob.driving.controllers.adapters;
 
+import com.rob.application.ports.driving.RoleServicePort;
 import com.rob.application.ports.driving.UserServicePort;
 import com.rob.domain.models.User;
 import com.rob.driving.api.UsersApi;
+import com.rob.driving.controllers.adapters.error.ErrorResponse;
 import com.rob.driving.dtos.LoginRequest;
 import com.rob.driving.dtos.RegisterRequest;
 import com.rob.driving.dtos.UserDTO;
+import com.rob.driving.mappers.RoleDTOMapper;
 import com.rob.driving.mappers.UserDTOMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -21,7 +26,9 @@ import java.util.List;
 public class UserControllerAdapter implements UsersApi {
 
     private final UserServicePort userServicePort;
+    private final RoleServicePort roleServicePort;
     private final UserDTOMapper userDTOMapper;
+    private final RoleDTOMapper roleDTOMapper;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam(value = "username", required = false) String username) {
@@ -37,14 +44,12 @@ public class UserControllerAdapter implements UsersApi {
         return ResponseEntity.ok(userDTOMapper.toUserDTO(userServicePort.getUserByUsernameOrEmailAndPassword(loginRequest.getUsernameOrEmail(), loginRequest.getPassword())));
     }
 
-//    @PostMapping("/register")
-//    public ResponseEntity<UserDTO> registerByUsernameEmailAndPassword(@Valid @RequestBody RegisterRequest registerRequest) {
-//        if(registerRequest.getPassword().equals(registerRequest.getRepeatPassword())) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//        // hacer funcion para buscar por email y otra por username!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//        if(userServicePort.getUserByUsernameOrEmail(registerRequest.getUsername(), registerRequest.getEmail()).isPresent()) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
+    @PostMapping("/register")
+    public ResponseEntity<UserDTO> registerByUsernameEmailAndPassword(@Valid @RequestBody RegisterRequest registerRequest) {
+        registerRequest.setRole(roleDTOMapper.toRoleDTO(roleServicePort.getRolesByName("ADMIN").get(0)));
+        if(!registerRequest.getPassword().equals(registerRequest.getRepeatPassword())) {
+           throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las contraseñas no coinciden");
+        }
+        return ResponseEntity.ok(userDTOMapper.toUserDTO(userServicePort.createUser(userDTOMapper.toUser(registerRequest))));
+    }
 }

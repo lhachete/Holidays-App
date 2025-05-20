@@ -7,4 +7,7 @@ import java.util.List;
 public interface UserServicePort {
     List<User> getUsersByUsername(String username);
     User getUserByUsernameOrEmailAndPassword(String usernameOrEmail, String password);
+    boolean usernameExists(String username);
+    boolean emailExists(String email);
+    User createUser(User user);
 }
