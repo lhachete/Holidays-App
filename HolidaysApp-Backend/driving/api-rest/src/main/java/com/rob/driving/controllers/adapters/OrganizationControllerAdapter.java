@@ -7,6 +7,7 @@ import com.rob.driving.mappers.OrganizationDTOMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,8 @@ public class OrganizationControllerAdapter implements OrganizationsApi {
     }
 
     @PostMapping
-    public ResponseEntity<OrganizationDTO> createOrganization(@Validated @RequestBody OrganizationCreateDTO organizationCreateDTO) {
+    public ResponseEntity<OrganizationDTO> createOrganization(@RequestBody OrganizationCreateDTO organizationCreateDTO) {
+        System.out.println("DTO recibido: " + organizationCreateDTO.getName());
         Organization organization = organizationDTOMapper.toOrganization(organizationCreateDTO);
         Organization createdOrganization = organizationServicePort.createOrganization(organization);
         return ResponseEntity.ok(organizationDTOMapper.toOrganizationDTO(createdOrganization));

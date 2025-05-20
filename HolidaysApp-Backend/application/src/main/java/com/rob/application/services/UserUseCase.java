@@ -4,7 +4,9 @@ import com.rob.application.ports.driven.UserRepositoryPort;
 import com.rob.application.ports.driving.UserServicePort;
 import com.rob.domain.models.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -24,6 +26,10 @@ public class UserUseCase implements UserServicePort {
 
     @Override
     public User getUserByUsernameOrEmailAndPassword(String usernameOrEmail, String password) {
-        return userRepositoryPort.findByUsernameOrEmailAndPassword(usernameOrEmail, password);
+        User user = userRepositoryPort.findByUsernameOrEmailAndPassword(usernameOrEmail, password);
+        if(user == null) {
+            throw new org.springframework.web.server.ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username/email or password", null);
+        }
+        return user;
     }
 }

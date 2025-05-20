@@ -33,7 +33,7 @@ public class UserControllerAdapter implements UsersApi {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDTO> getUserByUsernameOrEmailAndPassword(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<UserDTO> getUserByUsernameOrEmailAndPassword(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(userDTOMapper.toUserDTO(userServicePort.getUserByUsernameOrEmailAndPassword(loginRequest.getUsernameOrEmail(), loginRequest.getPassword())));
     }
 

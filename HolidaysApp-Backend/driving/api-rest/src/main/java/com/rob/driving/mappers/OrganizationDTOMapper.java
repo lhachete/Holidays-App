@@ -3,6 +3,7 @@ package com.rob.driving.mappers;
 import com.rob.domain.models.Organization;
 import com.rob.driving.dtos.OrganizationCreateDTO;
 import com.rob.driving.dtos.OrganizationDTO;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Component;
 import org.mapstruct.Mapper;
 
@@ -24,7 +25,7 @@ public interface OrganizationDTOMapper {
                 .build();
     }
 
-    default Organization toOrganization(OrganizationCreateDTO organizationCreateDTO) {
+    default Organization toOrganization(@Valid OrganizationCreateDTO organizationCreateDTO) {
         return Organization.builder()
                 .name(organizationCreateDTO.getName())
                 .build();

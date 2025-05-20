@@ -51,51 +51,55 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: invalid parameters
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid parameters
+
         '401':
           description: Not authorized – invalid or expired token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No valid token provided
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
+
         '403':
           description: Denied – no permission to access the resource
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: You do not have permission to access this resource
-        "404":
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
+
+        '404':
           description: Organization not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The Organization was not found
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Organization was not found
+
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Unexpected error occurred
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
     post:
       tags:
         - Organizations
@@ -120,51 +124,55 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: invalid parameters
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+
         '401':
           description: Not authorized – invalid or expired token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No valid token provided
-        "404":
-          description: Organization not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The Organization was not found
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
+
         '403':
           description: Denied – no permission to access the resource
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: You do not have permission to access this resource
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
+
+        '404':
+          description: Organization not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Organization was not found
+
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Unexpected error occurred
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
     put:
       tags:
         - Organizations
@@ -185,55 +193,58 @@ paths: # Todos los endpoints de la API
               schema:
                 $ref: '#/components/schemas/OrganizationDTO'
         '400':
-          description: Invalid input
+          description: Wrong Request – invalid parameters
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Invalid data
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
         '401':
           description: Not authorized – invalid or expired token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No valid token provided
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
+
         '403':
           description: Denied – no permission to access the resource
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: You do not have permission to access this resource
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
+
         '404':
           description: Organization not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The specified ID does not exist
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Organization was not found
+
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Unexpected error occurred
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
 
   /api-rest/organizations/{organizationId}:
     get:
@@ -255,57 +266,59 @@ paths: # Todos los endpoints de la API
             application/json:
               schema:
                 $ref: '#/components/schemas/OrganizationDTO'
-        "400":
+        '400':
           description: Wrong Request – invalid parameters
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: invalid parameters
-
-        "401":
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
           description: Not authorized – invalid or expired token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No valid token provided
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
 
-        "403":
+        '403':
           description: Denied – no permission to access the resource
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: You do not have permission to access this resource
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
 
-        "404":
+        '404':
           description: Organization not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The Organization was not found
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Organization was not found
+
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/OrganizationDTO'
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
     delete:
       tags:
         - Organizations
@@ -326,57 +339,59 @@ paths: # Todos los endpoints de la API
             application/json:
               schema:
                 $ref: '#/components/schemas/OrganizationDTO'
-        "400":
+        '400':
           description: Wrong Request – invalid parameters
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: invalid parameters
-
-        "401":
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
           description: Not authorized – invalid or expired token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No valid token provided
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
 
-        "403":
+        '403':
           description: Denied – no permission to access the resource
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: You do not have permission to access this resource
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
 
-        "404":
+        '404':
           description: Organization not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The Organization was not found
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Organization was not found
+
         '500':
           description: Internal Server Error
           content:
-            application/hal+json:
+            application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/OrganizationDTO'
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
   /api-rest/roles:
     get:
       tags:
@@ -400,57 +415,59 @@ paths: # Todos los endpoints de la API
                 type: array
                 items:
                   $ref: '#/components/schemas/RoleDTO'
-        "400":
+        '400':
           description: Wrong Request – invalid parameters
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: invalid parameters
-
-        "401":
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
           description: Not authorized – invalid or expired token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No valid token provided
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
 
-        "403":
+        '403':
           description: Denied – no permission to access the resource
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: You do not have permission to access this resource
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
 
-        "404":
+        '404':
           description: Role not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The Role was not found
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Role was not found
+
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RoleDTO'
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
   /api-rest/projects:
     get:
       tags:
@@ -474,57 +491,59 @@ paths: # Todos los endpoints de la API
                 type: array
                 items:
                   $ref: '#/components/schemas/ProjectDTO'
-        "400":
+        '400':
           description: Wrong Request – invalid parameters
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: invalid parameters
-
-        "401":
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
           description: Not authorized – invalid or expired token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No valid token provided
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
 
-        "403":
+        '403':
           description: Denied – no permission to access the resource
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: You do not have permission to access this resource
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
 
-        "404":
+        '404':
           description: Project not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The Project was not found
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Project was not found
+
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ProjectDTO'
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
   /api-rest/departments:
     get:
       tags:
@@ -548,57 +567,59 @@ paths: # Todos los endpoints de la API
                 type: array
                 items:
                   $ref: '#/components/schemas/DepartmentDTO'
-        "400":
+        '400':
           description: Wrong Request – invalid parameters
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: invalid parameters
-
-        "401":
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
           description: Not authorized – invalid or expired token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No valid token provided
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
 
-        "403":
+        '403':
           description: Denied – no permission to access the resource
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: You do not have permission to access this resource
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
 
-        "404":
+        '404':
           description: Department not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The Department was not found
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Department was not found
+
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DepartmentDTO'
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
   /api-rest/employees:
     get:
       tags:
@@ -622,57 +643,59 @@ paths: # Todos los endpoints de la API
                 type: array
                 items:
                   $ref: '#/components/schemas/EmployeeDTO'
-        "400":
+        '400':
           description: Wrong Request – invalid parameters
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: invalid parameters
-
-        "401":
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
           description: Not authorized – invalid or expired token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No valid token provided
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
 
-        "403":
+        '403':
           description: Denied – no permission to access the resource
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: You do not have permission to access this resource
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
 
-        "404":
+        '404':
           description: Employee not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The Employee was not found
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Employee was not found
+
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/EmployeeDTO'
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
   /api-rest/users:
     get:
       tags:
@@ -696,57 +719,59 @@ paths: # Todos los endpoints de la API
                 type: array
                 items:
                   $ref: '#/components/schemas/UserDTO'
-        "400":
+        '400':
           description: Wrong Request – invalid parameters
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: invalid parameters
-
-        "401":
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
           description: Not authorized – invalid or expired token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No valid token provided
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
 
-        "403":
+        '403':
           description: Denied – no permission to access the resource
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: You do not have permission to access this resource
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
 
-        "404":
+        '404':
           description: User not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The User was not found
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The User was not found
+
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserDTO'
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
   /api-rest/users/login:
     post:
       tags:
@@ -768,55 +793,59 @@ paths: # Todos los endpoints de la API
             application/json:
               schema:
                 $ref: '#/components/schemas/UserDTO'
-        "400":
+        '400':
           description: Wrong Request – invalid parameters
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: invalid parameters
-
-        "401":
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
           description: Not authorized – invalid or expired token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No valid token provided
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
 
-        "403":
+        '403':
           description: Denied – no permission to access the resource
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: You do not have permission to access this resource
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
 
-        "404":
+        '404':
           description: User not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The User was not found
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The User was not found
+
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDTO'
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
   /api-rest/users/register:
     post:
       tags:
@@ -838,55 +867,59 @@ paths: # Todos los endpoints de la API
             application/json:
               schema:
                 $ref: '#/components/schemas/UserDTO'
-        "400":
+        '400':
           description: Wrong Request – invalid parameters
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: invalid parameters
-
-        "401":
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
           description: Not authorized – invalid or expired token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No valid token provided
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
 
-        "403":
+        '403':
           description: Denied – no permission to access the resource
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: You do not have permission to access this resource
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
 
-        "404":
+        '404':
           description: User not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The User was not found
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The User was not found
+
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDTO'
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
   /api-rest/holidays:
     get:
       tags:
@@ -904,63 +937,67 @@ paths: # Todos los endpoints de la API
                 type: array
                 items:
                   $ref: '#/components/schemas/HolidayDTO'
-        "400":
+        '400':
           description: Wrong Request – invalid parameters
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: invalid parameters
-
-        "401":
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
           description: Not authorized – invalid or expired token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No valid token provided
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
 
-        "403":
+        '403':
           description: Denied – no permission to access the resource
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: You do not have permission to access this resource
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
 
-        "404":
+        '404':
           description: Holiday not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: The Holiday was not found
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Holiday was not found
+
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/HolidayDTO'
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
 
 components:
   schemas:
     OrganizationDTO:
       description: This is the Organization model
       type: object
+      required:
+        - name
       properties:
         id:
           type: integer
@@ -969,9 +1006,14 @@ components:
     OrganizationCreateDTO:
       description: This is the Organization model to create
       type: object
+      required:
+        - name
       properties:
         name:
           type: string
+          x-field-extra-annotation: "@NotBlank\n@Size(min=3, max=20)"
+          minLength: 3
+          maxLength: 20
     RoleDTO:
       description: This is the Role model
       type: object
@@ -1184,3 +1226,14 @@ components:
           $ref: '#/components/schemas/UserDTO'
         isDeleted:
           type: boolean
+    ErrorResponse:
+      description: Standard error model for API responses
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        message:
+          type: string

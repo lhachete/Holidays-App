@@ -2,10 +2,15 @@ package com.rob.main.driven.repositories.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +24,8 @@ public class OrganizationMO {
     @Column(name = "org_id", nullable = false)
     private Integer id;
 
-    @NotNull
+    @NotBlank
+    @Size(min = 3, max = 20)
     @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
     private String name;
 
