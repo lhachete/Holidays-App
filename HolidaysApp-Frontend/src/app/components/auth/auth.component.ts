@@ -116,10 +116,10 @@ export class AuthComponent implements OnInit {
     const username = this.registerForm.value.username ?? '';
     const email = this.registerForm.value.email ?? '';
     const password = this.registerForm.value.password ?? '';
-    const confirmPassword = this.registerForm.value.confirmPassword ?? '';
+    const repeatPassword = this.registerForm.value.confirmPassword ?? '';
 
     const { valid, errors } = await this.authService.validateRegistration({
-      username, email, password, confirmPassword
+      username, email, password, repeatPassword
     });
 
     if (!valid) {
@@ -128,7 +128,7 @@ export class AuthComponent implements OnInit {
     }
 
     // si todo OK, creamos el usuario
-    await this.authService.registerUser({ username, password });
+    await this.authService.registerUser({ username, password, repeatPassword, email });
     Swal.fire({
       icon: 'success',
       title: 'Registration successful!',

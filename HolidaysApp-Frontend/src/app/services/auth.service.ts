@@ -52,7 +52,7 @@ export class AuthService {
   }
 
   //Registra un nuevo usuario en la API (in-memory para pruebas) email: string; < eliminado
-  async registerUser(user: { username: string; password: string; }): Promise<User> {
+  async registerUser(user: { username: string; password: string; repeatPassword: string; email: string; }): Promise<User> {
     const newUser = await this.userService.addUser({
       ...user
     } as User);
@@ -76,15 +76,14 @@ export class AuthService {
   return this.user?.role?.name === role;
 }
 
-  //Comprueba si ya existe un usuario (para pruebas con mock)
-  async isUsernameTaken(username: string): Promise<boolean> {
+  //Comprueba si ya existe un usuario //!(para pruebas con mock)
+/*   async isUsernameTaken(username: string): Promise<boolean> {
     const users = await this.userService.getAllUsers();
     return users.some(u => u.username === username);
-  }
+  } */
 
 
-  //Comprueba si ya existe un email (para pruebas con mock) 
-   
+  //Comprueba si ya existe un email //!(para pruebas con mock) 
   /* async isEmailTaken(email: string): Promise<boolean> {
     const users = await this.userService.getAllUsers();
     return users.some(u => u.email === email);
@@ -96,17 +95,19 @@ export class AuthService {
     username: string;
     email: string;
     password: string;
-    confirmPassword: string;
+    repeatPassword: string;
   }): Promise<{ valid: boolean; errors: Record<string, string> }> {
-    const errs: Record<string, string> = {};
 
-    if (await this.isUsernameTaken(data.username)) {
+
+    const errs: Record<string, string> = {};
+    console.log('validateRegistration', data);
+/*     if (await this.isUsernameTaken(data.username)) {
       errs['username'] = 'Username is already taken.';
-    }
+    } */
 /*     if (await this.isEmailTaken(data.email)) {
       errs['email'] = 'Email is already registered.';
     } */
-    if (data.password !== data.confirmPassword) {
+    if (data.password !== data.repeatPassword) {
       errs['password'] = 'Passwords do not match.';
     }
 
