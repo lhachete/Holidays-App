@@ -24,7 +24,7 @@ export class HolidayService {
   }
 
   updateHoliday(holiday: Holiday): Promise<Holiday> {
-    return this.api.put<Holiday>(`${this.apiUrl}/${holiday.holiday_id}`, holiday);
+    return this.api.put<Holiday>(`${this.apiUrl}/${holiday.holidayId}`, holiday);
   }
   
   deleteHoliday(id: number): Promise<void> {
