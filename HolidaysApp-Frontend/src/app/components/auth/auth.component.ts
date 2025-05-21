@@ -140,7 +140,6 @@ export class AuthComponent implements OnInit {
     this.router.navigateByUrl('/login');
 
   } catch (serverMessage: any) {
-    // Aquí parseas el string y extraes los campos con errores (como `username`, `email`, etc.)
     this.registerErrors = this.parseServerErrors(serverMessage);
   }
 }
@@ -175,8 +174,9 @@ export class AuthComponent implements OnInit {
   // Parsear errores del servidor
   private parseServerErrors(message: string): { [key: string]: string } {
   const errors: { [key: string]: string } = {};
+  // con esto separo los errores que estan divididos por ";" 
   const entries = message.split(';');
-
+    console.log('entries', entries)
   entries.forEach(entry => {
     const parts = entry.split(':');
 
@@ -188,7 +188,7 @@ export class AuthComponent implements OnInit {
       const trimmed = entry.trim();
       if (!trimmed) return;
 
-      if (trimmed.startsWith('U')) {
+      if (trimmed.startsWith('U') || trimmed.startsWith('N')) {
         errors['username'] = trimmed;
       } else if (trimmed.startsWith('E')) {
         errors['email'] = trimmed;
