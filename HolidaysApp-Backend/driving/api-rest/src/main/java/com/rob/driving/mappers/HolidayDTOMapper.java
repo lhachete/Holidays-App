@@ -4,6 +4,7 @@ import com.rob.domain.models.Employee;
 import com.rob.domain.models.Holiday;
 import com.rob.driving.dtos.EmployeeDTO;
 import com.rob.driving.dtos.HolidayDTO;
+import com.rob.driving.dtos.HolidayRequestDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -25,4 +26,7 @@ public interface HolidayDTOMapper {
     @Mapping(source = "updatedBy", target = "updatedBy")
     @Mapping(source = "deletedBy", target = "deletedBy")
     Holiday toHoliday(HolidayDTO holidayDTO);
+
+    
+    Holiday toHoliday(HolidayRequestDTO holidayRequestDTO);
 }

@@ -772,6 +772,78 @@ paths: # Todos los endpoints de la API
                 timestamp: '2025-05-20T19:00:00Z'
                 status: 500
                 message: Unexpected error occurred
+    put:
+      tags:
+        - Users
+      summary: Update an existing User By Id
+      description: Updates an User by its ID, which must be included in the request body
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '400':
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
+
+        '403':
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
+
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The User was not found
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
   /api-rest/users/login:
     post:
       tags:
@@ -851,7 +923,7 @@ paths: # Todos los endpoints de la API
       tags:
         - Users
       summary: Register with the User's username, password and repeated password
-      description: Login with the User's username and password using a request body
+      description: Register with the User's username and password using a request body
       operationId: registerByUsernameEmailAndPassword
       requestBody:
         required: true
@@ -860,6 +932,80 @@ paths: # Todos los endpoints de la API
             schema:
               $ref: '#/components/schemas/RegisterRequest'
 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '400':
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
+
+        '403':
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
+
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The User was not found
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
+  /api-rest/users/{userId}:
+    get:
+      tags:
+        - Users
+      summary: Get an User By ID
+      description: Get an User by its ID which is included in the path
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the User to get
+          schema:
+            type: integer
       responses:
         '200':
           description: OK
@@ -934,7 +1080,6 @@ paths: # Todos los endpoints de la API
           required: false
           schema:
             type: integer
-
       responses:
         '200':
           description: OK
@@ -997,7 +1142,298 @@ paths: # Todos los endpoints de la API
                 timestamp: '2025-05-20T19:00:00Z'
                 status: 500
                 message: Unexpected error occurred
+    post:
+      tags:
+        - Holidays
+      summary: Add a holiday for a user
+      description: Add a holiday for a user
+      operationId: addHoliday
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HolidayRequestDTO'
+      responses:
+        '201':
+          description: Holiday created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HolidayDTO'
+        '400':
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
 
+        '401':
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
+
+        '403':
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
+
+        '404':
+          description: Holiday not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Holiday was not found
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
+    put:
+      tags:
+        - Holidays
+      summary: Update an existing Holiday
+      description: Updates an Holiday by its ID, which must be included in the request body
+      operationId: updateHoliday
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HolidayDTO'
+      responses:
+        '200':
+          description: Holiday updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HolidayDTO'
+        '400':
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
+
+        '403':
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
+
+        '404':
+          description: Holiday not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Holiday was not found
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
+  /api-rest/holidays/{holidayId}:
+    get:
+      tags:
+        - Holidays
+      summary: Get an Holiday By ID
+      description: Get an Holiday by its ID which is included in the path
+      operationId: getHolidayById
+      parameters:
+        - name: holidayId
+          in: path
+          required: true
+          description: ID of the Holiday to delete
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HolidayDTO'
+        '400':
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
+
+        '403':
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
+
+        '404':
+          description: Holiday not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Holiday was not found
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
+    delete:
+      tags:
+        - Holidays
+      summary: Delete an Holiday
+      description: Deletes an Holiday by its ID which is included in the path
+      operationId: deleteHolidayById
+      parameters:
+        - name: holidayId
+          in: path
+          required: true
+          description: ID of the Holiday to delete
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HolidayDTO'
+        '400':
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
+
+        '403':
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
+
+        '404':
+          description: Holiday not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Holiday was not found
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
 
 components:
   schemas:
@@ -1159,7 +1595,7 @@ components:
           maxLength: 30
           pattern: '^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$'
           description: >
-            Must contain at least one uppercase letter and one special character
+            Debe contener al menos una letra mayúscula y un carácter especial
     RegisterRequest:
       description: This is the Register Request model
       type: object
@@ -1185,28 +1621,37 @@ components:
           x-field-extra-annotation: |
             @NotBlank
             @Size(min=8, max=30)
-            @Pattern(regexp="^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$", message = "Must contain one uppercase letter and one special character")
+            @Pattern(regexp="^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$", message = "Debe contener al menos una letra mayúscula y un carácter especial")
           minLength: 8
           maxLength: 30
           pattern: '^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$'
           description: >
-            Must contain at least one uppercase letter and one special character
+            Debe contener al menos una letra mayúscula y un carácter especial
         repeatPassword:
           type: string
           x-field-extra-annotation: |
             @NotBlank
             @Size(min=8, max=30)
-            @Pattern(regexp="^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$", message = "Must contain one uppercase letter and one special character")
+            @Pattern(regexp="^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$", message = "Debe contener al menos una letra mayúscula y un carácter especial")
           minLength: 8
           maxLength: 30
           pattern: '^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$'
           description: >
-            Must contain at least one uppercase letter and one special character
+            Debe contener al menos una letra mayúscula y un carácter especial
         role:
           $ref: '#/components/schemas/RoleDTO'
     HolidayDTO:
       type: object
       description: This is the Holiday model
+      required:
+        - holidayId
+        - user
+        - holidayStartDate
+        - holidayEndDate
+        - vacationType
+        - vacationState
+        - createdAt
+        - createdBy
       properties:
         holidayId:
           type: integer
@@ -1246,6 +1691,25 @@ components:
           $ref: '#/components/schemas/UserDTO'
         isDeleted:
           type: boolean
+    HolidayRequestDTO:
+        type: object
+        description: This is the Holiday Request model to add a new holiday
+        required:
+          - userId
+          - holidayStartDate
+          - holidayEndDate
+          - vacationType
+        properties:
+          userId:
+            type: integer
+          holidayStartDate:
+            type: string
+            format: date
+          holidayEndDate:
+            type: string
+            format: date
+          vacationType:
+            type: string
     ErrorResponse:
       description: Standard error model for API responses
       type: object
