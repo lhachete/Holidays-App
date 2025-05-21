@@ -1226,7 +1226,7 @@ paths: # Todos los endpoints de la API
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/HolidayDTO'
+              $ref: '#/components/schemas/HolidayUpdateRequestDTO'
       responses:
         '200':
           description: Holiday updated successfully
@@ -1578,6 +1578,24 @@ components:
           type: string
         enabled:
           type: boolean
+    UserUpdateDTO:
+      description: This is the User Update model
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+        roleId:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        enabled:
+          type: boolean
     LoginRequest:
       description: This is the Login Request model
       type: object
@@ -1700,6 +1718,8 @@ components:
           - holidayEndDate
           - vacationType
         properties:
+          holidayId:
+            type: integer
           userId:
             type: integer
             x-field-extra-annotation: |
@@ -1721,6 +1741,41 @@ components:
               @NotNull
               @Size(min=3, max=20)
             type: string
+    HolidayUpdateRequestDTO:
+      type: object
+      description: This is the Holiday Update Request model to update a holiday
+      required:
+        - holidayId
+        - userId
+        - holidayStartDate
+        - holidayEndDate
+        - vacationType
+      properties:
+        holidayId:
+          type: integer
+          x-field-extra-annotation: |
+            @NotNull
+        userId:
+          type: integer
+          x-field-extra-annotation: |
+            @NotNull
+        holidayStartDate:
+          type: string
+          x-field-extra-annotation: |
+            @NotNull
+            @FutureOrPresent
+          format: date
+        holidayEndDate:
+          type: string
+          x-field-extra-annotation: |
+            @NotNull
+            @FutureOrPresent
+          format: date
+        vacationType:
+          x-field-extra-annotation: |
+            @NotNull
+            @Size(min=3, max=20)
+          type: string
     ErrorResponse:
       description: Standard error model for API responses
       type: object

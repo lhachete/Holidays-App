@@ -27,5 +27,14 @@ public interface HolidayDTOMapper {
     Holiday toHoliday(HolidayDTO holidayDTO);
 
 
-    Holiday toHoliday(HolidayRequestDTO holidayRequestDTO);
+    @Mapping(source = "holidayStartDate", target = "holidayStartDate")
+    @Mapping(source = "holidayEndDate", target = "holidayEndDate")
+    @Mapping(source = "vacationType", target = "vacationType")
+    HolidayDTO holidayRequestDTOtoHolidayDTO(HolidayRequestDTO holidayRequestDTO);
+
+    @Mapping(source = "holidayId", target = "id")
+    @Mapping(source = "holidayStartDate", target = "holidayStartDate")
+    @Mapping(source = "holidayEndDate", target = "holidayEndDate")
+    @Mapping(source = "vacationType", target = "vacationType")
+    Holiday holidayRequestDTOtoHoliday(HolidayRequestDTO holidayRequestDTO);
 }

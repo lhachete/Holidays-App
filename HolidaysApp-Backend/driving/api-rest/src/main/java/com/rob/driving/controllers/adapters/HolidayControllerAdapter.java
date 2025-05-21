@@ -6,8 +6,10 @@ import com.rob.domain.models.User;
 import com.rob.driving.api.HolidaysApi;
 import com.rob.driving.dtos.HolidayDTO;
 import com.rob.driving.dtos.HolidayRequestDTO;
+import com.rob.driving.dtos.HolidayUpdateRequestDTO;
 import com.rob.driving.mappers.HolidayDTOMapper;
 import com.rob.driving.mappers.UserDTOMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,11 +38,8 @@ public class HolidayControllerAdapter implements HolidaysApi {
     @PostMapping
     public ResponseEntity<HolidayDTO> addHoliday(@RequestBody HolidayRequestDTO holidayRequestDTO) {
         User user = userServicePort.getUserById(holidayRequestDTO.getUserId());
-        HolidayDTO newHoliday = new HolidayDTO();
+        HolidayDTO newHoliday = holidayDTOMapper.holidayRequestDTOtoHolidayDTO(holidayRequestDTO);
         newHoliday.setUser(userDTOMapper.toUserDTO(user));
-        newHoliday.setHolidayStartDate(holidayRequestDTO.getHolidayStartDate());
-        newHoliday.setHolidayEndDate(holidayRequestDTO.getHolidayEndDate());
-        newHoliday.vacationType(holidayRequestDTO.getVacationType());
         return ResponseEntity.ok(holidayDTOMapper.toHolidayDTO(
                 holidayServicePort.addHoliday(holidayDTOMapper.toHoliday(newHoliday))
         ));
@@ -57,4 +56,9 @@ public class HolidayControllerAdapter implements HolidaysApi {
         HolidayDTO deletedHolidayDTO = holidayDTOMapper.toHolidayDTO(holidayServicePort.deleteHolidayById(holidayId));
         return ResponseEntity.ok(deletedHolidayDTO);
     }
+
+//    @PutMapping
+//    public ResponseEntity<HolidayDTO> updateHoliday(@Valid @RequestBody HolidayUpdateRequestDTO holidayUpdateRequestDTO) {
+//
+//    }
 }
