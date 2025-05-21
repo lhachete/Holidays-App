@@ -10,4 +10,6 @@ public interface HolidayRepositoryPort {
     List<Holiday> findAllHolidays();
 
     List<Holiday> findByUserId(Integer userId);
+
+    Holiday save(Holiday holiday);
 }

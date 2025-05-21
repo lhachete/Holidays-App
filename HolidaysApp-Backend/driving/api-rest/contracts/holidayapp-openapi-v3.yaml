@@ -1702,13 +1702,24 @@ components:
         properties:
           userId:
             type: integer
+            x-field-extra-annotation: |
+              @NotNull
           holidayStartDate:
             type: string
+            x-field-extra-annotation: |
+              @NotNull
+              @FutureOrPresent
             format: date
           holidayEndDate:
             type: string
+            x-field-extra-annotation: |
+              @NotNull
+              @FutureOrPresent
             format: date
           vacationType:
+            x-field-extra-annotation: |
+              @NotNull
+              @Size(min=3, max=20)
             type: string
     ErrorResponse:
       description: Standard error model for API responses

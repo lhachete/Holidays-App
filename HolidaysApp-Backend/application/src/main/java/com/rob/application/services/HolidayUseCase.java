@@ -21,4 +21,13 @@ public class HolidayUseCase implements HolidayServicePort {
         }
         return holidayRepositoryPort.findAllHolidays();
     }
+
+    @Override
+    public Holiday addHoliday(Holiday holiday) {
+        return holidayRepositoryPort.save(holiday);
+    }
+
+    public boolean isNewHolidayOverlapAntiqueHoliday(Holiday newHoliday) {
+
+    }
 }

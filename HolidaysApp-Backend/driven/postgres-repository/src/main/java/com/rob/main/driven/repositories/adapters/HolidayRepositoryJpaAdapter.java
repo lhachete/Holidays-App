@@ -25,4 +25,9 @@ public class HolidayRepositoryJpaAdapter implements HolidayRepositoryPort {
     public List<Holiday> findByUserId(Integer userId) {
         return holidayMOJpaRepository.findByUser_Id(userId).stream().map(holidayMOMapper::toHoliday).toList();
     }
+
+    @Override
+    public Holiday save(Holiday holiday) {
+        return holidayMOMapper.toHoliday(holidayMOJpaRepository.save(holidayMOMapper.toHolidayMO(holiday)));
+    }
 }
