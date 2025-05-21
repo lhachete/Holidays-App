@@ -35,7 +35,7 @@ export class ShowVacationComponent {
       /* const holidays = await this.holidayService.getAllHolidays(); */
       const userId = this.user.id;
       const holidays = await this.holidayService.getHolidaysById(userId);
-      console.log('userId', userId);
+
       console.log('holidays', holidays);
       this.usersEvents = holidays.map(h => ({
         start: new Date(h.holidayStartDate),
