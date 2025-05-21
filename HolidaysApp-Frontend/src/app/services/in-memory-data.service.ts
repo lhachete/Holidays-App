@@ -14,8 +14,8 @@ export class InMemoryDataService implements InMemoryDbService {
         ];
 
         const users: User[] = [
-            { id: 1, username: 'admin', email: 'admin@example.com',  password: '12345678', role: { id: 1, name: 'ADMIN' } },
-            { id: 2, username: 'user1', email: 'user1@example.com',  password: '12345678', role: { id: 2, name: 'USUARIO' } }
+            { id: 1, username: 'admin', email: 'admin@example.com', password: '12345678', role: { id: 1, name: 'ADMIN' } },
+            { id: 2, username: 'user1', email: 'user1@example.com', password: '12345678', role: { id: 2, name: 'USUARIO' } }
         ];
 
         return { holidays, users };
@@ -36,22 +36,22 @@ export class InMemoryDataService implements InMemoryDbService {
     // Intercepta **todos** los GET de la colección holidays
     get(reqInfo: RequestInfo): Observable<ResponseOptions> | undefined {
         const { collectionName, query } = reqInfo;
-      
+
         if (collectionName === 'holidays' && query.get('user_id')) {
-          const userId = Number(query.get('user_id')![0]);
-          const db = (reqInfo.utils as any).getDb();
-          const holidays: Holiday[] = db.holidays;
-          const filtered = holidays.filter(h => h.userId === userId);
-      
-          return reqInfo.utils.createResponse$(() => ({
-            status: 200,
-            body: filtered
-          }));
+            const userId = Number(query.get('user_id')![0]);
+            const db = (reqInfo.utils as any).getDb();
+            const holidays: Holiday[] = db.holidays;
+            const filtered = holidays.filter(h => h.userId === userId);
+
+            return reqInfo.utils.createResponse$(() => ({
+                status: 200,
+                body: filtered
+            }));
         }
-      
+
         return undefined; // fallback a comportamiento por defecto
-      }
-      
+    }
+
 
     // Intercepta **todos** los POST
     post(reqInfo: RequestInfo): Observable<ResponseOptions> | undefined {

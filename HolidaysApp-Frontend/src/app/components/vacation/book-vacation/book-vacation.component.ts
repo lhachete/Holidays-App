@@ -5,6 +5,7 @@ import { startOfDay, endOfDay } from 'date-fns';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { AuthService } from '../../../services/auth.service';
 import Swal from 'sweetalert2';
+import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
 
 @Component({
   selector: 'app-book-vacation',
@@ -39,7 +40,7 @@ export class BookVacationComponent {
     this.userEvents = holidays.map(h => ({
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
-      title: `Vacation ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+      title: `Holiday ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
     } as CalendarEvent));
   }
 
@@ -129,35 +130,62 @@ export class BookVacationComponent {
       });
       return;
     }
-    if (this.saving === false) {
-      this.saving = true;
 
-      const newHoliday = await this.holidayService.addHoliday({
-        userId: this.user.id,
-        holidayStartDate: this.selectedStart,
-        holidayEndDate: this.selectedEnd,
-        vacationType: 'Vacation', //TODO: <<<<<< GESTIONAR POR EL USUARIO (con un SELECT)
-      });
-      /* console.log('Nueva holiday:', newHoliday); */
-      this.userEvents = [...this.userEvents,
-      {
-        start: new Date(newHoliday.holidayStartDate),
-        end: new Date(newHoliday.holidayEndDate),
-        title: `Vacation ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`,
+    const { value: selectedType } = await Swal.fire({
+      title: 'Select vacation type',
+      input: 'select',
+      inputLabel: 'Type of vacation',
+      inputOptions: { // Opciones de vacaciones, el campo es lo que se guarda en la BD
+        Vacation: 'Vacation',
+        PTO: 'Paid Time Off',
+        Sick: 'Sick Leave',
+        Other: 'Other',
+      },
+      inputValue: 'Vacation', 
+      showCancelButton: true,
+      confirmButtonText: 'Accept',
+      confirmButtonColor: '#b35cff',
+      cancelButtonText: 'Cancel',
+    });
+
+    if (selectedType) {
+
+      if (this.saving === false) {
+        this.saving = true;
+
+        const newHoliday = await this.holidayService.addHoliday({
+          userId: this.user.id,
+          holidayStartDate: this.selectedStart,
+          holidayEndDate: this.selectedEnd,
+          vacationType: selectedType,
+        });
+
+        this.userEvents = [
+          ...this.userEvents,
+          {
+            start: new Date(newHoliday.holidayStartDate),
+            end: new Date(newHoliday.holidayEndDate),
+            title: `Holiday ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`,
+          },
+        ] as CustomCalendarEv[];
+
+        this.clearSelection();
+
+        Swal.fire({
+          toast: true,
+          icon: 'success',
+          title: 'Vacations saved',
+          showConfirmButton: false,
+          timer: 1500,
+          position: 'top-end',
+        });
+
+        this.saving = false;
       }
-      ];
-
-      this.clearSelection();
-
-      Swal.fire({
-        toast: true,
-        icon: 'success',
-        title: 'Vacations saved',
-        showConfirmButton: false,
-        timer: 1500,
-        position: 'top-end',
-      });
-      this.saving = false;
     }
   };
+
+
+
+
 }

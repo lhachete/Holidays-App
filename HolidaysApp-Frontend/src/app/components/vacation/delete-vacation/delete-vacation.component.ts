@@ -4,6 +4,7 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { AuthService } from '../../../services/auth.service';
 import Swal from 'sweetalert2';
+import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
 
 @Component({
   selector: 'app-delete-vacation',
@@ -29,14 +30,15 @@ export class DeleteVacationComponent {
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
       title: `Holidays: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
-      // meta para guardar el id de la vacation que se va a eliminar. //! Igual cuando conectemos la API da problemas.
-      meta: { id: h.holidayId }
+      //! Comprobar como llega de la API sin él no podemos eliminar la vacación.
+      holidayId: h.holidayId 
     } as CalendarEvent));
   }
 
 
   onDayDetails = async (day: CalendarMonthViewDay<CalendarEvent>): Promise<void> => {
-    const events = day.events;
+    // He tenido que añadirlo para que reconozca las propiedades personalizadas.
+    const events = day.events as CustomCalendarEv[]; 
     if (events.length) {
       // Construimos HTML con lista de vacaciones
       console.log('events', events);
@@ -52,14 +54,15 @@ export class DeleteVacationComponent {
       });
 
       if (result.isConfirmed) {
-        const id = events[0].meta?.id;
+        
+        const id = events[0].holidayId;
         if (id) {
           await this.holidayService.deleteHoliday(id);
         }
 
         // Actualizamos la lista local excluyendo la vacación eliminada
         this.userEvents = this.userEvents.filter(holiday =>
-          !events.some(selectedHoliday => selectedHoliday.meta?.id === holiday.meta?.id)
+          !events.some(selectedHoliday => selectedHoliday.holidayId === (holiday as CustomCalendarEv).holidayId)
         );
 
         // Notificación de éxito
