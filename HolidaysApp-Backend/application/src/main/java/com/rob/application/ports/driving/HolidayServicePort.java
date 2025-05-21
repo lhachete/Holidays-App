@@ -10,4 +10,6 @@ public interface HolidayServicePort {
 
     List<Holiday> getHolidaysByUserId(Integer id);
     Holiday addHoliday(Holiday holiday);
+    Holiday getHolidayById(Integer id);
+    Holiday deleteHolidayById(Integer holidayId);
 }

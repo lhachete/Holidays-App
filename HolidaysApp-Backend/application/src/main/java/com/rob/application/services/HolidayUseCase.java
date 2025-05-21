@@ -35,4 +35,14 @@ public class HolidayUseCase implements HolidayServicePort {
         holiday.setIsDeleted(false);
         return holidayRepositoryPort.save(holiday);
     }
+
+    @Override
+    public Holiday getHolidayById(Integer id) {
+        return holidayRepositoryPort.findById(id);
+    }
+
+    @Override
+    public Holiday deleteHolidayById(Integer holidayId) {
+        return holidayRepositoryPort.deleteById(holidayId);
+    }
 }

@@ -36,4 +36,17 @@ public class HolidayRepositoryJpaAdapter implements HolidayRepositoryPort {
     public long countOverlappingVacations(Integer userId, LocalDate startDate, LocalDate endDate) {
         return holidayMOJpaRepository.countOverlappingVacations(userId, startDate, endDate);
     }
+
+    @Override
+    public Holiday findById(Integer id) {
+        return holidayMOMapper.toHoliday(holidayMOJpaRepository.findById(id).get());
+    }
+
+    @Override
+    public Holiday deleteById(Integer holidayId) {
+        Holiday deletedHoliday = findById(holidayId);
+        deletedHoliday.setIsDeleted(true);
+        holidayMOJpaRepository.deleteById(holidayId);
+        return deletedHoliday;
+    }
 }

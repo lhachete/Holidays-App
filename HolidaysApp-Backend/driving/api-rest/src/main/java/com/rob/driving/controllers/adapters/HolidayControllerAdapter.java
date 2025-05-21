@@ -45,4 +45,16 @@ public class HolidayControllerAdapter implements HolidaysApi {
                 holidayServicePort.addHoliday(holidayDTOMapper.toHoliday(newHoliday))
         ));
     }
+
+    @GetMapping("/{holidayId}")
+    public ResponseEntity<HolidayDTO> getHolidayById(@PathVariable(name = "holidayId") Integer holidayId) {
+        HolidayDTO holiday = holidayDTOMapper.toHolidayDTO(holidayServicePort.getHolidayById(holidayId));
+        return ResponseEntity.ok(holiday);
+    }
+
+    @DeleteMapping("/{holidayId}")
+    public ResponseEntity<HolidayDTO> deleteHolidayById(@PathVariable(name = "holidayId") Integer holidayId) {
+        HolidayDTO deletedHolidayDTO = holidayDTOMapper.toHolidayDTO(holidayServicePort.deleteHolidayById(holidayId));
+        return ResponseEntity.ok(deletedHolidayDTO);
+    }
 }

@@ -15,4 +15,8 @@ public interface HolidayRepositoryPort {
     Holiday save(Holiday holiday);
 
     long countOverlappingVacations(Integer userId, LocalDate startDate,LocalDate endDate);
+
+    Holiday findById(Integer id);
+
+    Holiday deleteById(Integer holidayId);
 }
