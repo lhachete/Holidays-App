@@ -10,4 +10,6 @@ public interface UserServicePort {
     boolean usernameExists(String username);
     boolean emailExists(String email);
     User createUser(User user);
+
+    User getUserById(Integer userId);
 }

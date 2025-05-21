@@ -7,6 +7,7 @@ import com.rob.main.driven.repositories.mappers.HolidayMOMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -29,5 +30,10 @@ public class HolidayRepositoryJpaAdapter implements HolidayRepositoryPort {
     @Override
     public Holiday save(Holiday holiday) {
         return holidayMOMapper.toHoliday(holidayMOJpaRepository.save(holidayMOMapper.toHolidayMO(holiday)));
+    }
+
+    @Override
+    public long countOverlappingVacations(Integer userId, LocalDate startDate, LocalDate endDate) {
+        return holidayMOJpaRepository.countOverlappingVacations(userId, startDate, endDate);
     }
 }

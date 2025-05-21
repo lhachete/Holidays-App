@@ -52,4 +52,9 @@ public class UserControllerAdapter implements UsersApi {
         }
         return ResponseEntity.ok(userDTOMapper.toUserDTO(userServicePort.createUser(userDTOMapper.toUser(registerRequest))));
     }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Integer userId) {
+        return ResponseEntity.ok(userDTOMapper.toUserDTO(userServicePort.getUserById(userId)));
+    }
 }

@@ -6,6 +6,7 @@ import com.rob.domain.models.Holiday;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -24,10 +25,14 @@ public class HolidayUseCase implements HolidayServicePort {
 
     @Override
     public Holiday addHoliday(Holiday holiday) {
+        System.out.println("Holiday: " + holiday);
+        if(holidayRepositoryPort.countOverlappingVacations(holiday.getUser().getId(), holiday.getHolidayStartDate(), holiday.getHolidayEndDate()) > 0) {
+            throw new IllegalArgumentException("Las fechas de vacaciones se solapan con otras vacaciones existentes.");
+        }
+        holiday.setCreatedAt(OffsetDateTime.now());
+        holiday.setCreatedBy(holiday.getUser());
+        holiday.setVacationState("APROBADA");
+        holiday.setIsDeleted(false);
         return holidayRepositoryPort.save(holiday);
     }
-
-//    public boolean isNewHolidayOverlapAntiqueHoliday(Holiday newHoliday) {
-//
-//    }
 }

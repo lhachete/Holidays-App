@@ -3,9 +3,22 @@ package com.rob.main.driven.repositories;
 import com.rob.domain.models.Holiday;
 import com.rob.main.driven.repositories.models.HolidayMO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface HolidayMOJpaRepository extends JpaRepository<HolidayMO, Integer> {
     List<HolidayMO> findByUser_Id(Integer userId);
+
+    @Query("SELECT COUNT(h) FROM HolidayMO h " +
+            "WHERE h.user.id = :userId " +
+            "AND h.holidayStartDate <= :endDate " +
+            "AND h.holidayEndDate >= :startDate")
+    long countOverlappingVacations(
+            @Param("userId") Integer userId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
 }

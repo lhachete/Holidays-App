@@ -55,4 +55,9 @@ public class UserJpaRepositoryAdapter implements UserRepositoryPort {
     public User save(User user) {
         return userMOMapper.toUser(userMOJpaRepository.save(userMOMapper.toUserMO(user)));
     }
+
+    @Override
+    public User findById(Integer userId) {
+        return userMOMapper.toUser(userMOJpaRepository.findById(userId).get());
+    }
 }
