@@ -4,8 +4,8 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { startOfDay, endOfDay } from 'date-fns';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { AuthService } from '../../../services/auth.service';
+import { vacationTypeOptions } from '../../../shared/constants/vacation.constants';
 import Swal from 'sweetalert2';
-import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
 
 @Component({
   selector: 'app-book-vacation',
@@ -19,24 +19,17 @@ export class BookVacationComponent {
 
   selectedStart: Date | null = null;
   selectedEnd: Date | null = null;
-
+  
   // Detalles completos del día clicado
   selectedDayDetail: CalendarMonthViewDay<CalendarEvent> | null = null;
-
   // Vacaciones que YA tiene el usuario
   userEvents: CalendarEvent[] = [];
   // Vacaciones que el usuario está seleccionando (resaltadas)
   selectionEvents: CalendarEvent[] = [];
-
+  
   saving: Boolean = false;
-
-  private vacationTypeOptions = {
-    Vacation: 'Vacation',
-    PTO: 'Paid Time Off',
-    Sick: 'Sick Leave',
-    Other: 'Other'
-  };
-
+  
+  private vacationTypeOptions = vacationTypeOptions;
   private setUTCDate = (date: Date): Date =>
     new Date(Date.UTC(
       date.getFullYear(),
@@ -144,9 +137,6 @@ export class BookVacationComponent {
         this.saving = true;
         const startDateUTC = this.setUTCDate(this.selectedStart);
         const endDateUTC = this.setUTCDate(this.selectedEnd);
-
-        console.log('startDateUTC', startDateUTC);
-        console.log('endDateUTC', endDateUTC);
 
         const newHoliday = await this.holidayService.addHoliday({
           userId: this.user.id,

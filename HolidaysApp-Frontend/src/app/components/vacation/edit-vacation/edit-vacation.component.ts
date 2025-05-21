@@ -3,6 +3,8 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { HolidayService } from '../../../services/holiday.service';
 import { AuthService } from '../../../services/auth.service';
+import { vacationTypeOptions } from '../../../shared/constants/vacation.constants';
+import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
 import Holiday from '../../../models/Holiday';
 import Swal from 'sweetalert2';
 
@@ -18,6 +20,8 @@ export class EditVacationComponent {
     return this.authService.user;
   }
 
+  private vacationTypeOptions = vacationTypeOptions;
+
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
   async ngOnInit(): Promise<void> {
@@ -27,41 +31,42 @@ export class EditVacationComponent {
   private loadUserHolidays = async (): Promise<void> => {
     const userId = this.user.id;
     const holidays = await this.holidayService.getHolidaysById(userId);
+    console.log('holidays', holidays);
     this.userEvents = holidays.map(holiday => {
       return this.mapToCalendarEvent(holiday)
     });
-    console.log('userEvents', this.userEvents);
   };
 
   // Mapeo las holidays, y le doy formato.
-  private mapToCalendarEvent = (holidy: Holiday): CalendarEvent => ({
-    start: new Date(holidy.holidayStartDate),
-    end: new Date(holidy.holidayEndDate),
-    title: `Holidays: ${new Date(holidy.holidayStartDate).toLocaleDateString()} – ${new Date(holidy.holidayEndDate).toLocaleDateString()}`,
-    meta: { id: holidy.holidayId ?? holidy.holidayId, userId: holidy.userId }
-  });
+  private mapToCalendarEvent = (holiday: Holiday): CalendarEvent => ({
+    start: new Date(holiday.holidayStartDate),
+    end: new Date(holiday.holidayEndDate),
+    title: `Holidays: ${new Date(holiday.holidayStartDate).toLocaleDateString()} – ${new Date(holiday.holidayEndDate).toLocaleDateString()}`,
+    holidayId: holiday.holidayId,
+    type: holiday.vacationType,
+  }) as CustomCalendarEv;
 
-  /**
-   * Se dispara con (dayDetails), maneja edición de todas las vacacione
-   */
+  //Se dispara con (dayDetails) del html, para editar una vacación.
+
   onDayDetails = async (day: CalendarMonthViewDay<CalendarEvent>): Promise<void> => {
-    const events = day.events;
-    console.log('events', events);
+    const events = day.events as CustomCalendarEv[]; 
 
+    console.log('events', events);
+    console.log('events', day.events[0]);
     /* console.log('events', day);*/
     if (events.length) {
       const data = this.prepareEditData(events[0]);
-
+      console.log('data', data);
       if (data) {
         const formValues = await this.openEditModal(data);
         if (formValues) {
           const newStart = formValues.holidayStartDate;
           const newEnd = formValues.holidayEndDate;
 
-          if (this.isValidVacationRange(newStart, newEnd, data.id)) {
+          if (this.isValidVacationRange(newStart, newEnd, data.holidayId)) {
 
             await this.saveChanges(data, formValues);
-            this.refreshCalendar(data.id, formValues);
+            this.refreshCalendar(data.holidayId, formValues);
             this.showSuccessToast();
           }
         }
@@ -70,14 +75,15 @@ export class EditVacationComponent {
   };
 
   // Preparo los datos para el modal de edición y compruebo que los id son válidos.
-  private prepareEditData = (event: CalendarEvent) => {
-    const id = event.meta?.id; // id de la vacation
-    const userId = event.meta?.userId;
-    if (!id || !userId) {
+  private prepareEditData = (event: CustomCalendarEv) => {
+    console.log('event', event);
+    const holidayId = event.holidayId; // id de la vacation
+    const userId = this.user.id; // id del usuario
+    if (!holidayId || !userId) {
       // console.error('Evento inválido para editar:', event);
       return null;
     } else {
-      return { id, userId, start: event.start, end: event.end! };
+      return { holidayId, userId, start: event.start, end: event.end! };
     }
   };
 
@@ -94,10 +100,11 @@ export class EditVacationComponent {
         `<label>Start:</label><input type="date" id="start" class="swal2-input" value="${currentStart}"><br>` +
         `<label>End:</label><input type="date" id="end" class="swal2-input" value="${currentEnd}">`,
       showCancelButton: true,
+      confirmButtonColor: '#b35cff',
       focusConfirm: false,
       preConfirm: () => this.parseModalDates()
     });
-    return result.value; // { holidayStartDate, holidayEndDate }
+    return result.value; // { holidayStartDate, holidayEndDate, faltaría el vacationType }
   };
 
   //Función para comprobar la fecha editada
@@ -135,11 +142,11 @@ console.log(this.userEvents)
 
 
   private saveChanges = async (
-    data: { id: number; userId: number },
+    data: { holidayId: number; userId: number },
     values: { holidayStartDate: Date; holidayEndDate: Date }
   ): Promise<void> => {
     await this.holidayService.updateHoliday({
-      holidayId: data.id,
+      holidayId: data.holidayId,
       userId: data.userId,
       holidayStartDate: values.holidayStartDate,
       holidayEndDate: values.holidayEndDate,
