@@ -9,3 +9,8 @@ export default interface Holiday {
     vacationState?: string;
     vacationType: string;
 }
+
+/* 
+    meta: { id: h.holidayId }
+    holidayId: h.holidayId
+*/

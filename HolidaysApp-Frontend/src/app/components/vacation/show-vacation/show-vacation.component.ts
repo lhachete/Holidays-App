@@ -39,7 +39,7 @@ export class ShowVacationComponent {
         end:   new Date(h.holidayEndDate),
         title: `Holidays: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
         type: h.vacationType,
-        meta: { id: h.holidayId }
+        holidayId: h.holidayId
       } as CalendarEvent));
     } catch (err) {
       console.error('Error loading all the holidays', err);
