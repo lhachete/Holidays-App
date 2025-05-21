@@ -35,10 +35,10 @@ export class EditVacationComponent {
 
   // Mapeo las holidays, y le doy formato.
   private mapToCalendarEvent = (holidy: Holiday): CalendarEvent => ({
-    start: new Date(holidy.holiday_start_date),
-    end: new Date(holidy.holiday_end_date),
-    title: `Holidays: ${new Date(holidy.holiday_start_date).toLocaleDateString()} – ${new Date(holidy.holiday_end_date).toLocaleDateString()}`,
-    meta: { id: holidy.holiday_id ?? holidy.id, user_id: holidy.user_id }
+    start: new Date(holidy.holidayStartDate),
+    end: new Date(holidy.holidayEndDate),
+    title: `Holidays: ${new Date(holidy.holidayStartDate).toLocaleDateString()} – ${new Date(holidy.holidayEndDate).toLocaleDateString()}`,
+    meta: { id: holidy.holidayId ?? holidy.id, userId: holidy.userId }
   });
 
   /**
@@ -55,8 +55,8 @@ export class EditVacationComponent {
       if (data) {
         const formValues = await this.openEditModal(data);
         if (formValues) {
-          const newStart = formValues.holiday_start_date;
-          const newEnd = formValues.holiday_end_date;
+          const newStart = formValues.holidayStartDate;
+          const newEnd = formValues.holidayEndDate;
 
           if (this.isValidVacationRange(newStart, newEnd, data.id)) {
 
@@ -72,12 +72,12 @@ export class EditVacationComponent {
   // Preparo los datos para el modal de edición y compruebo que los id son válidos.
   private prepareEditData = (event: CalendarEvent) => {
     const id = event.meta?.id; // id de la vacation
-    const user_id = event.meta?.user_id;
-    if (!id || !user_id) {
+    const userId = event.meta?.userId;
+    if (!id || !userId) {
       // console.error('Evento inválido para editar:', event);
       return null;
     } else {
-      return { id, user_id, start: event.start, end: event.end! };
+      return { id, userId, start: event.start, end: event.end! };
     }
   };
 
@@ -97,7 +97,7 @@ export class EditVacationComponent {
       focusConfirm: false,
       preConfirm: () => this.parseModalDates()
     });
-    return result.value; // { holiday_start_date, holiday_end_date }
+    return result.value; // { holidayStartDate, holidayEndDate }
   };
 
   //Función para comprobar la fecha editada
@@ -135,29 +135,30 @@ console.log(this.userEvents)
 
 
   private saveChanges = async (
-    data: { id: number; user_id: number },
-    values: { holiday_start_date: Date; holiday_end_date: Date }
+    data: { id: number; userId: number },
+    values: { holidayStartDate: Date; holidayEndDate: Date }
   ): Promise<void> => {
     await this.holidayService.updateHoliday({
       id: data.id,
-      holiday_id: data.id,
-      user_id: data.user_id,
-      holiday_start_date: values.holiday_start_date,
-      holiday_end_date: values.holiday_end_date
+      holidayId: data.id,
+      userId: data.userId,
+      holidayStartDate: values.holidayStartDate,
+      holidayEndDate: values.holidayEndDate,
+      vacationType: 'Vacation' // TODO: Cambiar por el tipo de vacación real
     });
   };
 
   
   private refreshCalendar = (
     id: number,
-    values: { holiday_start_date: Date; holiday_end_date: Date }
+    values: { holidayStartDate: Date; holidayEndDate: Date }
   ): void => {
     this.userEvents = this.userEvents.map(ev =>
       ev.meta?.id === id ? {
         ...ev,
-        start: values.holiday_start_date,
-        end: values.holiday_end_date,
-        title: `Holiday ${values.holiday_start_date.toLocaleDateString()} → ${values.holiday_end_date.toLocaleDateString()}`
+        start: values.holidayStartDate,
+        end: values.holidayEndDate,
+        title: `Holiday ${values.holidayStartDate.toLocaleDateString()} → ${values.holidayEndDate.toLocaleDateString()}`
       } : ev
     );
   };
@@ -171,7 +172,7 @@ console.log(this.userEvents)
   };
 
   // Para asegurarnos de guardar las fechas en el formato correcto en cualquier zona horaria.
-  private parseModalDates = (): { holiday_start_date: Date; holiday_end_date: Date } | void => {
+  private parseModalDates = (): { holidayStartDate: Date; holidayEndDate: Date } | void => {
     const start = (document.getElementById('start') as HTMLInputElement).value;
     const end = (document.getElementById('end') as HTMLInputElement).value;
     if (!start || !end) {
@@ -182,8 +183,8 @@ console.log(this.userEvents)
   const [endYear, endMonth, endDay] = end.split('-').map(Number);
 
   return {
-    holiday_start_date: new Date(startYear, startMonth - 1, startDay), // Mes -1 porque enero es 0
-    holiday_end_date: new Date(endYear, endMonth - 1, endDay)
+    holidayStartDate: new Date(startYear, startMonth - 1, startDay), // Mes -1 porque enero es 0
+    holidayEndDate: new Date(endYear, endMonth - 1, endDay)
   };
   };
 

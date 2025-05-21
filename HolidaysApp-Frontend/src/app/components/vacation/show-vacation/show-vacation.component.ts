@@ -43,6 +43,8 @@ export class ShowVacationComponent {
       } as CalendarEvent));
     } catch (err) {
       console.error('Error loading all the holidays', err);
+    } finally {
+      console.log('holidays mapeadas', this.usersEvents);
     }
   };
 

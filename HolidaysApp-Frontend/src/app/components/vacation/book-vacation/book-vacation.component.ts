@@ -37,9 +37,9 @@ export class BookVacationComponent {
     const userId = this.user.id;
     const holidays = await this.holidayService.getHolidaysById(userId);
     this.userEvents = holidays.map(h => ({
-      start: new Date(h.holiday_start_date),
-      end: new Date(h.holiday_end_date),
-      title: `Vacation ${new Date(h.holiday_start_date).toLocaleDateString()} – ${new Date(h.holiday_end_date).toLocaleDateString()}`,
+      start: new Date(h.holidayStartDate),
+      end: new Date(h.holidayEndDate),
+      title: `Vacation ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
     } as CalendarEvent));
   }
 
@@ -133,16 +133,17 @@ export class BookVacationComponent {
       this.saving = true;
 
       const newHoliday = await this.holidayService.addHoliday({
-        user_id: this.user.id,
-        holiday_start_date: this.selectedStart,
-        holiday_end_date: this.selectedEnd,
+        userId: this.user.id,
+        holidayStartDate: this.selectedStart,
+        holidayEndDate: this.selectedEnd,
+        vacationType: 'Vacation', //TODO: <<<<<< GESTIONAR POR EL USUARIO (con un SELECT)
       });
       /* console.log('Nueva holiday:', newHoliday); */
       this.userEvents = [...this.userEvents,
       {
-        start: new Date(newHoliday.holiday_start_date),
-        end: new Date(newHoliday.holiday_end_date),
-        title: `Vacation ${new Date(newHoliday.holiday_start_date).toLocaleDateString()} – ${new Date(newHoliday.holiday_end_date).toLocaleDateString()}`,
+        start: new Date(newHoliday.holidayStartDate),
+        end: new Date(newHoliday.holidayEndDate),
+        title: `Vacation ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`,
       }
       ];
 

@@ -26,11 +26,11 @@ export class DeleteVacationComponent {
     const holidays = await this.holidayService.getHolidaysById(userId);
 
     this.userEvents = holidays.map(h => ({
-      start: new Date(h.holiday_start_date),
-      end: new Date(h.holiday_end_date),
-      title: `Holidays: ${new Date(h.holiday_start_date).toLocaleDateString()} – ${new Date(h.holiday_end_date).toLocaleDateString()}`,
+      start: new Date(h.holidayStartDate),
+      end: new Date(h.holidayEndDate),
+      title: `Holidays: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
       // meta para guardar el id de la vacation que se va a eliminar. //! Igual cuando conectemos la API da problemas.
-      meta: { id: h.holiday_id }
+      meta: { id: h.holidayId }
     } as CalendarEvent));
   }
 
