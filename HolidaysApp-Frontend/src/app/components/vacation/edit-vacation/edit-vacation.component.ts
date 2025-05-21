@@ -38,7 +38,7 @@ export class EditVacationComponent {
     start: new Date(holidy.holidayStartDate),
     end: new Date(holidy.holidayEndDate),
     title: `Holidays: ${new Date(holidy.holidayStartDate).toLocaleDateString()} – ${new Date(holidy.holidayEndDate).toLocaleDateString()}`,
-    meta: { id: holidy.holidayId ?? holidy.id, userId: holidy.userId }
+    meta: { id: holidy.holidayId ?? holidy.holidayId, userId: holidy.userId }
   });
 
   /**
@@ -48,7 +48,7 @@ export class EditVacationComponent {
     const events = day.events;
     console.log('events', events);
 
-    console.log('events', day);
+    /* console.log('events', day);*/
     if (events.length) {
       const data = this.prepareEditData(events[0]);
 
@@ -139,7 +139,6 @@ console.log(this.userEvents)
     values: { holidayStartDate: Date; holidayEndDate: Date }
   ): Promise<void> => {
     await this.holidayService.updateHoliday({
-      id: data.id,
       holidayId: data.id,
       userId: data.userId,
       holidayStartDate: values.holidayStartDate,

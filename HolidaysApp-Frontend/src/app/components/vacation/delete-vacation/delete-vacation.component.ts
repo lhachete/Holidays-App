@@ -30,7 +30,7 @@ export class DeleteVacationComponent {
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
       title: `Holidays: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
-
+      //! Comprobar como llega de la API sin él no podemos eliminar la vacación.
       holidayId: h.holidayId 
     } as CalendarEvent));
   }
