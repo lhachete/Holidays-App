@@ -1,9 +1,11 @@
 export default interface Holiday {
-    id?: number; // opcional para pruebas
-    holiday_id?: number;
-    user_id: number;
-    holiday_start_date: Date;
-    holiday_end_date: Date;
-    review_date?: Date;
-    review_comment?: string;
+    id?: number; // opcional , solo es para pruebas
+    holidayId?: number;
+    userId: number;
+    holidayStartDate: Date;
+    holidayEndDate: Date;
+    reviewDate?: Date;
+    reviewComment?: string;
+    vacationState?: string;
+    vacationType: string;
 }

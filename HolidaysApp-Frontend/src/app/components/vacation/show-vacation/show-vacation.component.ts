@@ -35,10 +35,11 @@ export class ShowVacationComponent {
       const holidays = await this.holidayService.getHolidaysById(userId);
       console.log('holidays', holidays);
       this.usersEvents = holidays.map(h => ({
-        start: new Date(h.holiday_start_date),
-        end:   new Date(h.holiday_end_date),
-        title: `Holidays: ${new Date(h.holiday_start_date).toLocaleDateString()} – ${new Date(h.holiday_end_date).toLocaleDateString()}`,
-        meta: { id: h.holiday_id }
+        start: new Date(h.holidayStartDate),
+        end:   new Date(h.holidayEndDate),
+        title: `Holidays: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+        type: h.vacationType,
+        meta: { id: h.holidayId }
       } as CalendarEvent));
     } catch (err) {
       console.error('Error loading all the holidays', err);
