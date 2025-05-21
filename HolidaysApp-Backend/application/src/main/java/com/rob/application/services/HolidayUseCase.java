@@ -26,17 +26,14 @@ public class HolidayUseCase implements HolidayServicePort {
     @Override
     public Holiday addHoliday(Holiday holiday) {
         System.out.println("Holiday: " + holiday);
-        if(holiday.getHolidayEndDate().isBefore(holiday.getHolidayStartDate())) {
-            throw new IllegalArgumentException("La fecha de fin de vacaciones no puede ser anterior a la fecha de inicio.");
+        if(isValidHoliday(holiday)) {
+            holiday.setCreatedAt(OffsetDateTime.now());
+            holiday.setCreatedBy(holiday.getUser());
+            holiday.setVacationState("APROBADA");
+            holiday.setIsDeleted(false);
+            return holidayRepositoryPort.save(holiday);
         }
-        if(holidayRepositoryPort.countOverlappingVacations(holiday.getUser().getId(), holiday.getHolidayStartDate(), holiday.getHolidayEndDate()) > 0) {
-            throw new IllegalArgumentException("Las fechas de vacaciones se solapan con otras vacaciones existentes.");
-        }
-        holiday.setCreatedAt(OffsetDateTime.now());
-        holiday.setCreatedBy(holiday.getUser());
-        holiday.setVacationState("APROBADA");
-        holiday.setIsDeleted(false);
-        return holidayRepositoryPort.save(holiday);
+        return null;
     }
 
     @Override
@@ -47,5 +44,29 @@ public class HolidayUseCase implements HolidayServicePort {
     @Override
     public Holiday deleteHolidayById(Integer holidayId) {
         return holidayRepositoryPort.deleteById(holidayId);
+    }
+
+    @Override
+    public Holiday updateHoliday(Holiday holiday) {
+        if(isValidHoliday(holiday)) {
+            Holiday holidayToUpdate = holidayRepositoryPort.findById(holiday.getId());
+            holidayToUpdate.setHolidayStartDate(holiday.getHolidayStartDate());
+            holidayToUpdate.setHolidayEndDate(holiday.getHolidayEndDate());
+            holidayToUpdate.setVacationState(holiday.getVacationType());
+            holidayToUpdate.setUpdatedAt(OffsetDateTime.now());
+            holidayToUpdate.setUpdatedBy(holiday.getUser());
+            return holidayRepositoryPort.save(holidayToUpdate);
+        }
+        return null;
+    }
+
+    public boolean isValidHoliday(Holiday holiday) {
+        if(holiday.getHolidayEndDate().isBefore(holiday.getHolidayStartDate())) {
+            throw new IllegalArgumentException("La fecha de fin de vacaciones no puede ser anterior a la fecha de inicio.");
+        }
+        if(holidayRepositoryPort.countOverlappingVacations(holiday.getUser().getId(), holiday.getHolidayStartDate(), holiday.getHolidayEndDate()) > 0) {
+            throw new IllegalArgumentException("Las fechas de vacaciones se solapan con otras vacaciones existentes.");
+        }
+        return true;
     }
 }

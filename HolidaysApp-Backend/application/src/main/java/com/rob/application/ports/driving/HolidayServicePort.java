@@ -12,4 +12,5 @@ public interface HolidayServicePort {
     Holiday addHoliday(Holiday holiday);
     Holiday getHolidayById(Integer id);
     Holiday deleteHolidayById(Integer holidayId);
+    Holiday updateHoliday(Holiday holiday);
 }

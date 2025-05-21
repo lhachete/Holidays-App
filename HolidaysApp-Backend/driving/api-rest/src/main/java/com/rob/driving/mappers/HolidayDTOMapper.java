@@ -3,6 +3,7 @@ package com.rob.driving.mappers;
 import com.rob.domain.models.Holiday;
 import com.rob.driving.dtos.HolidayDTO;
 import com.rob.driving.dtos.HolidayRequestDTO;
+import com.rob.driving.dtos.HolidayUpdateRequestDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -36,5 +37,11 @@ public interface HolidayDTOMapper {
     @Mapping(source = "holidayStartDate", target = "holidayStartDate")
     @Mapping(source = "holidayEndDate", target = "holidayEndDate")
     @Mapping(source = "vacationType", target = "vacationType")
-    Holiday holidayRequestDTOtoHoliday(HolidayRequestDTO holidayRequestDTO);
+    Holiday holidayUpdateRequestDTOtoHoliday(HolidayUpdateRequestDTO holidayRequestDTO);
+
+    @Mapping(source = "holidayId", target = "holidayId")
+    @Mapping(source = "holidayStartDate", target = "holidayStartDate")
+    @Mapping(source = "holidayEndDate", target = "holidayEndDate")
+    @Mapping(source = "vacationType", target = "vacationType")
+    HolidayDTO holidayUpdateRequestDTOtoHolidayDTO(HolidayUpdateRequestDTO holidayRequestDTO);
 }

@@ -57,8 +57,13 @@ public class HolidayControllerAdapter implements HolidaysApi {
         return ResponseEntity.ok(deletedHolidayDTO);
     }
 
-//    @PutMapping
-//    public ResponseEntity<HolidayDTO> updateHoliday(@Valid @RequestBody HolidayUpdateRequestDTO holidayUpdateRequestDTO) {
-//
-//    }
+    @PutMapping
+    public ResponseEntity<HolidayDTO> updateHoliday(@Valid @RequestBody HolidayUpdateRequestDTO holidayUpdateRequestDTO) {
+        User user = userServicePort.getUserById(holidayUpdateRequestDTO.getUserId());
+        HolidayDTO newHoliday = holidayDTOMapper.holidayUpdateRequestDTOtoHolidayDTO(holidayUpdateRequestDTO);
+        newHoliday.setUser(userDTOMapper.toUserDTO(user));
+        return ResponseEntity.ok(holidayDTOMapper.toHolidayDTO(
+                holidayServicePort.updateHoliday(holidayDTOMapper.toHoliday(newHoliday))
+        ));
+    }
 }
