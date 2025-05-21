@@ -151,12 +151,15 @@ export class BookVacationComponent {
     if (selectedType) {
       if (!this.saving) {
         this.saving = true;
+        console.log('start', this.selectedStart);
+        console.log('end', this.selectedEnd);
         const newHoliday = await this.holidayService.addHoliday({
           userId: this.user.id,
           holidayStartDate: this.selectedStart,
           holidayEndDate: this.selectedEnd,
           vacationType: selectedType,
         });
+        console.log('newHoliday', newHoliday);
         // Actualizo la lista de vacaiones del usuario
         this.userEvents = [...this.userEvents,
           {
