@@ -30,6 +30,12 @@ export class BookVacationComponent {
 
   saving: Boolean = false;
 
+  private vacationTypeOptions = {
+    Vacation: 'Vacation',
+    PTO: 'Paid Time Off',
+    Sick: 'Sick Leave',
+    Other: 'Other'
+  };
 
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
@@ -105,73 +111,63 @@ export class BookVacationComponent {
     }
   };
 
-  // Limpia la selección de las fechas
-  clearSelection = (): void => {
-    this.selectedStart = null;
-    this.selectedEnd = null;
-    this.selectionEvents = [];
-  };
 
 
-  addHolidayRange = async (): Promise<void> => {
-    if (!this.selectedStart || !this.selectedEnd) return;
-
-    const overlap = this.userEvents.some(ev =>
-      startOfDay(this.selectedStart!) <= ev.end! &&
-      endOfDay(this.selectedEnd!) >= ev.start!
-    );
-
-    if (overlap) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Booking conflict',
-        text: 'There are already vacations in the selected date range.',
-        confirmButtonText: 'OK',
-      });
-      return;
-    }
-
-    const { value: selectedType } = await Swal.fire({
+  private promptVacationType = async (): Promise<string | undefined> => {
+    const { value } = await Swal.fire<string>({
       title: 'Select vacation type',
       input: 'select',
       inputLabel: 'Type of vacation',
-      inputOptions: { // Opciones de vacaciones, el campo es lo que se guarda en la BD
-        Vacation: 'Vacation',
-        PTO: 'Paid Time Off',
-        Sick: 'Sick Leave',
-        Other: 'Other',
-      },
-      inputValue: 'Vacation', 
+      inputOptions: this.vacationTypeOptions,
+      inputValue: 'Vacation',
       showCancelButton: true,
       confirmButtonText: 'Accept',
       confirmButtonColor: '#b35cff',
       cancelButtonText: 'Cancel',
     });
+    return value ?? undefined;
+  };
+
+  addHolidayRange = async (): Promise<void> => {
+    if (!this.selectedStart || !this.selectedEnd) return;
+
+    // Validación de solapamiento
+    const overlap = this.userEvents.some(ev =>
+      startOfDay(this.selectedStart!) <= ev.end! &&
+      endOfDay(this.selectedEnd!) >= ev.start!
+    );
+    if (overlap) {
+      await Swal.fire({
+        icon: 'warning',
+        title: 'Booking conflict',
+        text: 'There are already vacations in the selected date range.',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+
+    const selectedType = await this.promptVacationType();
 
     if (selectedType) {
-
-      if (this.saving === false) {
+      if (!this.saving) {
         this.saving = true;
-
         const newHoliday = await this.holidayService.addHoliday({
           userId: this.user.id,
           holidayStartDate: this.selectedStart,
           holidayEndDate: this.selectedEnd,
           vacationType: selectedType,
         });
-
-        this.userEvents = [
-          ...this.userEvents,
+        // Actualizo la lista de vacaiones del usuario
+        this.userEvents = [...this.userEvents,
           {
             start: new Date(newHoliday.holidayStartDate),
             end: new Date(newHoliday.holidayEndDate),
-            title: `Holiday ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`,
-          },
-        ] as CustomCalendarEv[];
+            title: `Holiday ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`
+          }
+        ];
 
         this.clearSelection();
-
-        Swal.fire({
+        await Swal.fire({
           toast: true,
           icon: 'success',
           title: 'Vacations saved',
@@ -179,13 +175,15 @@ export class BookVacationComponent {
           timer: 1500,
           position: 'top-end',
         });
-
         this.saving = false;
       }
     }
   };
 
-
-
+    clearSelection = (): void => {
+      this.selectedStart = null;
+      this.selectedEnd = null;
+      this.selectionEvents = [];
+    };
 
 }
