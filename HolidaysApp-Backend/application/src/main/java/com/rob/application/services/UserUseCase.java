@@ -63,4 +63,13 @@ public class UserUseCase implements UserServicePort {
         }
         return null;
     }
+
+    @Override
+    public User getUserById(Integer userId) {
+        User user = userRepositoryPort.findById(userId);
+        if(user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found", null);
+        }
+        return user;
+    }
 }

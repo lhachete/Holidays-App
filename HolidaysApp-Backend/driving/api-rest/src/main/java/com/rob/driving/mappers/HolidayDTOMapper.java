@@ -19,6 +19,7 @@ public interface HolidayDTOMapper {
 
     @Mapping(source = "holidayId", target = "id")
     @Mapping(source = "user", target = "user")
+    @Mapping(source = "vacationType", target = "vacationType")
     @Mapping(source = "reviewedByAdmin", target = "reviewedByAdmin")
     @Mapping(source = "createdBy", target = "createdBy")
     @Mapping(source = "updatedBy", target = "updatedBy")
@@ -26,6 +27,5 @@ public interface HolidayDTOMapper {
     Holiday toHoliday(HolidayDTO holidayDTO);
 
 
-    @Mapping(source = "userId", target = "user.id")
     Holiday toHoliday(HolidayRequestDTO holidayRequestDTO);
 }

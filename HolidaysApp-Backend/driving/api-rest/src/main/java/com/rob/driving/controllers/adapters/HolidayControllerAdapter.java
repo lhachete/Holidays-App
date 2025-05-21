@@ -1,10 +1,13 @@
 package com.rob.driving.controllers.adapters;
 
 import com.rob.application.ports.driving.HolidayServicePort;
+import com.rob.application.ports.driving.UserServicePort;
+import com.rob.domain.models.User;
 import com.rob.driving.api.HolidaysApi;
 import com.rob.driving.dtos.HolidayDTO;
 import com.rob.driving.dtos.HolidayRequestDTO;
 import com.rob.driving.mappers.HolidayDTOMapper;
+import com.rob.driving.mappers.UserDTOMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +21,9 @@ import java.util.List;
 public class HolidayControllerAdapter implements HolidaysApi {
 
     private final HolidayServicePort holidayServicePort;
+    private final UserServicePort userServicePort;
     private final HolidayDTOMapper holidayDTOMapper;
+    private final UserDTOMapper userDTOMapper;
 
     @GetMapping
     public ResponseEntity<List<HolidayDTO>> getAllHolidays(@RequestParam(value = "userId", required = false) Integer userId) {
@@ -30,8 +35,14 @@ public class HolidayControllerAdapter implements HolidaysApi {
 
     @PostMapping
     public ResponseEntity<HolidayDTO> addHoliday(@RequestBody HolidayRequestDTO holidayRequestDTO) {
+        User user = userServicePort.getUserById(holidayRequestDTO.getUserId());
+        HolidayDTO newHoliday = new HolidayDTO();
+        newHoliday.setUser(userDTOMapper.toUserDTO(user));
+        newHoliday.setHolidayStartDate(holidayRequestDTO.getHolidayStartDate());
+        newHoliday.setHolidayEndDate(holidayRequestDTO.getHolidayEndDate());
+        newHoliday.vacationType(holidayRequestDTO.getVacationType());
         return ResponseEntity.ok(holidayDTOMapper.toHolidayDTO(
-                holidayServicePort.addHoliday(holidayDTOMapper.toHoliday(holidayRequestDTO))
+                holidayServicePort.addHoliday(holidayDTOMapper.toHoliday(newHoliday))
         ));
     }
 }
