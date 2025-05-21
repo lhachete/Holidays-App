@@ -25,12 +25,11 @@ export class DeleteVacationComponent {
   async ngOnInit(): Promise<void> {
     const userId = this.user.id;
     const holidays = await this.holidayService.getHolidaysById(userId);
-
+    console.log('holidays', holidays);
     this.userEvents = holidays.map(h => ({
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
       title: `Holidays: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
-      //! Comprobar como llega de la API sin él no podemos eliminar la vacación.
       holidayId: h.holidayId 
     } as CalendarEvent));
   }
@@ -54,7 +53,6 @@ export class DeleteVacationComponent {
       });
 
       if (result.isConfirmed) {
-        
         const id = events[0].holidayId;
         if (id) {
           await this.holidayService.deleteHoliday(id);

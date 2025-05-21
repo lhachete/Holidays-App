@@ -37,6 +37,13 @@ export class BookVacationComponent {
     Other: 'Other'
   };
 
+  private setUTCDate = (date: Date): Date =>
+    new Date(Date.UTC(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    ));
+
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
   // Inicializa cargando las vacaciones del usuario
@@ -94,14 +101,14 @@ export class BookVacationComponent {
   private updateSelectionEvents = (): void => {
     if (this.selectedStart && this.selectedEnd) {
       this.selectionEvents = [{
-        start: startOfDay(this.selectedStart),
-        end: endOfDay(this.selectedEnd),
+        start: this.selectedStart,
+        end: this.selectedEnd,
         title: 'Selected',
         color: { primary: '#38e51d', secondary: '#D1E8FF' },
       }];
     } else if (this.selectedStart) {
       this.selectionEvents = [{
-        start: startOfDay(this.selectedStart),
+        start: this.selectedStart,
         end: new Date(this.selectedStart),
         title: 'Selected',
         color: { primary: '#ffaa00', secondary: '#D1E8FF' },
@@ -111,22 +118,6 @@ export class BookVacationComponent {
     }
   };
 
-
-
-  private promptVacationType = async (): Promise<string | undefined> => {
-    const { value } = await Swal.fire<string>({
-      title: 'Select vacation type',
-      input: 'select',
-      inputLabel: 'Type of vacation',
-      inputOptions: this.vacationTypeOptions,
-      inputValue: 'Vacation',
-      showCancelButton: true,
-      confirmButtonText: 'Accept',
-      confirmButtonColor: '#b35cff',
-      cancelButtonText: 'Cancel',
-    });
-    return value ?? undefined;
-  };
 
   addHolidayRange = async (): Promise<void> => {
     if (!this.selectedStart || !this.selectedEnd) return;
@@ -151,22 +142,26 @@ export class BookVacationComponent {
     if (selectedType) {
       if (!this.saving) {
         this.saving = true;
-        console.log('start', this.selectedStart);
-        console.log('end', this.selectedEnd);
+        const startDateUTC = this.setUTCDate(this.selectedStart);
+        const endDateUTC = this.setUTCDate(this.selectedEnd);
+
+        console.log('startDateUTC', startDateUTC);
+        console.log('endDateUTC', endDateUTC);
+
         const newHoliday = await this.holidayService.addHoliday({
           userId: this.user.id,
-          holidayStartDate: this.selectedStart,
-          holidayEndDate: this.selectedEnd,
+          holidayStartDate: startDateUTC,
+          holidayEndDate: endDateUTC,
           vacationType: selectedType,
         });
-        console.log('newHoliday', newHoliday);
+
         // Actualizo la lista de vacaiones del usuario
         this.userEvents = [...this.userEvents,
-          {
-            start: new Date(newHoliday.holidayStartDate),
-            end: new Date(newHoliday.holidayEndDate),
-            title: `Holiday ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`
-          }
+        {
+          start: new Date(newHoliday.holidayStartDate),
+          end: new Date(newHoliday.holidayEndDate),
+          title: `Holiday ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`
+        }
         ];
 
         this.clearSelection();
@@ -183,10 +178,25 @@ export class BookVacationComponent {
     }
   };
 
-    clearSelection = (): void => {
-      this.selectedStart = null;
-      this.selectedEnd = null;
-      this.selectionEvents = [];
-    };
+  private promptVacationType = async (): Promise<string | undefined> => {
+    const { value } = await Swal.fire<string>({
+      title: 'Select vacation type',
+      input: 'select',
+      inputLabel: 'Type of vacation',
+      inputOptions: this.vacationTypeOptions,
+      inputValue: 'Vacation',
+      showCancelButton: true,
+      confirmButtonText: 'Accept',
+      confirmButtonColor: '#b35cff',
+      cancelButtonText: 'Cancel',
+    });
+    return value ?? undefined;
+  };
+
+  clearSelection = (): void => {
+    this.selectedStart = null;
+    this.selectedEnd = null;
+    this.selectionEvents = [];
+  };
 
 }
