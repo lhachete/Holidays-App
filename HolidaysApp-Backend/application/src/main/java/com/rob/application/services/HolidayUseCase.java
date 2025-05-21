@@ -27,7 +27,7 @@ public class HolidayUseCase implements HolidayServicePort {
         return holidayRepositoryPort.save(holiday);
     }
 
-    public boolean isNewHolidayOverlapAntiqueHoliday(Holiday newHoliday) {
-
-    }
+//    public boolean isNewHolidayOverlapAntiqueHoliday(Holiday newHoliday) {
+//
+//    }
 }
