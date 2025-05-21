@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { HolidayService } from '../../../services/holiday.service';
+import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
+
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../services/auth.service';
 
@@ -33,6 +35,7 @@ export class ShowVacationComponent {
       /* const holidays = await this.holidayService.getAllHolidays(); */
       const userId = this.user.id;
       const holidays = await this.holidayService.getHolidaysById(userId);
+      console.log('userId', userId);
       console.log('holidays', holidays);
       this.usersEvents = holidays.map(h => ({
         start: new Date(h.holidayStartDate),
@@ -51,14 +54,17 @@ export class ShowVacationComponent {
   // 
   onDayDetails = async (day: CalendarMonthViewDay<CalendarEvent>): Promise<void> => {
     this.selectedDayDetail = day;
-    const events = day.events;
+
+    //He tenido que añadirlo para que reconozca las propiedades personalizadas.
+    const events = day.events as CustomCalendarEv[]; 
 
     if (events.length) {
     // Construir HTML con detalles de cada vacación
     const html = events.map(ev => {
+      console.log('ev', ev);
       const start = ev.start.toLocaleDateString();
       const end = ev.end?.toLocaleDateString();
-      return `<p><strong>${ev.title}</strong><br>Starts ${start} to ${end}</p>`;
+      return `<p><strong>${ev.title}</strong><br>The type of your vacation: ${ev.type}</p>`;
     }).join('');
 
     await Swal.fire({

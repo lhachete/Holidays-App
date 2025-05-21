@@ -17,8 +17,8 @@ export class UserService {
   }
 
   // Login via POST /login --> userInput para mock, usernameOrEmail para la API
-  login(usernameOrEmail: string, password: string): Promise<User> {
-    return this.api.post<User>(this.loginUrl, { usernameOrEmail, password });
+  login(userInput: string, password: string): Promise<User> {
+    return this.api.post<User>(this.loginUrl, { userInput, password });
   }
 
   getAllUsers(): Promise<User[]> {

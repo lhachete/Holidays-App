@@ -33,6 +33,25 @@ export class InMemoryDataService implements InMemoryDbService {
         return 1;
     }
 
+    // Intercepta **todos** los GET de la colección holidays
+    get(reqInfo: RequestInfo): Observable<ResponseOptions> | undefined {
+        const { collectionName, query } = reqInfo;
+      
+        if (collectionName === 'holidays' && query.get('user_id')) {
+          const userId = Number(query.get('user_id')![0]);
+          const db = (reqInfo.utils as any).getDb();
+          const holidays: Holiday[] = db.holidays;
+          const filtered = holidays.filter(h => h.userId === userId);
+      
+          return reqInfo.utils.createResponse$(() => ({
+            status: 200,
+            body: filtered
+          }));
+        }
+      
+        return undefined; // fallback a comportamiento por defecto
+      }
+      
 
     // Intercepta **todos** los POST
     post(reqInfo: RequestInfo): Observable<ResponseOptions> | undefined {
