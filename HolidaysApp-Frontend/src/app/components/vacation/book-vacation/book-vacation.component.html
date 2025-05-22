@@ -19,8 +19,8 @@
         type="date"
         class="form-control"
         [(ngModel)]="startInput"
-        (ngModelChange)="onDateInputChange('start',$event)"
-      />
+        (ngModelChange)="onDateInputChange('start', $event)"
+        [min]="minStartDate"/>
     </div>
     <div class="col">
       <label for="endDate" class="form-label">End date</label>
@@ -30,8 +30,8 @@
         type="date"
         class="form-control"
         [(ngModel)]="endInput"
-        (ngModelChange)="onDateInputChange('end',$event)"
-      />
+        (ngModelChange)="onDateInputChange('end', $event)"
+        [min]="minEndDate"/>
     </div>
   </div>
   

@@ -4,7 +4,7 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { startOfDay, endOfDay } from 'date-fns';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { AuthService } from '../../../services/auth.service';
-import { vacationTypeOptions , setUTCDate, toDateInputValue, parseInputDate } from '../../../shared/constants/vacation.constants';
+import { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate } from '../../../shared/constants/vacation.constants';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
 
@@ -22,20 +22,30 @@ export class BookVacationComponent {
   selectedEnd: Date | null = null;
   // valores para los inputs <date>
   startInput = '';
-  endInput   = '';
-  
+  endInput = '';
+
   // Detalles completos del día clicado
   selectedDayDetail: CalendarMonthViewDay<CalendarEvent> | null = null;
   // Vacaciones que YA tiene el usuario
   userEvents: CalendarEvent[] = [];
   // Vacaciones que el usuario está seleccionando (resaltadas)
   selectionEvents: CalendarEvent[] = [];
-  
+
   saving: Boolean = false;
-  
+
   private vacationTypeOptions = vacationTypeOptions;
   private setUTCDate = setUTCDate;
-  private toDateInputValue = toDateInputValue;
+  public toDateInputValue = toDateInputValue;
+
+    // Fecha mínima para el select en Start date
+  public get minStartDate(): string {
+    return this.toDateInputValue(new Date());
+  }
+
+  // Fecha máxima para el end -> o bien startInput, o bien hoy por si no hay fecha de inicio aún.
+  public get minEndDate(): string {
+    return this.startInput || this.minStartDate;
+  }
 
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
@@ -86,7 +96,7 @@ export class BookVacationComponent {
       }
       // Actualizo los inputs y los eventos de selección.
       this.startInput = this.toDateInputValue(this.selectedStart);
-      this.endInput   = this.selectedEnd ? this.toDateInputValue(this.selectedEnd) : '';
+      this.endInput = this.selectedEnd ? this.toDateInputValue(this.selectedEnd) : '';
       this.updateSelectionEvents();
     }
   }
@@ -185,22 +195,42 @@ export class BookVacationComponent {
     return value ?? undefined;
   };
 
-   onDateInputChange(type: 'start' | 'end', value: string) {
+
+  //Para que el input de fechas funcione bien
+  onDateInputChange(type: 'start' | 'end', value: string) {
     const date = parseInputDate(value);
+    const today = startOfDay(new Date());
+
+    // No permitir hoy ni fechas pasadas
+    if (date <= today) {
+      Swal.fire('Invalid date', 'The date must be after today.', 'error');
+      if (type === 'start') this.startInput = '';
+      else this.endInput = '';
+      return;
+    }
+
     if (type === 'start') {
       this.selectedStart = date;
-      // si end es anterior, lo igualamos
+      //Si ya había end y ahora es anterior, lo ajustas:
       if (this.selectedEnd && this.selectedEnd < date) {
+        Swal.fire('Invalid range', 'End date cannot be before start date.', 'error');
         this.selectedEnd = date;
-        this.endInput    = value;
+        this.endInput = this.toDateInputValue(date);
       }
+      this.startInput = value;
     } else {
-      this.selectedEnd = date;
-      // si no había start, lo igualamos
+      // Para no dejar que end sea antes de start
       if (!this.selectedStart) {
-        this.selectedStart = date;
-        this.startInput = value;
+        Swal.fire('Error', 'You must select a start date first.', 'error');
+        this.endInput = '';
+        return;
       }
+      if (date < this.selectedStart) {
+        Swal.fire('Invalid range', 'End date cannot be before start date.', 'error');
+        this.endInput = '';
+        return;
+      }
+      this.selectedEnd = date;
     }
     this.updateSelectionEvents();
   }

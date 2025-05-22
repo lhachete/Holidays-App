@@ -7,6 +7,7 @@ import { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate } fro
 import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
 import Holiday from '../../../models/Holiday';
 import Swal from 'sweetalert2';
+import { set } from 'date-fns';
 
 @Component({
   selector: 'app-edit-vacation',
@@ -123,11 +124,12 @@ export class EditVacationComponent {
 
   //Función para comprobar la fecha editada
   private isValidVacationRange = (newStart: Date, newEnd: Date, holidayId: number): boolean => {
+    console.log('newStart', newStart);
+    const todayUtc = new Date();
+    todayUtc.setUTCHours(0, 0, 0, 0);
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // eliminar la hora
-
-    if (newStart <= today) {
+console.log(todayUtc.toISOString());
+    if (newStart <= todayUtc) {
       Swal.fire('Error', 'The start date must be later than the current date.', 'error');
       return false;
     }
