@@ -1,6 +1,6 @@
 <div class="container text-center mt-4">
     <h1>Book vacations</h1>
-  </div>
+</div>
 <div class="container py-4">
   <app-calendar
     [mode]="'add'"
@@ -8,8 +8,6 @@
     (dayDetails)="onDayDetails($event)"
   ></app-calendar>
 
-  <!-- [events]="displayEvents" - El evento que le enviamos al calendario, el calendario lo recibe como events, en [events]="events" -->
-  <!-- (daySelected)="onDayClicked($event)" - El evento del output de calendar -->
   
   <div class="d-flex justify-content-end mt-5">
     <button class="btn btn-success me-3"

@@ -3,7 +3,7 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { HolidayService } from '../../../services/holiday.service';
 import { AuthService } from '../../../services/auth.service';
-import { vacationTypeOptions } from '../../../shared/constants/vacation.constants';
+import { vacationTypeOptions, setUTCDate } from '../../../shared/constants/vacation.constants';
 import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
 import Holiday from '../../../models/Holiday';
 import Swal from 'sweetalert2';
@@ -22,12 +22,7 @@ export class EditVacationComponent {
 
   private vacationTypeOptions = vacationTypeOptions;
 
-    private setUTCDate = (date: Date): Date =>
-    new Date(Date.UTC(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate()
-    ));
+    private setUTCDate = setUTCDate;
 
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
@@ -158,7 +153,7 @@ export class EditVacationComponent {
       userId: data.userId,
       holidayStartDate: newStart,
       holidayEndDate: newEnd,
-      vacationType: 'Vacation' // TODO: Cambiar por el tipo de vacación real
+      vacationType: 'Vacation' // TODO: Cambiar por el tipo de vacación que eliga el usuario
     });
   };
 

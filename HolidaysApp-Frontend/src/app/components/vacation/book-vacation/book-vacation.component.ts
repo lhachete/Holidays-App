@@ -4,7 +4,7 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { startOfDay, endOfDay } from 'date-fns';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { AuthService } from '../../../services/auth.service';
-import { vacationTypeOptions } from '../../../shared/constants/vacation.constants';
+import { vacationTypeOptions , setUTCDate } from '../../../shared/constants/vacation.constants';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -30,12 +30,7 @@ export class BookVacationComponent {
   saving: Boolean = false;
   
   private vacationTypeOptions = vacationTypeOptions;
-  private setUTCDate = (date: Date): Date =>
-    new Date(Date.UTC(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate()
-    ));
+  private setUTCDate = setUTCDate;
 
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
