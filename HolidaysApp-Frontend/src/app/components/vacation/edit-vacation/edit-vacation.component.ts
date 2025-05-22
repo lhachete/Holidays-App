@@ -22,6 +22,13 @@ export class EditVacationComponent {
 
   private vacationTypeOptions = vacationTypeOptions;
 
+    private setUTCDate = (date: Date): Date =>
+    new Date(Date.UTC(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    ));
+
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
   async ngOnInit(): Promise<void> {
@@ -31,7 +38,6 @@ export class EditVacationComponent {
   private loadUserHolidays = async (): Promise<void> => {
     const userId = this.user.id;
     const holidays = await this.holidayService.getHolidaysById(userId);
-    console.log('holidays', holidays);
     this.userEvents = holidays.map(holiday => {
       return this.mapToCalendarEvent(holiday)
     });
@@ -51,8 +57,6 @@ export class EditVacationComponent {
   onDayDetails = async (day: CalendarMonthViewDay<CalendarEvent>): Promise<void> => {
     const events = day.events as CustomCalendarEv[]; 
 
-    console.log('events', events);
-    console.log('events', day.events[0]);
     /* console.log('events', day);*/
     if (events.length) {
       const data = this.prepareEditData(events[0]);
@@ -60,13 +64,17 @@ export class EditVacationComponent {
       if (data) {
         const formValues = await this.openEditModal(data);
         if (formValues) {
-          const newStart = formValues.holidayStartDate;
-          const newEnd = formValues.holidayEndDate;
+          const newStart =  this.setUTCDate(formValues.holidayStartDate);
+          const newEnd =  this.setUTCDate(formValues.holidayEndDate);
+
 
           if (this.isValidVacationRange(newStart, newEnd, data.holidayId)) {
+            console.log(data.holidayId)
+            console.log(newStart)
+            console.log(newEnd)
 
-            await this.saveChanges(data, formValues);
-            this.refreshCalendar(data.holidayId, formValues);
+            await this.saveChanges(data, newStart, newEnd);
+            this.refreshCalendar(data.holidayId, newStart, newEnd);
             this.showSuccessToast();
           }
         }
@@ -76,7 +84,7 @@ export class EditVacationComponent {
 
   // Preparo los datos para el modal de edición y compruebo que los id son válidos.
   private prepareEditData = (event: CustomCalendarEv) => {
-    console.log('event', event);
+
     const holidayId = event.holidayId; // id de la vacation
     const userId = this.user.id; // id del usuario
     if (!holidayId || !userId) {
@@ -122,11 +130,11 @@ export class EditVacationComponent {
       Swal.fire('Error', 'The end date cannot be earlier than the start date, and the start date cannot be later than the end date.', 'error');
       return false;
     }
-console.log(this.userEvents)
+
     // Verificar solapamiento con otras vacaciones
-    for (const event of this.userEvents) {
-      if (event.meta?.id === holidayId) continue; // Ignorar la vacación actual
-      
+    for (const event of this.userEvents as CustomCalendarEv[]) {
+      if (event.holidayId === holidayId) continue; // Ignorar la vacación actual
+      console.log('event', event);
       const existingStart = new Date(event.start);
       const existingEnd = new Date(event.end!);
 
@@ -143,13 +151,13 @@ console.log(this.userEvents)
 
   private saveChanges = async (
     data: { holidayId: number; userId: number },
-    values: { holidayStartDate: Date; holidayEndDate: Date }
+    newStart: Date, newEnd: Date 
   ): Promise<void> => {
     await this.holidayService.updateHoliday({
       holidayId: data.holidayId,
       userId: data.userId,
-      holidayStartDate: values.holidayStartDate,
-      holidayEndDate: values.holidayEndDate,
+      holidayStartDate: newStart,
+      holidayEndDate: newEnd,
       vacationType: 'Vacation' // TODO: Cambiar por el tipo de vacación real
     });
   };
@@ -157,14 +165,15 @@ console.log(this.userEvents)
   
   private refreshCalendar = (
     id: number,
-    values: { holidayStartDate: Date; holidayEndDate: Date }
+    newStart: Date,
+    newEnd: Date
   ): void => {
-    this.userEvents = this.userEvents.map(ev =>
-      ev.meta?.id === id ? {
+    this.userEvents= (this.userEvents as CustomCalendarEv[]).map(ev =>
+      ev.holidayId === id ? {
         ...ev,
-        start: values.holidayStartDate,
-        end: values.holidayEndDate,
-        title: `Holiday ${values.holidayStartDate.toLocaleDateString()} → ${values.holidayEndDate.toLocaleDateString()}`
+        start: newStart,
+        end: newEnd,
+        title: `Holiday ${newStart.toLocaleDateString()} - ${newEnd.toLocaleDateString()}`
       } : ev
     );
   };

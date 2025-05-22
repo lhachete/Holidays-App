@@ -15,7 +15,7 @@ export class HolidayService {
   }
 
   getHolidaysById(userId: number): Promise<Holiday[]> {
-    return this.api.get<Holiday[]>(`${this.apiUrl}?user_id=${userId}`);
+    return this.api.get<Holiday[]>(`${this.apiUrl}?userId=${userId}`);
   }
   
   // Crear una nueva vacación
@@ -24,7 +24,7 @@ export class HolidayService {
   }
 
   updateHoliday(holiday: Holiday): Promise<Holiday> {
-    return this.api.put<Holiday>(`${this.apiUrl}/${holiday.holidayId}`, holiday);
+    return this.api.put<Holiday>(`${this.apiUrl}`, holiday);
   }
   
   deleteHoliday(id: number): Promise<void> {
