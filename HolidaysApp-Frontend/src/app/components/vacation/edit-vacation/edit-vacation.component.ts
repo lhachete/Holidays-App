@@ -3,7 +3,7 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { HolidayService } from '../../../services/holiday.service';
 import { AuthService } from '../../../services/auth.service';
-import { vacationTypeOptions, setUTCDate } from '../../../shared/constants/vacation.constants';
+import { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate } from '../../../shared/constants/vacation.constants';
 import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
 import Holiday from '../../../models/Holiday';
 import Swal from 'sweetalert2';
@@ -22,7 +22,8 @@ export class EditVacationComponent {
 
   private vacationTypeOptions = vacationTypeOptions;
 
-    private setUTCDate = setUTCDate;
+  private setUTCDate = setUTCDate;
+  private toDateInputValue = toDateInputValue;
 
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
@@ -50,7 +51,7 @@ export class EditVacationComponent {
   //Se dispara con (dayDetails) del html, para editar una vacación.
 
   onDayDetails = async (day: CalendarMonthViewDay<CalendarEvent>): Promise<void> => {
-    const events = day.events as CustomCalendarEv[]; 
+    const events = day.events as CustomCalendarEv[];
 
     /* console.log('events', day);*/
     if (events.length) {
@@ -59,9 +60,8 @@ export class EditVacationComponent {
       if (data) {
         const formValues = await this.openEditModal(data);
         if (formValues) {
-          const newStart =  this.setUTCDate(formValues.holidayStartDate);
-          const newEnd =  this.setUTCDate(formValues.holidayEndDate);
-
+          const newStart = this.setUTCDate(formValues.holidayStartDate);
+          const newEnd = this.setUTCDate(formValues.holidayEndDate);
 
           if (this.isValidVacationRange(newStart, newEnd, data.holidayId)) {
             console.log(data.holidayId)
@@ -146,7 +146,7 @@ export class EditVacationComponent {
 
   private saveChanges = async (
     data: { holidayId: number; userId: number },
-    newStart: Date, newEnd: Date 
+    newStart: Date, newEnd: Date
   ): Promise<void> => {
     await this.holidayService.updateHoliday({
       holidayId: data.holidayId,
@@ -157,13 +157,12 @@ export class EditVacationComponent {
     });
   };
 
-  
   private refreshCalendar = (
     id: number,
     newStart: Date,
     newEnd: Date
   ): void => {
-    this.userEvents= (this.userEvents as CustomCalendarEv[]).map(ev =>
+    this.userEvents = (this.userEvents as CustomCalendarEv[]).map(ev =>
       ev.holidayId === id ? {
         ...ev,
         start: newStart,
@@ -173,29 +172,20 @@ export class EditVacationComponent {
     );
   };
 
-    // Convierte la fecha a un formato de entrada de fecha HTML sin errores.
-  private toDateInputValue = (date: Date): string => {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
-  };
+
 
   // Para asegurarnos de guardar las fechas en el formato correcto en cualquier zona horaria.
   private parseModalDates = (): { holidayStartDate: Date; holidayEndDate: Date } | void => {
-    const start = (document.getElementById('start') as HTMLInputElement).value;
-    const end = (document.getElementById('end') as HTMLInputElement).value;
-    if (!start || !end) {
+    const startStr = (document.getElementById('start') as HTMLInputElement).value;
+    const endStr = (document.getElementById('end') as HTMLInputElement).value;
+    if (!startStr || !endStr) {
       Swal.showValidationMessage('You must select both start and end dates');
-      return;
+    } else {
+      return {
+        holidayStartDate: parseInputDate(startStr), 
+        holidayEndDate: parseInputDate(endStr),
+      };
     }
-      const [startYear, startMonth, startDay] = start.split('-').map(Number);
-  const [endYear, endMonth, endDay] = end.split('-').map(Number);
-
-  return {
-    holidayStartDate: new Date(startYear, startMonth - 1, startDay), // Mes -1 porque enero es 0
-    holidayEndDate: new Date(endYear, endMonth - 1, endDay)
-  };
   };
 
   private showSuccessToast = (): void => {

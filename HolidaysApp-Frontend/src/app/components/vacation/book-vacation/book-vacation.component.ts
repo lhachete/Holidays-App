@@ -4,12 +4,13 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { startOfDay, endOfDay } from 'date-fns';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { AuthService } from '../../../services/auth.service';
-import { vacationTypeOptions , setUTCDate } from '../../../shared/constants/vacation.constants';
+import { vacationTypeOptions , setUTCDate, toDateInputValue, parseInputDate } from '../../../shared/constants/vacation.constants';
 import Swal from 'sweetalert2';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-book-vacation',
-  imports: [CalendarComponent],
+  imports: [CalendarComponent, FormsModule],
   templateUrl: './book-vacation.component.html',
 })
 export class BookVacationComponent {
@@ -19,6 +20,9 @@ export class BookVacationComponent {
 
   selectedStart: Date | null = null;
   selectedEnd: Date | null = null;
+  // valores para los inputs <date>
+  startInput = '';
+  endInput   = '';
   
   // Detalles completos del día clicado
   selectedDayDetail: CalendarMonthViewDay<CalendarEvent> | null = null;
@@ -31,6 +35,7 @@ export class BookVacationComponent {
   
   private vacationTypeOptions = vacationTypeOptions;
   private setUTCDate = setUTCDate;
+  private toDateInputValue = toDateInputValue;
 
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
@@ -79,7 +84,9 @@ export class BookVacationComponent {
         this.selectedStart = date;
         this.selectedEnd = null;
       }
-
+      // Actualizo los inputs y los eventos de selección.
+      this.startInput = this.toDateInputValue(this.selectedStart);
+      this.endInput   = this.selectedEnd ? this.toDateInputValue(this.selectedEnd) : '';
       this.updateSelectionEvents();
     }
   }
@@ -178,10 +185,32 @@ export class BookVacationComponent {
     return value ?? undefined;
   };
 
+   onDateInputChange(type: 'start' | 'end', value: string) {
+    const date = parseInputDate(value);
+    if (type === 'start') {
+      this.selectedStart = date;
+      // si end es anterior, lo igualamos
+      if (this.selectedEnd && this.selectedEnd < date) {
+        this.selectedEnd = date;
+        this.endInput    = value;
+      }
+    } else {
+      this.selectedEnd = date;
+      // si no había start, lo igualamos
+      if (!this.selectedStart) {
+        this.selectedStart = date;
+        this.startInput = value;
+      }
+    }
+    this.updateSelectionEvents();
+  }
+
   clearSelection = (): void => {
     this.selectedStart = null;
     this.selectedEnd = null;
     this.selectionEvents = [];
+    this.startInput = '';
+    this.endInput = '';
   };
 
 }
