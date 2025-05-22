@@ -33,8 +33,8 @@ public class HolidayRepositoryJpaAdapter implements HolidayRepositoryPort {
     }
 
     @Override
-    public long countOverlappingVacations(Integer userId, LocalDate startDate, LocalDate endDate) {
-        return holidayMOJpaRepository.countOverlappingVacations(userId, startDate, endDate);
+    public long countOverlappingVacations(Integer userId, LocalDate startDate, LocalDate endDate, Integer holidayId) {
+        return holidayMOJpaRepository.countOverlappingVacations(userId, startDate, endDate, holidayId);
     }
 
     @Override
@@ -48,5 +48,10 @@ public class HolidayRepositoryJpaAdapter implements HolidayRepositoryPort {
         deletedHoliday.setIsDeleted(true);
         holidayMOJpaRepository.deleteById(holidayId);
         return deletedHoliday;
+    }
+
+    @Override
+    public Holiday findByIdAndUserId(Integer id, Integer userId) {
+        return holidayMOMapper.toHoliday(holidayMOJpaRepository.findByIdAndUser_Id(id, userId).orElse(null));
     }
 }
