@@ -1,15 +1,11 @@
-
-
 @if (!isAuthenticated) {
     <div class="container my-5 p-4 text-center bg-light border rounded shadow-sm">
-        <h1 class="text-lightPurple">Welcome to the Vacation Reservation System</h1>
-        <p>Please log in to view and manage your vacations.</p>
+        <h1 class="text-lightPurple">Bienvenido al Sistema de Reservas de Vacaciones</h1>
+        <p>Por favor, inicia sesión para ver y gestionar tus vacaciones.</p>
     </div>
 } @else {
     <div class="container my-5 p-4 text-center bg-light border rounded shadow-sm">
-        <h1 class="text-lightPurple">Welcome back, {{ user.username }}!</h1>
-        <p>Explore your holidays in the calendar and manage them.</p>
+        <h1 class="text-lightPurple">¡Bienvenido de nuevo, {{ user.username }}!</h1>
+        <p>Explora tus vacaciones en el calendario y gestiónalas.</p>
     </div>
 }
-
-

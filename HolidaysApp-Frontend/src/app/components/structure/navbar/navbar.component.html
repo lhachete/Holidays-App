@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-lightPurple">
     <div class="container">
-        <a class="navbar-brand" routerLink="/">Vacation reservations</a>
+        <a class="navbar-brand" routerLink="/">Reserva de vacaciones</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -10,41 +10,41 @@
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/" routerLinkActive="underline-custom text-white"
                         [routerLinkActiveOptions]="{ exact: true }">
-                        Home
+                        Inicio
                     </a>
                 </li>
 
                 @if (!isAuthenticated) {
                 <a class="nav-link" routerLink="/login">
                     <button class="btn-lightPurple" routerLinkActive="active button-active">
-                        Login
+                        Iniciar sesión
                     </button>
                 </a>
                 } @else {
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="vacationDropdown" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        My Vacations
+                        Mis vacaciones
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="vacationDropdown">
                         <li>
                             <a class="dropdown-item" routerLink="/vacation/show" routerLinkActive="active">
-                                Show Vacations
+                                Ver vacaciones
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item" routerLink="/vacation/book" routerLinkActive="active">
-                                Book Vacations
+                                Guardar vacaciones
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item" routerLink="/vacation/edit" routerLinkActive="active">
-                                Edit Vacations
+                                Editar vacaciones
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item" routerLink="/vacation/delete" routerLinkActive="active">
-                                Delete Vacations
+                                Borrar vacaciones
                             </a>
                         </li>
                     </ul>

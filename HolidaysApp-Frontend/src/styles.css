@@ -1,3 +1,28 @@
+app-root {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-rows: auto auto 1fr;
+}
+
+app-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* 
+  * Color azul GFT1 (main) #213E7F
+  * Color azul GFT2 #133E78
+
+  * Color mas intenso (deskbee) #153A7B
+
+  * Color azul claro GFT1 #0097D9
+  * Color azul muy claro GFT2 #297ADF
+
+  * Púrpura GFT #B02A87
+  * Purpura GFT hover #972875
+*/
 
 .bg-lightPurple {
   background-color: #c788fe !important;

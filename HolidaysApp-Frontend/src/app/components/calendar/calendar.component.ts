@@ -23,14 +23,13 @@ export class CalendarComponent implements OnInit {
   viewMonth!: number;
   viewYear!: number;
   months = [
-    'January', 'February', 'March', 'April',
-    'May', 'June', 'July', 'August',
-    'September','October', 'November', 'December'
-  ];
+  'Enero', 'Febrero', 'Marzo', 'Abril',
+  'Mayo', 'Junio', 'Julio', 'Agosto',
+  'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+];
 
-  /**
-   * Inicializa viewDate y genera años disponibles
-   */
+
+  //Inicializa viewDate y se generan los años disponibles.
   ngOnInit(): void {
     const today = new Date();
     this.viewDate = today;
@@ -41,16 +40,12 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  /**
-   * Emite todos los detalles del día al hacer clic en una celda
-   */
+
   onDayClick(event: { day: CalendarMonthViewDay<CalendarEvent>; sourceEvent: MouseEvent | KeyboardEvent }): void {
     this.dayDetails.emit(event.day);
   }
 
-  /**
-   * Navega al mes anterior
-   */
+
   prevMonth(): void {
     const prev = subMonths(this.viewDate, 1);
     this.viewDate = prev;
@@ -58,9 +53,6 @@ export class CalendarComponent implements OnInit {
     this.viewYear = prev.getFullYear();
   }
 
-  /**
-   * Navega al mes siguiente
-   */
   nextMonth(): void {
     const next = addMonths(this.viewDate, 1);
     this.viewDate = next;
@@ -68,9 +60,6 @@ export class CalendarComponent implements OnInit {
     this.viewYear = next.getFullYear();
   }
 
-  /**
-   * Establece la fecha actual como vista
-   */
   todayFn(): void {
     const today = new Date();
     this.viewDate = today;
@@ -78,9 +67,7 @@ export class CalendarComponent implements OnInit {
     this.viewYear = today.getFullYear();
   }
 
-  /**
-   * Actualiza viewDate al cambiar mes o año
-   */
+  //Actualiza viewDate al cambiar mes o año
   updateViewDate(): void {
     this.viewDate = new Date(this.viewYear, this.viewMonth, 1);
   }

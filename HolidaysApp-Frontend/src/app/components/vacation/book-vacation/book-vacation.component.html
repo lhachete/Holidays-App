@@ -1,5 +1,5 @@
 <div class="container text-center mt-4">
-    <h1>Book vacations</h1>
+    <h1>Guardar nuevas vacaciones</h1>
 </div>
 <div class="container py-4">
   <app-calendar
@@ -11,7 +11,7 @@
 
   <div class="row my-4">
     <div class="col">
-      <label for="startDate" class="form-label">Start date</label>
+      <label for="startDate" class="form-label">Fecha inicio</label>
       <input
         id="startDate"
         name="startDate"
@@ -22,7 +22,7 @@
         [min]="minStartDate"/>
     </div>
     <div class="col">
-      <label for="endDate" class="form-label">End date</label>
+      <label for="endDate" class="form-label">Fecha fin</label>
       <input
         id="endDate"
         name="endDate"
@@ -37,10 +37,10 @@
   <div class="d-flex justify-content-end mt-5">
     <button class="btn btn-success me-3"
             [disabled]="!selectedStart || !selectedEnd"
-            (click)="addHolidayRange()">Save vacation</button>
+            (click)="addHolidayRange()">Guardar vacaciones</button>
   
     <button class="btn btn-danger"
             [disabled]="!selectedStart"
-            (click)="clearSelection()">Uncheck</button>
+            (click)="clearSelection()">Limpiar selecciones</button>
   </div>
 </div>

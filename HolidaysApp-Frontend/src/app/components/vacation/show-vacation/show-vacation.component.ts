@@ -36,19 +36,16 @@ export class ShowVacationComponent {
       const userId = this.user.id;
       const holidays = await this.holidayService.getHolidaysById(userId);
 
-      console.log('holidays', holidays);
       this.usersEvents = holidays.map(h => ({
         start: new Date(h.holidayStartDate),
         end:   new Date(h.holidayEndDate),
-        title: `Holidays: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+        title: `Vacaciones: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
         type: h.vacationType,
         holidayId: h.holidayId
       } as CalendarEvent));
     } catch (err) {
-      console.error('Error loading all the holidays', err);
-    } finally {
-      console.log('holidays mapeadas', this.usersEvents);
-    }
+      console.error('Error al cargar todas las vacaciones', err);
+    } 
   };
 
   // 
@@ -64,14 +61,14 @@ export class ShowVacationComponent {
       console.log('ev', ev);
       const start = ev.start.toLocaleDateString();
       const end = ev.end?.toLocaleDateString();
-      return `<p><strong>${ev.title}</strong><br>The type of your vacation: ${ev.type}</p>`;
+      return `<p><strong>${ev.title}</strong><br>El tipo de tu vacación es: ${ev.type}</p>`;
     }).join('');
 
     await Swal.fire({
-      title: `Active holidays on ${day.date.toLocaleDateString()}`,
+      title: `Vacaciones activas el ${day.date.toLocaleDateString()}`,
       html,
       icon: 'info',
-      confirmButtonText: 'Close'
+      confirmButtonText: 'Cerrar'
     });
     }
   };

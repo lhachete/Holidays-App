@@ -47,12 +47,11 @@ export class EditVacationComponent {
   private mapToCalendarEvent = (holiday: Holiday): CalendarEvent => ({
     start: new Date(holiday.holidayStartDate),
     end: new Date(holiday.holidayEndDate),
-    title: `Holidays: ${new Date(holiday.holidayStartDate).toLocaleDateString()} – ${new Date(holiday.holidayEndDate).toLocaleDateString()}`,
+    title: `Vacaciones: ${new Date(holiday.holidayStartDate).toLocaleDateString()} – ${new Date(holiday.holidayEndDate).toLocaleDateString()}`,
     holidayId: holiday.holidayId,
     type: holiday.vacationType,
   }) as CustomCalendarEv;
 
-  //Se dispara con (dayDetails) del html, para editar una vacación.
 
   onDayDetails = async (day: CalendarMonthViewDay<CalendarEvent>): Promise<void> => {
     const events = day.events as CustomCalendarEv[];
@@ -77,11 +76,11 @@ export class EditVacationComponent {
     }
   };
 
-  // Preparo los datos para el modal de edición y compruebo que los id son válidos.
+  // Preparo los datos para la ventana modal de edición y compruebo que los id son válidos.
   private prepareEditData = (event: CustomCalendarEv) => {
 
-    const holidayId = event.holidayId; // id de la vacation
-    const userId = this.user.id; // id del usuario
+    const holidayId = event.holidayId;
+    const userId = this.user.id; 
     if (!holidayId || !userId) {
       // console.error('Evento inválido para editar:', event);
       return null;
@@ -90,9 +89,7 @@ export class EditVacationComponent {
     }
   };
 
-  /**
-   * Abre modal para editar fechas y retorna nuevas fechas
-   */
+  
   private openEditModal = async (data: { start: Date; end: Date; type: string }) => {
     const currentStart = this.toDateInputValue(data.start);
     const currentEnd = this.toDateInputValue(data.end);
@@ -103,15 +100,15 @@ export class EditVacationComponent {
       )
       .join('');
     const html =
-      `<label>Start:</label> <input type="date" id="start" class="swal2-input" value="${currentStart}"><br>` +
-      `<label>End:</label> <input type="date" id="end" class="swal2-input" value="${currentEnd}"><br>` +
-      `<label>Type:</label>
+      `<label>Inicio:</label> <input type="date" id="start" class="swal2-input" value="${currentStart}"><br>` +
+      `<label>Fin:</label> <input type="date" id="end" class="swal2-input" value="${currentEnd}"><br>` +
+      `<label>Tipo:</label>
       <select id="type" class="swal2-select">
         ${typeOptionsHtml}
       </select>`;
 
     const result = await Swal.fire({
-      title: 'Edit vacation',
+      title: 'Editar vacaciones',
       html,
       showCancelButton: true,
       confirmButtonColor: '#b35cff',
@@ -124,18 +121,18 @@ export class EditVacationComponent {
 
   //Función para comprobar la fecha editada
   private isValidVacationRange = (newStart: Date, newEnd: Date, holidayId: number): boolean => {
-    console.log('newStart', newStart);
+
     const todayUtc = new Date();
     todayUtc.setUTCHours(0, 0, 0, 0);
 
 console.log(todayUtc.toISOString());
     if (newStart <= todayUtc) {
-      Swal.fire('Error', 'The start date must be later than the current date.', 'error');
+      Swal.fire('Error', 'La fecha de inicio debe ser posterior a la fecha actual.', 'error');
       return false;
     }
 
     if (newEnd < newStart) {
-      Swal.fire('Error', 'The end date cannot be earlier than the start date, and the start date cannot be later than the end date.', 'error');
+      Swal.fire('Error', 'La fecha de fin no puede ser anterior a la fecha de inicio, y la fecha de inicio no puede ser posterior a la fecha de fin.', 'error');
       return false;
     }
 
@@ -148,7 +145,7 @@ console.log(todayUtc.toISOString());
 
       const overlaps = newStart <= existingEnd && newEnd >= existingStart;
       if (overlaps) {
-        Swal.fire('Error', 'The new rank overlaps with an existing holiday.', 'error');
+        Swal.fire('Error', 'El nuevo rango se solapa con unas vacaciones existentes.', 'error');
         return false;
       }
     }
@@ -179,7 +176,7 @@ console.log(todayUtc.toISOString());
         ...ev,
         start: newStart,
         end: newEnd,
-        title: `Holiday ${newStart.toLocaleDateString()} - ${newEnd.toLocaleDateString()}`,
+        title: `Vacaciones ${newStart.toLocaleDateString()} - ${newEnd.toLocaleDateString()}`,
         type
       } : ev
     );
@@ -193,7 +190,7 @@ console.log(todayUtc.toISOString());
     const endStr = (document.getElementById('end') as HTMLInputElement).value;
     const vacationType = (document.getElementById('type') as HTMLSelectElement).value;
     if (!startStr || !endStr) {
-      Swal.showValidationMessage('You must select both start and end dates');
+      Swal.showValidationMessage('Debes seleccionar tanto la fecha de inicio como la de fin');
     } else {
       return {
         holidayStartDate: parseInputDate(startStr),
@@ -207,7 +204,7 @@ console.log(todayUtc.toISOString());
     Swal.fire({
       toast: true,
       icon: 'success',
-      title: 'Vacation updated',
+      title: 'Vacaciones actualizadas',
       showConfirmButton: false,
       timer: 1500,
       position: 'top-end'

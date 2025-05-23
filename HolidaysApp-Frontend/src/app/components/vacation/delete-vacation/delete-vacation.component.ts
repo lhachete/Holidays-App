@@ -25,11 +25,11 @@ export class DeleteVacationComponent {
   async ngOnInit(): Promise<void> {
     const userId = this.user.id;
     const holidays = await this.holidayService.getHolidaysById(userId);
-    console.log('holidays', holidays);
+
     this.userEvents = holidays.map(h => ({
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
-      title: `Holidays: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+      title: `Vacaciones: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
       holidayId: h.holidayId 
     } as CalendarEvent));
   }
@@ -40,16 +40,15 @@ export class DeleteVacationComponent {
     const events = day.events as CustomCalendarEv[]; 
     if (events.length) {
       // Construimos HTML con lista de vacaciones
-      console.log('events', events);
       const html = events[0].title;
 
       const result = await Swal.fire({
-        title: `Delete vacations on ${day.date.toLocaleDateString()}?`,
+        title: `Borrar vacaciones en ${day.date.toLocaleDateString()}?`,
         html,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete',
-        cancelButtonText: 'Cancel'
+        confirmButtonText: 'Si, borrar',
+        cancelButtonText: 'Cancelar',
       });
 
       if (result.isConfirmed) {

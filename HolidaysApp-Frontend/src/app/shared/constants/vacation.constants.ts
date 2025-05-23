@@ -1,9 +1,10 @@
 const vacationTypeOptions = {
-  Vacation: 'Vacation',
-  PTO: 'Paid Time Off',
-  Sick: 'Sick Leave',
-  Other: 'Other'
+  Vacation: 'Vacaciones',
+  PTO: 'Días personales',
+  Sick: 'Baja por enfermedad',
+  Other: 'Otro'
 };
+
 
 const setUTCDate = (date: Date): Date =>
   new Date(Date.UTC(
@@ -24,5 +25,6 @@ const parseInputDate = (value: string): Date => {
   const [y, m, d] = value.split('-').map(Number);
   return new Date(y, m - 1, d);
 }
+
 
 export { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate };

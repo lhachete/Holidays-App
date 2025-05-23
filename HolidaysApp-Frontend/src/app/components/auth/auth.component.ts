@@ -20,11 +20,11 @@ export class AuthComponent implements OnInit {
 
   // Campos del formulario
   fields: FieldConfig[] = [
-    { key: 'userInput', label: 'Username or Email', type: 'text', modes: ['login'] },
+    { key: 'userInput', label: 'Nombre de usuario o email', type: 'text', modes: ['login'] },
     { key: 'email', label: 'Email', type: 'email', modes: ['register'] },
-    { key: 'username', label: 'Username', type: 'text', modes: ['register'] },
-    { key: 'password', label: 'Password', type: 'password', modes: ['login', 'register'] },
-    { key: 'confirmPassword', label: 'Confirm Password', type: 'password', modes: ['register'] },
+    { key: 'username', label: 'Nombre de usuario', type: 'text', modes: ['register'] },
+    { key: 'password', label: 'Contraseña', type: 'password', modes: ['login', 'register'] },
+    { key: 'confirmPassword', label: 'Confirmar contraseña', type: 'password', modes: ['register'] },
   ];
 
   loginForm = new FormGroup({
@@ -130,10 +130,10 @@ export class AuthComponent implements OnInit {
 
     Swal.fire({
       icon: 'success',
-      title: 'Registration successful!',
-      text: 'You can now log in.',
+      title: '¡Registro exitoso!',
+      text: 'Ya puedes iniciar sesión.',
       iconColor: '#c490ff',
-      confirmButtonText: 'OK',
+      confirmButtonText: 'Vale',
       confirmButtonColor: '#c490ff',
     });
 

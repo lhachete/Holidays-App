@@ -76,8 +76,8 @@ export class BookVacationComponent {
     if (day.isPast || day.isToday) {
       Swal.fire({
         icon: 'error',
-        title: 'Invalid date',
-        text: 'You cannot select past or today dates for vacation.',
+        title: 'Fecha inválida',
+        text: 'No puede seleccionar fechas pasadas o actuales para las vacaciones.',
         confirmButtonText: 'OK'
       });
       this.clearSelection();
@@ -108,14 +108,14 @@ export class BookVacationComponent {
       this.selectionEvents = [{
         start: this.selectedStart,
         end: this.selectedEnd,
-        title: 'Selected',
+        title: 'Seleccionado',
         color: { primary: '#38e51d', secondary: '#D1E8FF' },
       }];
     } else if (this.selectedStart) {
       this.selectionEvents = [{
         start: this.selectedStart,
         end: new Date(this.selectedStart),
-        title: 'Selected',
+        title: 'Seleccionado',
         color: { primary: '#ffaa00', secondary: '#D1E8FF' },
       }];
     } else {
@@ -135,8 +135,8 @@ export class BookVacationComponent {
     if (overlap) {
       await Swal.fire({
         icon: 'warning',
-        title: 'Booking conflict',
-        text: 'There are already vacations in the selected date range.',
+        title: 'Conflicto al guardar',
+        text: 'Ya hay vacaciones en el intervalo de fechas seleccionadas.',
         confirmButtonText: 'OK'
       });
       return;
@@ -162,7 +162,7 @@ export class BookVacationComponent {
         {
           start: new Date(newHoliday.holidayStartDate),
           end: new Date(newHoliday.holidayEndDate),
-          title: `Holiday ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`
+          title: `Vacaciones: ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`
         }
         ];
 
@@ -170,7 +170,7 @@ export class BookVacationComponent {
         await Swal.fire({
           toast: true,
           icon: 'success',
-          title: 'Vacations saved',
+          title: 'Vacaciones guardadas',
           showConfirmButton: false,
           timer: 1500,
           position: 'top-end',
@@ -182,15 +182,15 @@ export class BookVacationComponent {
 
   private promptVacationType = async (): Promise<string | undefined> => {
     const { value } = await Swal.fire<string>({
-      title: 'Select vacation type',
+      title: 'Selecciona el tipo de vacaciones',
       input: 'select',
-      inputLabel: 'Type of vacation',
+      inputLabel: 'Tipo de vacacion',
       inputOptions: this.vacationTypeOptions,
-      inputValue: 'Vacation',
+      inputValue: 'Vacación',
       showCancelButton: true,
-      confirmButtonText: 'Accept',
+      confirmButtonText: 'Aceptar',
       confirmButtonColor: '#b35cff',
-      cancelButtonText: 'Cancel',
+      cancelButtonText: 'Cancelar',
     });
     return value ?? undefined;
   };
@@ -203,7 +203,7 @@ export class BookVacationComponent {
 
     // No permitir hoy ni fechas pasadas
     if (date <= today) {
-      Swal.fire('Invalid date', 'The date must be after today.', 'error');
+      Swal.fire('Fecha no válida', 'La fecha debe ser posterior a hoy.', 'error');
       if (type === 'start') this.startInput = '';
       else this.endInput = '';
       return;
@@ -213,7 +213,7 @@ export class BookVacationComponent {
       this.selectedStart = date;
       //Si ya había end y ahora es anterior, lo ajustas:
       if (this.selectedEnd && this.selectedEnd < date) {
-        Swal.fire('Invalid range', 'End date cannot be before start date.', 'error');
+        Swal.fire('Rango inválido', 'La fecha final no puede ser anterior a la fecha inicial.', 'error');
         this.selectedEnd = date;
         this.endInput = this.toDateInputValue(date);
       }
@@ -221,12 +221,12 @@ export class BookVacationComponent {
     } else {
       // Para no dejar que end sea antes de start
       if (!this.selectedStart) {
-        Swal.fire('Error', 'You must select a start date first.', 'error');
+        Swal.fire('Error', 'Primero debe seleccionar una fecha de inicio.', 'error');
         this.endInput = '';
         return;
       }
       if (date < this.selectedStart) {
-        Swal.fire('Invalid range', 'End date cannot be before start date.', 'error');
+        Swal.fire('Rango inválido', 'La fecha final no puede ser anterior a la fecha inicial.', 'error');
         this.endInput = '';
         return;
       }
