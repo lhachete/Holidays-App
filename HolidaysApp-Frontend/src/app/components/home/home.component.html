@@ -1,11 +1,11 @@
 @if (!isAuthenticated) {
     <div class="container my-5 p-4 text-center bg-light border rounded shadow-sm">
-        <h1 class="text-lightPurple">Bienvenido al Sistema de Reservas de Vacaciones</h1>
+        <h1 class="text-blueGFT">Bienvenido al Sistema de Reservas de Vacaciones</h1>
         <p>Por favor, inicia sesión para ver y gestionar tus vacaciones.</p>
     </div>
 } @else {
     <div class="container my-5 p-4 text-center bg-light border rounded shadow-sm">
-        <h1 class="text-lightPurple">¡Bienvenido de nuevo, {{ user.username }}!</h1>
+        <h1 class="text-blueGFT">¡Bienvenido de nuevo, {{ user.username }}!</h1>
         <p>Explora tus vacaciones en el calendario y gestiónalas.</p>
     </div>
 }

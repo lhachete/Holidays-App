@@ -10,41 +10,44 @@ app-login {
   align-items: center;
 }
 
-
 /* 
   * Color azul GFT1 (main) #213E7F
   * Color azul GFT2 #133E78
 
   * Color mas intenso (deskbee) #153A7B
+  * Color azul hover GFT1 #405990
 
   * Color azul claro GFT1 #0097D9
   * Color azul muy claro GFT2 #297ADF
 
   * Púrpura GFT #B02A87
   * Purpura GFT hover #972875
+
+  * box-shadow: 0 2px 2px #00000040;
 */
 
-.bg-lightPurple {
-  background-color: #c788fe !important;
-  border-color: #c788fe;
+.bg-blueGFT {
+  background-color: #213E7F !important;
+  border-color: #213E7F; /* Antes #c788fe */
+  box-shadow: 0 2px 2px #00000040;
 }
 
-.bg-lightPurple-hover:hover {
-  background-color: #dcbdff !important;
-  border-color: #b35cff;
-  color: #b35cff;
+.bg-blueGFT-hover:hover {
+  background-color: #405990 !important;
+  border-color: #405990;
+  color: white;
 }
 
-.text-lightPurple {
-  color: #c490ff;
+.text-blueGFT {
+  color: #213E7F;
 }
 
 .btn:disabled {
-  border-color: #b35cff !important;
+  border-color: #153A7B !important;
 }
 
-.btn-lightPurple {
-  background-color: #c788fe !important;
+.btn-blueGFT {
+  background-color: #213E7F !important;
   border: white solid 2px !important;
   color: white;
   border-radius: 10px;
@@ -52,29 +55,37 @@ app-login {
   transition: all 0.3s ease;
 }
 
-.btn-lightPurple:hover {
-  background-color: #dcbdff !important;
-  border-color: #b35cff;
-  color: #b35cff;
+.btn-blueGFT:hover {
+  background-color: #405990 !important;
+  border-color: #405990;
+  color: white;
 }
 
 .button-active{
-  background-color: #dcbdff !important;
-  color: #b35cff;
+  background-color: #405990 !important;
+  color: white;
 }
 
 .dropdown-item.active, .dropdown-item:active {
   color: var(--bs-dropdown-link-active-color);
-  background-color: #b084f9;
-}
-
-.outline-purple:focus {
-  border-color: #b084f9 !important;
-  box-shadow: 0 0 0 0.2rem rgba(176, 132, 249, 0.25) !important;
+  background-color: #133E78;
 }
 
 .underline-custom {
   text-decoration: underline;
   text-decoration-color: white; 
   text-underline-offset: 3px;
+}
+
+
+.logoGFT1{
+  width: 200px;
+  margin-right: 16px;
+  padding-bottom: 4px;
+}
+
+.logoGFT2{
+  width: 80px;
+  margin-right: 16px;
+  padding-bottom: 2px;
 }

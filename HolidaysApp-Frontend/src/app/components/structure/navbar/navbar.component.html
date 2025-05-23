@@ -1,6 +1,10 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-lightPurple">
+<nav class="navbar navbar-expand-lg navbar-dark bg-blueGFT">
     <div class="container">
-        <a class="navbar-brand" routerLink="/">Reserva de vacaciones</a>
+        
+        <a class="navbar-brand" routerLink="/">
+            <img src="images/GFT2.webp" alt="LogoGFT" class="logoGFT2" />
+            Reserva de vacaciones
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -13,10 +17,9 @@
                         Inicio
                     </a>
                 </li>
-
                 @if (!isAuthenticated) {
                 <a class="nav-link" routerLink="/login">
-                    <button class="btn-lightPurple" routerLinkActive="active button-active">
+                    <button class="btn-blueGFT" routerLinkActive="active button-active">
                         Iniciar sesión
                     </button>
                 </a>
@@ -57,7 +60,7 @@
                     </li>
                 } -->
                 <a class="nav-link">
-                    <button (click)="logout()" class="btn-lightPurple" routerLinkActive="active button-active">
+                    <button (click)="logout()" class="btn-blueGFT" routerLinkActive="active button-active">
                         Logout
                     </button>
                 </a>
