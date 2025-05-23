@@ -25,7 +25,6 @@ export class AuthService {
     try {
 
       const foundUser = await this.userService.login(userInput, password);
-      console.log('foundUser', foundUser);
       if (!foundUser) {
         return 'USER_ERROR';
       }
@@ -44,7 +43,6 @@ export class AuthService {
 
     } catch (err: any) {
       const code = err.status;
-      console.error('Error logging in', err);
       if (code === 404) return 'USER_ERROR';
       if (code === 401) return 'PASS_ERROR';
       return 'USER_ERROR';
@@ -57,10 +55,9 @@ export class AuthService {
     const newUser = await this.userService.addUser(user as User);
     return newUser;
   } catch (err: any) {
-    console.error('Error registering user', err);
-    // Aquí capturas los errores de validación del backend
+
     if (err.error && err.error.message) {
-      throw err.error.message; // puedes lanzar directamente el string, o mapearlo a un objeto si prefieres
+      throw err.error.message; // envio el mensaje de error
     } else {
       throw 'Unknown error occurred';
     }

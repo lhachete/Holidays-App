@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { FieldConfig } from '../../models/FieldConfig.model';
+import { VALIDATION_MESSAGES } from '../../shared/constants/validation.constants';
 import Swal from 'sweetalert2';
 
-import { FieldConfig } from './field-config.model';
-import { VALIDATION_MESSAGES } from './validation-messages';
 
 @Component({
   selector: 'app-login',
@@ -176,7 +176,7 @@ export class AuthComponent implements OnInit {
   const errors: { [key: string]: string } = {};
   // con esto separo los errores que estan divididos por ";" 
   const entries = message.split(';');
-    console.log('entries', entries)
+
   entries.forEach(entry => {
     const parts = entry.split(':');
 
