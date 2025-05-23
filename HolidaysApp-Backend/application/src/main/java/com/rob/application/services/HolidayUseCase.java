@@ -54,7 +54,7 @@ public class HolidayUseCase implements HolidayServicePort {
             Holiday holidayToUpdate = holidayRepositoryPort.findById(holiday.getId());
             holidayToUpdate.setHolidayStartDate(holiday.getHolidayStartDate());
             holidayToUpdate.setHolidayEndDate(holiday.getHolidayEndDate());
-            holidayToUpdate.setVacationState(holiday.getVacationType());
+            holidayToUpdate.setVacationState("aprobada");
             holidayToUpdate.setUpdatedAt(OffsetDateTime.now());
             holidayToUpdate.setUpdatedBy(holiday.getUser());
             return holidayRepositoryPort.save(holidayToUpdate);

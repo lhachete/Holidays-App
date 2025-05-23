@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 
-
+// Esto le dice a Spring que este es un componente y que lo escanee para inyectarlo donde sea necesario
 @Mapper(componentModel = "spring", uses = {OrganizationMOMapper.class})
 public interface DepartmentMOMapper {
 
