@@ -28,7 +28,7 @@ public class HolidayUseCase implements HolidayServicePort {
         if(isValidHoliday(holiday)) {
             holiday.setCreatedAt(OffsetDateTime.now());
             holiday.setCreatedBy(holiday.getUser());
-            holiday.setVacationState("APROBADA");
+            holiday.setVacationState("aprobada");
             holiday.setIsDeleted(false);
             return holidayRepositoryPort.save(holiday);
         }
