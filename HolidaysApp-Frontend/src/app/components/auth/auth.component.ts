@@ -40,8 +40,8 @@ export class AuthComponent implements OnInit {
   }, { validators: this.passwordsMatchValidator() });
 
   constructor(
-    private authService: AuthService,
-    private router: Router,
+    public authService: AuthService,
+    public router: Router,
     private route: ActivatedRoute
   ) { }
 
@@ -101,8 +101,6 @@ export class AuthComponent implements OnInit {
       this.router.navigateByUrl('/vacation/show');
     } else if (result === 'USER_ERROR') {
       this.userNotFound = true;
-    } else if (result === 'PASS_ERROR') {
-      this.wrongPassword = true;
     }
   }
 

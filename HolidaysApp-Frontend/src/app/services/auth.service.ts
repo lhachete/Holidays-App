@@ -43,9 +43,7 @@ export class AuthService {
       return 'OK';
 
     } catch (err: any) {
-      const code = err.status;
-      if (code === 404) return 'USER_ERROR';
-      if (code === 401) return 'PASS_ERROR';
+      // const code = err.status;
       return 'USER_ERROR';
     }
   }
@@ -115,7 +113,7 @@ export class AuthService {
       errs['email'] = 'Email is already registered.';
     } */
     if (data.password !== data.repeatPassword) {
-      errs['password'] = 'Passwords do not match.';
+      errs['password'] = 'Las contraseñas no coinciden.';
     }
 
     return { valid: Object.keys(errs).length === 0, errors: errs };
