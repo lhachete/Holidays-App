@@ -132,9 +132,9 @@ export class AuthComponent implements OnInit {
       icon: 'success',
       title: '¡Registro exitoso!',
       text: 'Ya puedes iniciar sesión.',
-      iconColor: '#c490ff',
+      iconColor: '#153A7B',
       confirmButtonText: 'Vale',
-      confirmButtonColor: '#c490ff',
+      confirmButtonColor: '#153A7B',
     });
 
     this.router.navigateByUrl('/login');

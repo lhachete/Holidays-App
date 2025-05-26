@@ -4,7 +4,7 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { startOfDay, endOfDay } from 'date-fns';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { AuthService } from '../../../services/auth.service';
-import { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate } from '../../../shared/constants/vacation.constants';
+import { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate, showErrorAlert } from '../../../shared/constants/vacation.constants';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
 
@@ -74,12 +74,7 @@ export class BookVacationComponent {
 
     // Validaciones para que no se pueda seleccionar hoy o fechas pasadas
     if (day.isPast || day.isToday) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Fecha inválida',
-        text: 'No puede seleccionar fechas pasadas o actuales para las vacaciones.',
-        confirmButtonText: 'OK'
-      });
+      showErrorAlert('No puedes seleccionar fechas pasadas o actuales para las vacaciones.');
       this.clearSelection();
     } else {
 
@@ -137,7 +132,8 @@ export class BookVacationComponent {
         icon: 'warning',
         title: 'Conflicto al guardar',
         text: 'Ya hay vacaciones en el intervalo de fechas seleccionadas.',
-        confirmButtonText: 'OK'
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#153A7B',
       });
       return;
     }
@@ -188,8 +184,8 @@ export class BookVacationComponent {
       inputOptions: this.vacationTypeOptions,
       inputValue: 'Vacación',
       showCancelButton: true,
-      confirmButtonText: 'Aceptar',
-      confirmButtonColor: '#b35cff',
+      confirmButtonText: 'Guardar',
+      confirmButtonColor: '#153A7B',
       cancelButtonText: 'Cancelar',
     });
     return value ?? undefined;

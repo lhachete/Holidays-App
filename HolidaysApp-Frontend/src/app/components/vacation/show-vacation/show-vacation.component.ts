@@ -80,7 +80,9 @@ export class ShowVacationComponent {
         title: `Vacaciones activas el ${day.date.toLocaleDateString()}`,
         html,
         icon: 'info',
-        confirmButtonText: 'Cerrar'
+        iconColor: '#153A7B',
+        confirmButtonText: 'Cerrar',
+        confirmButtonColor: '#153A7B'
       });
     }
   };

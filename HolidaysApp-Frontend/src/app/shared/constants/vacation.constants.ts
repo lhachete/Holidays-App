@@ -1,3 +1,5 @@
+import Swal from 'sweetalert2';
+
 const vacationTypeOptions = {
   Vacation: 'Vacaciones',
   PTO: 'Días personales',
@@ -26,5 +28,14 @@ const parseInputDate = (value: string): Date => {
   return new Date(y, m - 1, d);
 }
 
+const showErrorAlert = (text: string): void => {
+  Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text,
+    confirmButtonText: 'Vale',
+    confirmButtonColor: '#153A7B',
+  });
+};
 
-export { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate };
+export { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate, showErrorAlert };

@@ -3,7 +3,7 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { HolidayService } from '../../../services/holiday.service';
 import { AuthService } from '../../../services/auth.service';
-import { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate } from '../../../shared/constants/vacation.constants';
+import { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate, showErrorAlert } from '../../../shared/constants/vacation.constants';
 import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
 import Holiday from '../../../models/Holiday';
 import Swal from 'sweetalert2';
@@ -39,8 +39,6 @@ export class EditVacationComponent {
       return this.mapToCalendarEvent(holiday)
     });
   };
-
-
 
 
   // Mapeo las holidays, y le doy formato.
@@ -80,7 +78,7 @@ export class EditVacationComponent {
   private prepareEditData = (event: CustomCalendarEv) => {
 
     const holidayId = event.holidayId;
-    const userId = this.user.id; 
+    const userId = this.user.id;
     if (!holidayId || !userId) {
       // console.error('Evento inválido para editar:', event);
       return null;
@@ -89,7 +87,7 @@ export class EditVacationComponent {
     }
   };
 
-  
+
   private openEditModal = async (data: { start: Date; end: Date; type: string }) => {
     const currentStart = this.toDateInputValue(data.start);
     const currentEnd = this.toDateInputValue(data.end);
@@ -111,11 +109,13 @@ export class EditVacationComponent {
       title: 'Editar vacaciones',
       html,
       showCancelButton: true,
-      confirmButtonColor: '#b35cff',
+      confirmButtonColor: '#153A7B',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Editar',
       focusConfirm: false,
       preConfirm: () => this.parseModalDates()
     });
-    return result.value; 
+    return result.value;
   };
 
   //Función para comprobar la fecha editada
@@ -125,12 +125,12 @@ export class EditVacationComponent {
     todayUtc.setUTCHours(0, 0, 0, 0);
 
     if (newStart <= todayUtc) {
-      Swal.fire('Error', 'La fecha de inicio debe ser posterior a la fecha actual.', 'error');
+      showErrorAlert('La fecha de inicio debe ser posterior a la fecha actual.');
       return false;
     }
 
     if (newEnd < newStart) {
-      Swal.fire('Error', 'La fecha de fin no puede ser anterior a la fecha de inicio, y la fecha de inicio no puede ser posterior a la fecha de fin.', 'error');
+      showErrorAlert('La fecha de fin no puede ser anterior a la fecha de inicio, y la fecha de inicio no puede ser posterior a la fecha de fin.');
       return false;
     }
 
@@ -142,7 +142,7 @@ export class EditVacationComponent {
 
       const overlaps = newStart <= existingEnd && newEnd >= existingStart;
       if (overlaps) {
-        Swal.fire('Error', 'El nuevo rango se solapa con unas vacaciones existentes.', 'error');
+        showErrorAlert('El nuevo rango se solapa con unas vacaciones existentes.');
         return false;
       }
     }
@@ -206,4 +206,6 @@ export class EditVacationComponent {
       position: 'top-end'
     });
   };
+
+  
 }
