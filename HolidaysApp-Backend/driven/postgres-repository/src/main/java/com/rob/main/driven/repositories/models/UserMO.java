@@ -31,7 +31,7 @@ public class UserMO {
 
     @Size(max = 255)
     @NotNull
-    @Column(name = "password", nullable = false)
+    @Column(name = "hash_password", nullable = false)
     private String hashedPassword;
 
     @NotNull
