@@ -23,17 +23,18 @@ export class AuthService {
 
   async login(userInput: string, password: string): Promise<'OK' | 'USER_ERROR' | 'PASS_ERROR'> {
     try {
-
       const foundUser = await this.userService.login(userInput, password);
-      if (!foundUser) {
-        return 'USER_ERROR';
-      }
+      if (!foundUser) return 'USER_ERROR';
+      
+       //! SUpongo que el token se llamará así en la API
+      //localStorage.setItem(foundUser.token);
 
       this.user = {
         id: foundUser.id,
         username: foundUser.username,
         email: foundUser.email,
         role: foundUser.role
+        //token: foundUser.token , igual no es necesario añadir el token aquí
       };
 
       
@@ -69,6 +70,7 @@ export class AuthService {
     this.isAuthenticated = false;
     this.user = null;
     localStorage.removeItem('userSession');
+    // localStorage.removeItem('authToken');
     this.router.navigateByUrl('/login');
   }
 

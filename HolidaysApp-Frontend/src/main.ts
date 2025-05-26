@@ -16,9 +16,7 @@ bootstrapApplication(AppComponent, {
     provideAnimations(),
     provideHttpClient(),
     
-
     importProvidersFrom(
-
       CalendarModule.forRoot({
         provide: DateAdapter,
         useFactory: adapterFactory

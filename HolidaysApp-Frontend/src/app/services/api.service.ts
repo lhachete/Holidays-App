@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders  } from "@angular/common/http";
 import { firstValueFrom } from "rxjs";
 import { environment } from "../../environments/environment";
 
@@ -7,6 +7,16 @@ import { environment } from "../../environments/environment";
 export class ApiService {
 
     constructor(private http: HttpClient) { }
+
+    private getAuthHeaders(): HttpHeaders {
+        const token = localStorage.getItem('authToken');
+        return new HttpHeaders({
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        });
+    }
+
+    //Luego añadir esto enm las peticiones -> , { headers: this.getAuthHeaders() }
 
     getApiUrl(): string {
         return environment.apiUrl;

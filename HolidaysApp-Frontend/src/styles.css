@@ -70,10 +70,10 @@ app-login {
   color: white;
 }
 
+
 .dropdown-item {
   cursor: pointer;
 }
-
 
 .dropdown-item.active, .dropdown-item:active {
   color: var(--bs-dropdown-link-active-color);
@@ -84,13 +84,6 @@ app-login {
   text-decoration: underline;
   text-decoration-color: white; 
   text-underline-offset: 3px;
-}
-
-
-.logoGFT1{
-  width: 200px;
-  margin-right: 16px;
-  padding-bottom: 4px;
 }
 
 .logoGFT2{
