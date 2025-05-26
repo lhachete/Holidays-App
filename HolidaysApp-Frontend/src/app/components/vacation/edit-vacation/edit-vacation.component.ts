@@ -115,7 +115,6 @@ export class EditVacationComponent {
       focusConfirm: false,
       preConfirm: () => this.parseModalDates()
     });
-    console.log('result', result);
     return result.value; 
   };
 
@@ -181,7 +180,6 @@ console.log(todayUtc.toISOString());
       } : ev
     );
   };
-
 
 
   // Para asegurarnos de guardar las fechas en el formato correcto en cualquier zona horaria.

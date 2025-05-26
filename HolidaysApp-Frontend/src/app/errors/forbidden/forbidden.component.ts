@@ -5,6 +5,6 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './forbidden.component.html',
 })
-export class ForbiddenComponent {
+export default class ForbiddenComponent {
 
 }

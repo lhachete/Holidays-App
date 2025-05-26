@@ -22,8 +22,10 @@ export class ShowVacationComponent {
   usersEvents: CalendarEvent[] = [];
   // Detalles completos del día clicado
   selectedDayDetail: CalendarMonthViewDay<CalendarEvent> | null = null;
-  
-  constructor(private holidayService: HolidayService, private authService: AuthService) {}
+  // Lista de vacaciones
+  holidays: any[] = [];
+
+  constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
   // Carga las vacaciones al iniciar el componente
   async ngOnInit(): Promise<void> {
@@ -31,21 +33,30 @@ export class ShowVacationComponent {
   }
 
   private loadAllHolidays = async (): Promise<void> => {
-    try {
-      /* const holidays = await this.holidayService.getAllHolidays(); */
-      const userId = this.user.id;
-      const holidays = await this.holidayService.getHolidaysById(userId);
 
-      this.usersEvents = holidays.map(h => ({
+    try {
+
+      const user = this.user;
+
+      console.log('usuario', user);
+      {
+        user.role.name === 'ADMIN' ?
+        this.holidays = await this.holidayService.getAllHolidays()
+        :
+        this.holidays = await this.holidayService.getHolidaysById(user.id)
+      }
+
+      console.log('Cargando vacaciones', this.holidays);
+      this.usersEvents = this.holidays.map(h => ({
         start: new Date(h.holidayStartDate),
-        end:   new Date(h.holidayEndDate),
+        end: new Date(h.holidayEndDate),
         title: `Vacaciones: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
         type: h.vacationType,
         holidayId: h.holidayId
       } as CalendarEvent));
     } catch (err) {
       console.error('Error al cargar todas las vacaciones', err);
-    } 
+    }
   };
 
   // 
@@ -53,23 +64,28 @@ export class ShowVacationComponent {
     this.selectedDayDetail = day;
 
     //He tenido que añadirlo para que reconozca las propiedades personalizadas.
-    const events = day.events as CustomCalendarEv[]; 
+    const events = day.events as CustomCalendarEv[];
 
     if (events.length) {
-    // Construir HTML con detalles de cada vacación
-    const html = events.map(ev => {
-      console.log('ev', ev);
-      const start = ev.start.toLocaleDateString();
-      const end = ev.end?.toLocaleDateString();
-      return `<p><strong>${ev.title}</strong><br>El tipo de tu vacación es: ${ev.type}</p>`;
-    }).join('');
+      // Construir HTML con detalles de cada vacación
+      const html = events.map(ev => {
+        const holiday = this.holidays.find(h => h.holidayId === ev.holidayId);
+        const username = holiday?.user?.username ?? 'Desconocido';
 
-    await Swal.fire({
-      title: `Vacaciones activas el ${day.date.toLocaleDateString()}`,
-      html,
-      icon: 'info',
-      confirmButtonText: 'Cerrar'
-    });
+        return `<p>
+          <strong>${ev.title}</strong><br>
+          El tipo de la vacación es: ${ev.type}
+          ${this.user.role.name === 'ADMIN' && `<br><i>Usuario: ${username}</i>`}
+        </p>`;
+      }).join('');
+
+
+      await Swal.fire({
+        title: `Vacaciones activas el ${day.date.toLocaleDateString()}`,
+        html,
+        icon: 'info',
+        confirmButtonText: 'Cerrar'
+      });
     }
   };
 }
