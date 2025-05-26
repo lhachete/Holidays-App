@@ -17,6 +17,7 @@ describe('HomeComponent', () => {
     fixture.detectChanges();
   });
 
+  //comprueba que la clase HomeComponent no lanza errores en su constructor ni en ngOnInit
   it('should create', () => {
     expect(component).toBeTruthy();
   });
