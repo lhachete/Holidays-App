@@ -35,18 +35,14 @@ export class ShowVacationComponent {
   private loadAllHolidays = async (): Promise<void> => {
 
     try {
-
       const user = this.user;
-
-      console.log('usuario', user);
       {
-        user.role.name === 'ADMIN' ?
-        this.holidays = await this.holidayService.getAllHolidays()
-        :
-        this.holidays = await this.holidayService.getHolidaysById(user.id)
+        user.role.name === 'ADMIN' 
+        ? this.holidays = await this.holidayService.getAllHolidays()
+        : this.holidays = await this.holidayService.getHolidaysById(user.id)
       }
 
-      console.log('Cargando vacaciones', this.holidays);
+      //console.log('Cargando vacaciones', this.holidays);
       this.usersEvents = this.holidays.map(h => ({
         start: new Date(h.holidayStartDate),
         end: new Date(h.holidayEndDate),

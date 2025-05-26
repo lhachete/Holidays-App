@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-blueGFT">
     <div class="container">
-        
+
         <a class="navbar-brand" routerLink="/">
             <img src="images/GFT2.webp" alt="LogoGFT" class="logoGFT2" />
             Reserva de vacaciones
@@ -29,7 +29,8 @@
                         aria-expanded="false">
                         Mis vacaciones
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="vacationDropdown">
+                    <ul class="dropdown-menu border border-blueGFT rounded shadow-sm"
+                        aria-labelledby="vacationDropdown">
                         <li>
                             <a class="dropdown-item" routerLink="/vacation/show" routerLinkActive="active">
                                 Ver vacaciones
@@ -52,18 +53,34 @@
                         </li>
                     </ul>
                 </li>
-<!--                 @if (user?.role?.name === 'ADMIN') {
+                <!--                 @if (user?.role?.name === 'ADMIN') {
                     <li class="nav-item">
                         <a class="nav-link" routerLink="/admin" routerLinkActive="underline-custom text-white">
                             Admin
                         </a>
                     </li>
                 } -->
-                <a class="nav-link">
-                    <button (click)="logout()" class="btn-blueGFT" routerLinkActive="active button-active">
-                        Logout
-                    </button>
-                </a>
+                <li class="nav-item dropdown">
+                    <a class="btn-blueGFT nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <fa-icon [icon]="faUser" class="text-white me-2" />
+                        {{ user?.username }}
+                    </a>
+                    <ul class="dropdown-menu border border-blueGFT rounded shadow-sm" aria-labelledby="profileDropdown">
+                        <li>
+                            <a class="dropdown-item" routerLink="/profile" routerLinkActive="active">
+                                <fa-icon [icon]="faAddressCard" class=" me-2" />
+                                Perfil
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item cursor-pointer" (click)="logout()">
+                                <fa-icon [icon]="faSignOutAlt" class=" me-2" />
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 }
             </ul>
         </div>

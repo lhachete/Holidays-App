@@ -10,7 +10,10 @@ const loadAuthComponent = () =>
 const loadVacationComponent = () =>
     import('../../components/vacation/vacation.component').then(m => m.VacationComponent);
 
+const loadProfileComponent = () =>
+    import('../../components/profile/profile.component').then(m => m.ProfileComponent);
+
 export {
-    loadForbiddenComponent, loadNotFoundComponent, loadAuthComponent, loadVacationComponent 
+    loadForbiddenComponent, loadNotFoundComponent, loadAuthComponent, loadVacationComponent, loadProfileComponent 
 };
 

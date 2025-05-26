@@ -97,8 +97,8 @@ export class EditVacationComponent {
       .entries(this.vacationTypeOptions)
       .map(([val, label]) =>
         `<option value="${val}" ${val === data.type && 'selected'}>${label}</option>`
-      )
-      .join('');
+      ).join('');
+
     const html =
       `<label>Inicio:</label> <input type="date" id="start" class="swal2-input" value="${currentStart}"><br>` +
       `<label>Fin:</label> <input type="date" id="end" class="swal2-input" value="${currentEnd}"><br>` +
@@ -124,7 +124,6 @@ export class EditVacationComponent {
     const todayUtc = new Date();
     todayUtc.setUTCHours(0, 0, 0, 0);
 
-console.log(todayUtc.toISOString());
     if (newStart <= todayUtc) {
       Swal.fire('Error', 'La fecha de inicio debe ser posterior a la fecha actual.', 'error');
       return false;
@@ -138,7 +137,6 @@ console.log(todayUtc.toISOString());
     // Verificar solapamiento con otras vacaciones
     for (const event of this.userEvents as CustomCalendarEv[]) {
       if (event.holidayId === holidayId) continue; // Ignorar la vacación actual
-      console.log('event', event);
       const existingStart = new Date(event.start);
       const existingEnd = new Date(event.end!);
 

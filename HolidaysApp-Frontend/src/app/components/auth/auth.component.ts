@@ -98,7 +98,7 @@ export class AuthComponent implements OnInit {
     const result = await this.authService.login(userInput, password);
 
     if (result === 'OK') {
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl('/vacation/show');
     } else if (result === 'USER_ERROR') {
       this.userNotFound = true;
     } else if (result === 'PASS_ERROR') {

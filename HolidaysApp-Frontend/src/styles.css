@@ -42,6 +42,10 @@ app-login {
   color: #213E7F;
 }
 
+.border-blueGFT {
+  border-color: #405990 !important;
+}
+
 .btn:disabled {
   border-color: #153A7B !important;
 }
@@ -65,6 +69,11 @@ app-login {
   background-color: #405990 !important;
   color: white;
 }
+
+.dropdown-item {
+  cursor: pointer;
+}
+
 
 .dropdown-item.active, .dropdown-item:active {
   color: var(--bs-dropdown-link-active-color);
