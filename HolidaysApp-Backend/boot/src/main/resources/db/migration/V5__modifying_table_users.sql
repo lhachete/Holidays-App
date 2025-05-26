@@ -1,2 +1,2 @@
 ALTER TABLE users
-RENAME COLUMN hashPassword TO hash_password;
+RENAME COLUMN password TO hash_password;
