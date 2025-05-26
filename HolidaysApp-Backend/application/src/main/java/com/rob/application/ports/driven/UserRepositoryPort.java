@@ -12,7 +12,7 @@ public interface UserRepositoryPort {
 
     List<User> findAll();
 
-    User findByUsernameOrEmailAndPassword(String usernameOrEmail, String password);
+    User findByUsernameOrEmailAndHashedPassword(String usernameOrEmail, String password);
 
     User findByUsername(String username);
 
@@ -21,4 +21,6 @@ public interface UserRepositoryPort {
     User save(User user);
 
     User findById(Integer userId);
+
+    User findByUsernameOrEmail(String username, String email);
 }

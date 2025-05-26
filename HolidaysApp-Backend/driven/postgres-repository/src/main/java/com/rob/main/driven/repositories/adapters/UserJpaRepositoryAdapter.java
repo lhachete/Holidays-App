@@ -37,8 +37,8 @@ public class UserJpaRepositoryAdapter implements UserRepositoryPort {
     }
 
     @Override
-    public User findByUsernameOrEmailAndPassword(String usernameOrEmail, String password) {
-        return userMOMapper.toUser(userMOJpaRepository.findByUsernameOrEmailAndPassword(usernameOrEmail,usernameOrEmail,password));
+    public User findByUsernameOrEmailAndHashedPassword(String usernameOrEmail, String password) {
+        return userMOMapper.toUser(userMOJpaRepository.findByUsernameOrEmailAndHashedPassword(usernameOrEmail,usernameOrEmail,password));
     }
 
     @Override
@@ -59,5 +59,10 @@ public class UserJpaRepositoryAdapter implements UserRepositoryPort {
     @Override
     public User findById(Integer userId) {
         return userMOMapper.toUser(userMOJpaRepository.findById(userId).get());
+    }
+
+    @Override
+    public User findByUsernameOrEmail(String username, String email) {
+        return userMOMapper.toUser(userMOJpaRepository.findByUsernameOrEmail(username, email).get());
     }
 }

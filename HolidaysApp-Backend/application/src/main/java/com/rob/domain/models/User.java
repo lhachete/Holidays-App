@@ -15,6 +15,6 @@ public class User {
     private Role role;
     private String username;
     private String email;
-    private String password;
+    private String hashedPassword;
     private Boolean enabled;
 }
