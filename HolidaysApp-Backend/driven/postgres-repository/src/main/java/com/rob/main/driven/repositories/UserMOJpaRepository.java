@@ -11,7 +11,7 @@ public interface UserMOJpaRepository extends JpaRepository<UserMO, Integer> {
     List<UserMO> findByUsernameContaining(String username);
     @NonNull List<UserMO> findAll();
 
-    UserMO findByUsernameOrEmailAndPassword(String username, String email, String password);
+    UserMO findByUsernameOrEmailAndHashedPassword(String username, String email, String password);
     
     UserMO findByUsername(String username);
 

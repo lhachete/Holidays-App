@@ -20,7 +20,7 @@ public class UserMO {
     private Integer id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "rol_id", nullable = false)
     private RoleMO rol;
 
@@ -31,8 +31,8 @@ public class UserMO {
 
     @Size(max = 255)
     @NotNull
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "hash_password", nullable = false)
+    private String hashedPassword;
 
     @NotNull
     @Column(name = "enabled", nullable = false)

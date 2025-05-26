@@ -2,6 +2,8 @@ openapi: 3.0.0
 
 info: # Información general sobre la API
   title: HolidaysApp API Rest
+  # si hago un cambio, aumento la versión s arreglo un bug aumento el tercer 0 de la derecha
+  # si es una nueva funcionalidad aumento el segundo 0 de la derecha
   version: 1.0.0
   description: API Rest for HolidaysApp
 servers: # URLs base del servidor
@@ -849,7 +851,7 @@ paths: # Todos los endpoints de la API
       tags:
         - Users
       summary: Login with the User's username or email and password
-      description: Login with the User's username and password using a request body
+      description: Login with the User's username or email and password using a request body
       operationId: getUserByUsernameOrEmailAndPassword
       requestBody:
         required: true
@@ -864,7 +866,7 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDTO'
+                $ref: '#/components/schemas/LoginResponse'
         '400':
           description: Wrong Request – invalid parameters
           content:
@@ -922,8 +924,8 @@ paths: # Todos los endpoints de la API
     post:
       tags:
         - Users
-      summary: Register with the User's username, password and repeated password
-      description: Register with the User's username and password using a request body
+      summary: Register with the User's username, email, password and repeated password
+      description: Register with the User's username, email, password and repeat password using a request body
       operationId: registerByUsernameEmailAndPassword
       requestBody:
         required: true
@@ -1574,7 +1576,7 @@ components:
           type: string
         email:
           type: string
-        password:
+        hashedPassword:
           type: string
         enabled:
           type: boolean
@@ -1614,6 +1616,28 @@ components:
           pattern: '^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$'
           description: >
             Debe contener al menos una letra mayúscula y un carácter especial
+    LoginResponse:
+      description: This is the Login Response model
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT token for authentication
+        userId:
+          type: integer
+          description: ID of the logged-in user
+        username:
+          type: string
+          description: Username of the logged-in user
+        email:
+          type: string
+          format: email
+          description: Email of the logged-in user
+        rol:
+          $ref: '#/components/schemas/RoleDTO'
+        hashedPassword:
+          type: string
+          description: Hashed password of the logged-in user
     RegisterRequest:
       description: This is the Register Request model
       type: object

@@ -6,6 +6,7 @@ import com.rob.domain.models.User;
 import com.rob.driving.api.UsersApi;
 import com.rob.driving.controllers.adapters.error.ErrorResponse;
 import com.rob.driving.dtos.LoginRequest;
+import com.rob.driving.dtos.LoginResponse;
 import com.rob.driving.dtos.RegisterRequest;
 import com.rob.driving.dtos.UserDTO;
 import com.rob.driving.mappers.RoleDTOMapper;
@@ -14,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,6 +31,7 @@ public class UserControllerAdapter implements UsersApi {
     private final RoleServicePort roleServicePort;
     private final UserDTOMapper userDTOMapper;
     private final RoleDTOMapper roleDTOMapper;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(15);
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam(value = "username", required = false) String username) {
@@ -40,8 +43,13 @@ public class UserControllerAdapter implements UsersApi {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDTO> getUserByUsernameOrEmailAndPassword(@RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(userDTOMapper.toUserDTO(userServicePort.getUserByUsernameOrEmailAndPassword(loginRequest.getUsernameOrEmail(), loginRequest.getPassword())));
+    public ResponseEntity<LoginResponse> getUserByUsernameOrEmailAndPassword(@RequestBody LoginRequest loginRequest) {
+        //System.out.println(encoder.encode(loginRequest.getPassword()));
+        LoginResponse loginResponse = userDTOMapper.toLoginResponse(userServicePort.getUserByUsernameOrEmailAndHashedPassword(loginRequest.getUsernameOrEmail(), loginRequest.getPassword()));
+        loginRequest.setUsernameOrEmail(loginResponse.getUsername());
+        String token = userServicePort.verify(userDTOMapper.toUser(loginRequest));
+        loginResponse.setToken(token);
+        return ResponseEntity.ok(loginResponse);
     }
 
     @PostMapping("/register")
