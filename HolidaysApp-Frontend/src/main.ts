@@ -1,21 +1,25 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { importProvidersFrom } from '@angular/core';
+import { importProvidersFrom, LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory }           from 'angular-calendar/date-adapters/date-fns';
-import { provideHttpClient }      from '@angular/common/http';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { provideHttpClient } from '@angular/common/http';
 import { AppComponent } from './app/app.component';
-import { appConfig }    from './app/app.config';
+import { appConfig } from './app/app.config';
 
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './app/services/in-memory-data.service';
 
+
+registerLocaleData(localeEs, 'es-ES');
+
 bootstrapApplication(AppComponent, {
   providers: [
-    // Para que angular-calendar pueda usar animaciones
     provideAnimations(),
     provideHttpClient(),
-    
+
     importProvidersFrom(
       CalendarModule.forRoot({
         provide: DateAdapter,
@@ -29,6 +33,7 @@ bootstrapApplication(AppComponent, {
       }) */
     ),
 
+    { provide: LOCALE_ID, useValue: 'es-ES' },
     ...(appConfig.providers || [])
   ]
 })
