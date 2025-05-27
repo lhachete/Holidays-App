@@ -7,10 +7,12 @@ import com.rob.main.driven.repositories.DepartmentMOJpaRepository;
 import com.rob.main.driven.repositories.mappers.DepartmentMOMapper;
 import com.rob.main.driven.repositories.models.DepartmentMO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class DepartmentJpaRepositoryAdapter implements DepartmentRepositoryPort {
@@ -20,10 +22,11 @@ public class DepartmentJpaRepositoryAdapter implements DepartmentRepositoryPort 
 
     @Override
     public List<Department> findAll() {
+        log.info("Se van a obtener todos los departamentos");
         List<DepartmentMO> departmentMOS = departmentRepository.findAll();
-        System.out.println("DepartmentMO: " + departmentMOS);
+        log.info("Se van a mapear los departamentos a objetos de dominio");
         List<Department> departments = departmentMOS.stream().map(departmentMOMapper::toDepartment).toList();
-        System.out.println("Department: " + departments);
+        log.info("Se han obtenido {} departamentos", departments.size());
         return departments;
 //        return departmentRepository.findAll()
 //                .stream()
@@ -35,6 +38,7 @@ public class DepartmentJpaRepositoryAdapter implements DepartmentRepositoryPort 
 
     @Override
     public List<Department> findByNameContaining(String name) {
+        log.info("Se van a buscar departamentos que contengan el nombre: {}", name);
         return departmentRepository.findByNameContaining(name)
                 .stream()
                 .map(departmentMO -> {

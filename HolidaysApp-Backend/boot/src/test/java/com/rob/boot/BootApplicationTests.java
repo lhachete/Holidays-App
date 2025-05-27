@@ -1,6 +1,5 @@
-package com.rob;
+package com.rob.boot;
 
-import com.rob.boot.BootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
