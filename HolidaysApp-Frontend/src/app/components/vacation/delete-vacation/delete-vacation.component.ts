@@ -49,6 +49,7 @@ export class DeleteVacationComponent {
         showCancelButton: true,
         confirmButtonText: 'Si, borrar',
         confirmButtonColor: '#d33',
+        iconColor: '#d33',
         cancelButtonText: 'Cancelar',
       });
 
@@ -67,7 +68,7 @@ export class DeleteVacationComponent {
         Swal.fire({
           toast: true,
           icon: 'success',
-          title: 'Vacations deleted',
+          title: 'Vacaciones borradas',
           showConfirmButton: false,
           timer: 1500,
           position: 'top-end'
