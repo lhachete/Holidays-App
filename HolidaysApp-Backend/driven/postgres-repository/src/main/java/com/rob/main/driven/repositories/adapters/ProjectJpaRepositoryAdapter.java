@@ -6,10 +6,12 @@ import com.rob.main.driven.repositories.ProjectMOJpaRepository;
 import com.rob.main.driven.repositories.mappers.ProjectMOMapper;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Repository
 public class ProjectJpaRepositoryAdapter implements ProjectRepositoryPort {
@@ -19,6 +21,7 @@ public class ProjectJpaRepositoryAdapter implements ProjectRepositoryPort {
 
     @Override
     public List<Project> findByNameContaining(String name) {
+        log.info("Se van a buscar proyectos que contengan el nombre: {}", name);
         return projectRepository.findByNameContaining(name).
                 stream().
                 map(projectMOMapper::toProject).
@@ -27,6 +30,7 @@ public class ProjectJpaRepositoryAdapter implements ProjectRepositoryPort {
 
     @Override
     public List<Project> findAll() {
+    log.info("Se van a obtener todos los proyectos");
         return projectRepository.findAll().
                 stream().
                 map(projectMOMapper::toProject).

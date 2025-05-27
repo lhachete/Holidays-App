@@ -71,7 +71,6 @@ public class UserUseCase implements UserServicePort {
     @Override
     public String verify(User user) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getHashedPassword()));
-        //System.out.println(authentication.getCredentials());
         if (authentication.isAuthenticated()) {
             return jwtServiceUseCase.generateToken(user.getUsername());
         } else {

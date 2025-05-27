@@ -8,6 +8,7 @@ import com.rob.driving.dtos.OrganizationDTO;
 import com.rob.driving.dtos.RoleDTO;
 import com.rob.driving.mappers.RoleDTOMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api-rest/roles")
@@ -28,13 +30,13 @@ public class RoleControllerAdapter implements RolesApi {
     @GetMapping
     public ResponseEntity<List<RoleDTO>> getAllRoles(
             @RequestParam(name = "name", required = false) String name) {
+        log.info("Se ha recibido una solicitud GET a /roles con el parámetro name: {}", name);
         List<RoleDTO> rolesDtos = new ArrayList<>();
         List<Role> roles = roleServicePort.getRolesByName(name);
         for (Role role : roles) {
             rolesDtos.add(roleDTOMapper.toRoleDTO(role));
         }
+        log.debug("Se han encontrado {} roles", rolesDtos.size());
         return ResponseEntity.ok(rolesDtos);
-        // try catch con el error que lo coga de los use case
-        // ej: error 404 y un mensaje
     }
 }
