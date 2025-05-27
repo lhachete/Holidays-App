@@ -82,9 +82,14 @@ describe('AuthComponent', () => {
     expect(auth.getErrorMessages('password')).toContain('El campo es obligatorio');
   });
 
-  it('Debe mostrar mensajes de error personalizados', () => {
-    auth.registerErrors = { username: 'El nombre de usuario ya está en uso' };
-    expect(auth.getErrorMessages('username')).toContain('El nombre de usuario ya está en uso');
+  it('Debe mostrar si el usuario ya existe', () => {
+    auth.registerErrors = { username: 'Nombre de usuario ya en uso' };
+    expect(auth.getErrorMessages('username')).toContain('Nombre de usuario ya en uso');
+  });
+
+  it('Debe mostrar si el correo electrónico ya está en uso', () => {
+    auth.registerErrors = { email: 'Email ya en uso' };
+    expect(auth.getErrorMessages('email')).toContain('Email ya en uso');
   });
 
   it('Debe iniciar sesión correctamente', async () => {
@@ -100,7 +105,7 @@ describe('AuthComponent', () => {
   });
   
   /* it('Debe registrar un nuevo usuario correctamente', async () => {
-    spyOn(auth.authService, 'registerUser').and.returnValue(Promise.resolve({ id: 10, username: 'testuser', email: 'test@email.com', role: { id: 2, name: 'USUARIO' }, password: 'Test123!' }));
+    spyOn(auth.authService, 'registerUser').and.returnValue(Promise.resolve({ id: 10, username: 'testuser', email: 'test@email.com', rol: { id: 2, name: 'USUARIO' }, password: 'Test123!' }));
     await auth.register();
     expect(auth.router.navigateByUrl).toHaveBeenCalledWith('/login');
     expect(auth.registerErrors).toEqual({});

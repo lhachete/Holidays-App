@@ -25,15 +25,16 @@ export class AuthService {
     try {
       const foundUser = await this.userService.login(userInput, password);
       if (!foundUser) return 'USER_ERROR';
-      
+      console.log('Usuario encontrado:', foundUser);
        //! SUpongo que el token se llamará así en la API
-      //localStorage.setItem(foundUser.token);
+      const token = foundUser.token;
+      localStorage.setItem('authToken', token!);
 
       this.user = {
         id: foundUser.id,
         username: foundUser.username,
         email: foundUser.email,
-        role: foundUser.role
+        rol: foundUser.rol
         //token: foundUser.token , igual no es necesario añadir el token aquí
       };
 
@@ -68,7 +69,7 @@ export class AuthService {
     this.isAuthenticated = false;
     this.user = null;
     localStorage.removeItem('userSession');
-    // localStorage.removeItem('authToken');
+    localStorage.removeItem('authToken');
     this.router.navigateByUrl('/login');
   }
 
@@ -77,8 +78,8 @@ export class AuthService {
   }
 
   //Compruebo si el usuario tiene el rol indicado
-  hasRole(role: string): boolean {
-  return this.user?.role?.name === role;
+  hasRole(rol: string): boolean {
+  return this.user?.rol?.name === rol;
 }
 
   //Comprueba si ya existe un usuario //!(para pruebas con mock)

@@ -6,6 +6,6 @@ export default interface User {
     email: string;
     password?: string; // No es necesario en el frontend, pero lo dejo por si hace falta.
     repeatPassword?: string; // No es necesario en el frontend, pero lo dejo por si hace falta.
-    role: Role;
+    rol: Role;
     token?: string; // Para cuando se creen los tokens de acceso.
 }

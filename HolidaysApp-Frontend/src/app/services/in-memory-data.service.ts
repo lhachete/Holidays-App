@@ -14,8 +14,8 @@ export class InMemoryDataService implements InMemoryDbService {
         ];
 
         const users: User[] = [
-            { id: 1, username: 'admin', email: 'admin@example.com', password: 'Dedede123º', role: { id: 1, name: 'ADMIN' } },
-            { id: 2, username: 'user1', email: 'user1@example.com', password: 'Dedede123º', role: { id: 2, name: 'USUARIO' } }
+            { id: 1, username: 'admin', email: 'admin@example.com', password: 'Dedede123º', rol: { id: 1, name: 'ADMIN' } },
+            { id: 2, username: 'user1', email: 'user1@example.com', password: 'Dedede123º', rol: { id: 2, name: 'USUARIO' } }
         ];
 
         return { holidays, users };

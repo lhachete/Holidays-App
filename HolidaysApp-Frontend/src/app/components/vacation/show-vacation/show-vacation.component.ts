@@ -37,7 +37,7 @@ export class ShowVacationComponent {
     try {
       const user = this.user;
       {
-        user.role.name === 'ADMIN' 
+        user.rol.name === 'ADMIN' 
         ? this.holidays = await this.holidayService.getAllHolidays()
         : this.holidays = await this.holidayService.getHolidaysById(user.id)
       }
@@ -71,7 +71,7 @@ export class ShowVacationComponent {
         return `<p>
           <strong>${ev.title}</strong><br>
           El tipo de la vacación es: ${ev.type}
-          ${this.user.role.name === 'ADMIN' && `<br><i>Usuario: ${username}</i>`}
+          ${this.user.rol.name === 'ADMIN' && `<br><i>Usuario: ${username}</i>`}
         </p>`;
       }).join('');
 
