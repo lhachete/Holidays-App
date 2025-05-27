@@ -42,7 +42,7 @@ export class ShowVacationComponent {
         : this.holidays = await this.holidayService.getHolidaysById(user.id)
       }
 
-      //console.log('Cargando vacaciones', this.holidays);
+      console.log('Cargando vacaciones', this.holidays);
       this.usersEvents = this.holidays.map(h => ({
         start: new Date(h.holidayStartDate),
         end: new Date(h.holidayEndDate),
