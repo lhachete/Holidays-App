@@ -3,19 +3,26 @@ import { FormGroup, Validators, ReactiveFormsModule, FormControl, AbstractContro
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FieldConfig } from '../../models/FieldConfig.model';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { VALIDATION_MESSAGES } from '../../shared/constants/validation.constants';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [RouterLink, ReactiveFormsModule, CommonModule, FontAwesomeModule],
   templateUrl: './auth.component.html',
 })
 export class AuthComponent implements OnInit {
   mode: 'login' | 'register' = 'login';
   userNotFound = false;
   wrongPassword = false;
+  
+  faEye = faEye;
+  faEyeSlash = faEyeSlash;
+  showPasswordFields: { [key: string]: boolean } = {};
   registerErrors: { [key: string]: string } = {};
 
   // Campos del formulario
@@ -49,6 +56,10 @@ export class AuthComponent implements OnInit {
     this.route.data.subscribe(data => {
       if (data['mode']) this.mode = data['mode'];
     });
+
+    this.fields
+      .filter(f => f.type === 'password')
+      .forEach(f => this.showPasswordFields[f.key] = false);
   }
 
   get form(): FormGroup {
@@ -62,6 +73,10 @@ export class AuthComponent implements OnInit {
   isTouched(control: AbstractControl | null): boolean {
     return Boolean(control && (control.dirty || control.touched));
   }
+
+  togglePasswordVisibility = (key: string): void => {
+    this.showPasswordFields[key] = !this.showPasswordFields[key];
+  };
 
   getErrorMessages(key: string): string[] {
     const control = this.form.get(key);
@@ -123,24 +138,24 @@ export class AuthComponent implements OnInit {
     if (!valid) {
       this.registerErrors = errors;
     } else {
-  try {
-    await this.authService.registerUser({ username, password, repeatPassword, email });
+      try {
+        await this.authService.registerUser({ username, password, repeatPassword, email });
 
-    Swal.fire({
-      icon: 'success',
-      title: '¡Registro exitoso!',
-      text: 'Ya puedes iniciar sesión.',
-      iconColor: '#153A7B',
-      confirmButtonText: 'Vale',
-      confirmButtonColor: '#153A7B',
-    });
+        Swal.fire({
+          icon: 'success',
+          title: '¡Registro exitoso!',
+          text: 'Ya puedes iniciar sesión.',
+          iconColor: '#153A7B',
+          confirmButtonText: 'Vale',
+          confirmButtonColor: '#153A7B',
+        });
 
-    this.router.navigateByUrl('/login');
+        this.router.navigateByUrl('/login');
 
-  } catch (serverMessage: any) {
-    this.registerErrors = this.parseServerErrors(serverMessage);
-  }
-}
+      } catch (serverMessage: any) {
+        this.registerErrors = this.parseServerErrors(serverMessage);
+      }
+    }
   }
 
   submit(): void {
@@ -171,31 +186,31 @@ export class AuthComponent implements OnInit {
 
   // Parsear errores del servidor
   private parseServerErrors(message: string): { [key: string]: string } {
-  const errors: { [key: string]: string } = {};
-  // con esto separo los errores que estan divididos por ";" 
-  const entries = message.split(';');
+    const errors: { [key: string]: string } = {};
+    // con esto separo los errores que estan divididos por ";" 
+    const entries = message.split(';');
 
-  entries.forEach(entry => {
-    const parts = entry.split(':');
+    entries.forEach(entry => {
+      const parts = entry.split(':');
 
-    if (parts.length >= 2) {
-      const field = parts[0].trim();
-      const msg = parts.slice(1).join(':').trim(); // por si el mensaje contiene ":"
-      errors[field] = msg;
-    } else {
-      const trimmed = entry.trim();
-      if (!trimmed) return;
+      if (parts.length >= 2) {
+        const field = parts[0].trim();
+        const msg = parts.slice(1).join(':').trim(); // por si el mensaje contiene ":"
+        errors[field] = msg;
+      } else {
+        const trimmed = entry.trim();
+        if (!trimmed) return;
 
-      if (trimmed.startsWith('U') || trimmed.startsWith('N')) {
-        errors['username'] = trimmed;
-      } else if (trimmed.startsWith('E')) {
-        errors['email'] = trimmed;
+        if (trimmed.startsWith('U') || trimmed.startsWith('N')) {
+          errors['username'] = trimmed;
+        } else if (trimmed.startsWith('E')) {
+          errors['email'] = trimmed;
+        }
       }
-    }
-  });
+    });
 
-  return errors;
-}
+    return errors;
+  }
 
 
 

@@ -13,21 +13,36 @@
                         @for (field of currentFields; track field.key) {
                         <div class="mb-3">
                             <label [for]="field.key" class="form-label">{{ field.label }}</label>
-                            <input [type]="field.type" class="form-control" [id]="field.key"
-                                [formControlName]="field.key" [placeholder]="'Introduce ' + field.label" [class.is-invalid]="
+
+                            <div class="input-group">
+                                <input
+                                    [type]="field.type === 'password' && showPasswordFields[field.key] ? 'text' : field.type"
+                                    class="form-control" [id]="field.key" [formControlName]="field.key"
+                                    [placeholder]="'Introduce ' + field.label" [class.is-invalid]="
                                     form.get(field.key)?.invalid && isTouched(form.get(field.key))
                                     || (mode === 'login' && field.key==='username' && userNotFound)
                                     || (mode === 'login' && field.key==='password' && wrongPassword)" />
 
-                                <!-- Si hay errores los muestro -->
+                                <!-- Icono del ojo a la derecha en las passwd -->
+                                @if (field.type === 'password') {
+                                <span class="input-group-text bg-white border-start-0">
+                                    <fa-icon class="cursor-pointer"
+                                        [icon]="showPasswordFields[field.key] ? faEyeSlash : faEye"
+                                        (click)="togglePasswordVisibility(field.key)"></fa-icon>
+                                </span>
+                                }
+                            </div>
+
+                            <!-- Errores -->
                             @if (getErrorMessages(field.key).length > 0) {
                                 @for (msg of getErrorMessages(field.key); track $index) {
-                                    <div class="mt-1 ms-1">
-                                        <small class="text-danger">{{ msg }}</small>
-                                    </div>
+                                <div class="mt-1 ms-1">
+                                    <small class="text-danger">{{ msg }}</small>
+                                </div>
                                 }
                             }
                         </div>
+
                         }
 
                         @if (mode==='login' && (userNotFound || wrongPassword)) {
@@ -38,7 +53,8 @@
                         </div>
                         }
 
-                        <button type="submit" [disabled]="form.invalid" class="btn btn-primary mt-1 w-100 bg-blueGFT bg-blueGFT-hover">
+                        <button type="submit" [disabled]="form.invalid"
+                            class="btn btn-primary mt-1 w-100 bg-blueGFT bg-blueGFT-hover">
                             {{ mode === 'login' ? 'Iniciar sesión' : 'Registrarse' }}
                         </button>
                     </form>
@@ -49,7 +65,7 @@
                             <a routerLink="/register" class="text-blueGFT">Registrarse</a>
                         </span>
                         } @else {
-                        <span>  ¿Ya tienes una cuenta?
+                        <span> ¿Ya tienes una cuenta?
                             <a routerLink="/login" class="text-blueGFT">Iniciar sesión</a>
                         </span>
                         }
