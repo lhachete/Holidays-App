@@ -25,6 +25,12 @@ public class JWTServiceUseCase implements JWTServicePort {
     public JWTServiceUseCase() {
 
         try {
+            // Genera una clave secreta para firmar los JWT con HMAC SHA-256
+            // HMAC SHA-256 es un algoritmo de firma simétrica que utiliza una clave secreta para firmar y verificar la integridad del token.
+            // El HMAC (Hash-based Message Authentication Code) es un mecanismo de autenticación que combina una función hash criptográfica
+            // con una clave secreta.
+            // HmacSHA256 tiene un input, una hash function y una clave secreta.
+            // Se conoce quien es el que firma el token y que la clave secreta es conocida por el emisor y el receptor del token.
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
             SecretKey sk = keyGen.generateKey();
             secretkey = Base64.getEncoder().encodeToString(sk.getEncoded());
