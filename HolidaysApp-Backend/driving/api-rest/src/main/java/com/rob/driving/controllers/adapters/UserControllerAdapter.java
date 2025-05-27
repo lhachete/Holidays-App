@@ -60,7 +60,7 @@ public class UserControllerAdapter implements UsersApi {
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerByUsernameEmailAndPassword(@Valid @RequestBody RegisterRequest registerRequest) {
         log.info("Solicitud POST /users/register recibida con datos: {}", registerRequest);
-        registerRequest.setRole(roleDTOMapper.toRoleDTO(roleServicePort.getRolesByName("ADMIN").get(0)));
+        registerRequest.setRole(roleDTOMapper.toRoleDTO(roleServicePort.getRolesByName("USUARIO").get(0)));
         if(!registerRequest.getPassword().equals(registerRequest.getRepeatPassword())) {
            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las contraseñas no coinciden");
         }
