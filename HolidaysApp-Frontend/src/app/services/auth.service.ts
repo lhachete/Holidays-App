@@ -59,6 +59,7 @@ export class AuthService {
     } catch (err: any) {
 
       if (err.error && err.error.message) {
+        console.error('Error al registrar el usuario:', err.error.message);
         throw err.error.message; // envio el mensaje de error
       } else {
         throw 'Unknown error occurred';
@@ -72,7 +73,7 @@ export class AuthService {
     if (token) {
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
-        return payload.exp * 5000; // - (590 * 1000)
+        return payload.exp * 1000; // - (590 * 1000)
       } catch {
         return null;
       }
