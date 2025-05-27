@@ -114,7 +114,9 @@ export class AuthService {
       icon: 'info',
       title: 'Sesión expirada',
       text: 'Tu sesión ha caducado. Por favor, vuelve a iniciar sesión.',
-      confirmButtonText: 'Aceptar'
+      confirmButtonText: 'Aceptar',
+      iconColor: '#213E7F',
+      confirmButtonColor: '#213E7F'
     }).then(() => this.logout());
   };
 
