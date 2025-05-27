@@ -29,6 +29,7 @@ export class AuthService {
       const foundUser = await this.userService.login(userInput, password);
       if (!foundUser) return 'USER_ERROR';
 
+      console.log('Usuario encontrado:', foundUser);
       const token = foundUser.token!;
       localStorage.setItem('authToken', token);
 
@@ -72,7 +73,7 @@ export class AuthService {
     if (token) {
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
-        return payload.exp * 1000; // - (590 * 1000)
+        return payload.exp * 5000; // - (590 * 1000)
       } catch {
         return null;
       }

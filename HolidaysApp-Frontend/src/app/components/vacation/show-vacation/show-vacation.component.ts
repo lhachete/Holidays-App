@@ -50,6 +50,7 @@ export class ShowVacationComponent {
         type: h.vacationType,
         holidayId: h.holidayId
       } as CalendarEvent));
+      console.log('Eventos de vacaciones cargados', this.usersEvents);
     } catch (err) {
       console.error('Error al cargar todas las vacaciones', err);
     }
@@ -67,11 +68,10 @@ export class ShowVacationComponent {
       const html = events.map(ev => {
         const holiday = this.holidays.find(h => h.holidayId === ev.holidayId);
         const username = holiday?.user?.username ?? 'Desconocido';
-
         return `<p>
           <strong>${ev.title}</strong><br>
           El tipo de la vacación es: ${ev.type}
-          ${this.user.rol.name === 'ADMIN' && `<br><i>Usuario: ${username}</i>`}
+          ${this.user.rol.name === 'ADMIN' ? `<br><i>Usuario: ${username}</i>` : ''}
         </p>`;
       }).join('');
 

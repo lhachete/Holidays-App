@@ -1,10 +1,10 @@
 import Swal from 'sweetalert2';
 
 const vacationTypeOptions = {
-  Vacation: 'Vacaciones',
-  PTO: 'Días personales',
-  Sick: 'Baja por enfermedad',
-  Other: 'Otro'
+  Vacaciones: 'Vacaciones',
+  Personales: 'Días personales',
+  Enfermedad: 'Baja por enfermedad',
+  Otro: 'Otro'
 };
 
 

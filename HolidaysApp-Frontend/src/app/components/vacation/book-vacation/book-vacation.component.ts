@@ -52,7 +52,6 @@ export class BookVacationComponent {
   // Inicializa cargando las vacaciones del usuario
   async ngOnInit(): Promise<void> {
     const userId = this.user.userId;
-    console.log('usuario', this.user);
     const holidays = await this.holidayService.getHolidaysById(userId);
     this.userEvents = holidays.map(h => ({
       start: new Date(h.holidayStartDate),
