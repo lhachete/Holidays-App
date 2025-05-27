@@ -48,6 +48,7 @@ export class DeleteVacationComponent {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si, borrar',
+        confirmButtonColor: '#d33',
         cancelButtonText: 'Cancelar',
       });
 

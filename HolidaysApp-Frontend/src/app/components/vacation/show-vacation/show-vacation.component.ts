@@ -39,7 +39,7 @@ export class ShowVacationComponent {
       {
         user.rol.name === 'ADMIN' 
         ? this.holidays = await this.holidayService.getAllHolidays()
-        : this.holidays = await this.holidayService.getHolidaysById(user.id)
+        : this.holidays = await this.holidayService.getHolidaysById(user.userId)
       }
 
       console.log('Cargando vacaciones', this.holidays);

@@ -51,7 +51,7 @@ export class AuthService {
     }
   }
 
-  //Registra un nuevo usuario en la API (in-memory para pruebas) email: string; < eliminado
+  //Registra un nuevo usuario en la API (in-memory para pruebas)
   async registerUser(user: { username: string; password: string; repeatPassword: string; email: string; }): Promise<User> {
     try {
       const newUser = await this.userService.addUser(user as User);
