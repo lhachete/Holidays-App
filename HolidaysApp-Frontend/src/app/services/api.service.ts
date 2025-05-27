@@ -10,7 +10,6 @@ export class ApiService {
 
     private getAuthHeaders(): HttpHeaders {
         const token = localStorage.getItem('authToken');
-        console.log('Token de autenticación:', token);
         return new HttpHeaders({
             'Content-Type': 'application/json',
             ...(token ? { 'Authorization': `Bearer ${token}` } : {})

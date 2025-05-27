@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
+import Swal from 'sweetalert2';
 import User from '../models/User';
 
 @Injectable({
@@ -9,6 +10,7 @@ import User from '../models/User';
 export class AuthService {
   public user: User | null = null;
   public isAuthenticated = false;
+  private sessionTimeoutId?: number;
 
   constructor(
     private router: Router,
@@ -18,6 +20,7 @@ export class AuthService {
     if (session) {
       this.user = JSON.parse(session);
       this.isAuthenticated = true;
+      this.scheduleSessionExpiration();
     }
   }
 
@@ -25,22 +28,21 @@ export class AuthService {
     try {
       const foundUser = await this.userService.login(userInput, password);
       if (!foundUser) return 'USER_ERROR';
-      console.log('Usuario encontrado:', foundUser);
-       //! SUpongo que el token se llamará así en la API
-      const token = foundUser.token;
-      localStorage.setItem('authToken', token!);
+
+      const token = foundUser.token!;
+      localStorage.setItem('authToken', token);
 
       this.user = {
-        id: foundUser.id,
+        userId: foundUser.userId,
         username: foundUser.username,
         email: foundUser.email,
         rol: foundUser.rol
-        //token: foundUser.token , igual no es necesario añadir el token aquí
       };
 
-      
       this.isAuthenticated = true;
       localStorage.setItem('userSession', JSON.stringify(this.user));
+
+      this.scheduleSessionExpiration();
       return 'OK';
 
     } catch (err: any) {
@@ -51,18 +53,69 @@ export class AuthService {
 
   //Registra un nuevo usuario en la API (in-memory para pruebas) email: string; < eliminado
   async registerUser(user: { username: string; password: string; repeatPassword: string; email: string; }): Promise<User> {
-  try {
-    const newUser = await this.userService.addUser(user as User);
-    return newUser;
-  } catch (err: any) {
+    try {
+      const newUser = await this.userService.addUser(user as User);
+      return newUser;
+    } catch (err: any) {
 
-    if (err.error && err.error.message) {
-      throw err.error.message; // envio el mensaje de error
-    } else {
-      throw 'Unknown error occurred';
+      if (err.error && err.error.message) {
+        throw err.error.message; // envio el mensaje de error
+      } else {
+        throw 'Unknown error occurred';
+      }
     }
   }
-}
+
+
+  private getTokenExpirationTime = (): number | null => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.exp * 1000; // - (590 * 1000)
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  };
+
+  private scheduleSessionExpiration = (): void => {
+    this.clearSessionTimeout();
+
+    const expTime = this.getTokenExpirationTime();
+    if (expTime) {
+
+      const now = Date.now();
+      let timeout = expTime - now;
+
+      if (timeout <= 0) {
+        this.sessionExpired();
+        return;
+      }
+
+      // Programar la expiración de la sesión
+      this.sessionTimeoutId = window.setTimeout(() => {
+        this.sessionExpired();
+      }, timeout);
+    }
+  };
+
+  private clearSessionTimeout = (): void => {
+    if (this.sessionTimeoutId) {
+      clearTimeout(this.sessionTimeoutId);
+      this.sessionTimeoutId = undefined;
+    }
+  };
+
+  private sessionExpired = (): void => {
+    Swal.fire({
+      icon: 'info',
+      title: 'Sesión expirada',
+      text: 'Tu sesión ha caducado. Por favor, vuelve a iniciar sesión.',
+      confirmButtonText: 'Aceptar'
+    }).then(() => this.logout());
+  };
 
 
   logout(): void {
@@ -78,16 +131,15 @@ export class AuthService {
   }
 
   //Compruebo si el usuario tiene el rol indicado
-  hasRole(rol: string): boolean {
-  return this.user?.rol?.name === rol;
-}
+  hasRole = (rol: string): boolean =>
+    this.user?.rol?.name === rol;
+
 
   //Comprueba si ya existe un usuario //!(para pruebas con mock)
-/*   async isUsernameTaken(username: string): Promise<boolean> {
-    const users = await this.userService.getAllUsers();
-    return users.some(u => u.username === username);
-  } */
-
+  /*   async isUsernameTaken(username: string): Promise<boolean> {
+      const users = await this.userService.getAllUsers();
+      return users.some(u => u.username === username);
+    } */
 
   //Comprueba si ya existe un email //!(para pruebas con mock) 
   /* async isEmailTaken(email: string): Promise<boolean> {
@@ -107,12 +159,12 @@ export class AuthService {
 
     const errs: Record<string, string> = {};
 
-/*     if (await this.isUsernameTaken(data.username)) {
-      errs['username'] = 'Username is already taken.';
-    } */
-/*     if (await this.isEmailTaken(data.email)) {
-      errs['email'] = 'Email is already registered.';
-    } */
+    /*     if (await this.isUsernameTaken(data.username)) {
+          errs['username'] = 'Username is already taken.';
+        } */
+    /*     if (await this.isEmailTaken(data.email)) {
+          errs['email'] = 'Email is already registered.';
+        } */
     if (data.password !== data.repeatPassword) {
       errs['password'] = 'Las contraseñas no coinciden.';
     }

@@ -23,7 +23,7 @@ export class DeleteVacationComponent {
 
   // Carga las vacaciones al iniciar el componente
   async ngOnInit(): Promise<void> {
-    const userId = this.user.id;
+    const userId = this.user.userId;
     const holidays = await this.holidayService.getHolidaysById(userId);
 
     this.userEvents = holidays.map(h => ({

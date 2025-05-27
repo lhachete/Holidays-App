@@ -34,7 +34,7 @@ export class UserService {
   }
 
   updateUser(user: User): Promise<User> {
-    return this.api.put<User>(`${this.usersUrl}/${user.id}`, user);
+    return this.api.put<User>(`${this.usersUrl}/${user.userId}`, user);
   }
 
   deleteUser(id: number): Promise<void> {

@@ -33,7 +33,7 @@ export class EditVacationComponent {
   }
 
   private loadUserHolidays = async (): Promise<void> => {
-    const userId = this.user.id;
+    const userId = this.user.userId;
     const holidays = await this.holidayService.getHolidaysById(userId);
     this.userEvents = holidays.map(holiday => {
       return this.mapToCalendarEvent(holiday)
@@ -78,7 +78,7 @@ export class EditVacationComponent {
   private prepareEditData = (event: CustomCalendarEv) => {
 
     const holidayId = event.holidayId;
-    const userId = this.user.id;
+    const userId = this.user.userId;
     if (!holidayId || !userId) {
       // console.error('Evento inválido para editar:', event);
       return null;
