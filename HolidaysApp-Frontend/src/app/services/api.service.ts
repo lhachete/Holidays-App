@@ -15,7 +15,7 @@ export class ApiService {
             ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         });
     }
-
+    
     getApiUrl(): string {
         return environment.apiUrl;
     }

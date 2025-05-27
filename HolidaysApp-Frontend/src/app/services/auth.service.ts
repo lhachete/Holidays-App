@@ -29,7 +29,6 @@ export class AuthService {
       const foundUser = await this.userService.login(userInput, password);
       if (!foundUser) return 'USER_ERROR';
 
-      console.log('Usuario encontrado:', foundUser);
       const token = foundUser.token!;
       localStorage.setItem('authToken', token);
 
