@@ -14,8 +14,8 @@ export class InMemoryDataService implements InMemoryDbService {
         ];
 
         const users: User[] = [
-            { userId: 1, username: 'admin', email: 'admin@example.com', password: 'Dedede123º', rol: { id: 1, name: 'ADMIN' }, color: '#ff0000' },
-            { userId: 2, username: 'user1', email: 'user1@example.com', password: 'Dedede123º', rol: { id: 2, name: 'USUARIO' }, color: '#f333ff' },
+            { userId: 1, username: 'admin', email: 'admin@example.com', password: 'Dedede123º', rol: { id: 1, name: 'ADMIN' }, color: '#ff0000', name: 'Admin', lastName: 'Admin Admin' },
+            { userId: 2, username: 'user1', email: 'user1@example.com', password: 'Dedede123º', rol: { id: 2, name: 'USUARIO' }, color: '#f333ff', name: 'User', lastName: 'User User' },
         ];
 
         return { holidays, users };
@@ -33,7 +33,6 @@ export class InMemoryDataService implements InMemoryDbService {
         return 1;
     }
 
-    // Intercepta **todos** los GET de la colección holidays
     get(reqInfo: RequestInfo): Observable<ResponseOptions> | undefined {
     const { collectionName, query } = reqInfo;
 

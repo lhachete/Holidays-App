@@ -36,6 +36,9 @@ export class AuthService {
         userId: foundUser.userId,
         username: foundUser.username,
         email: foundUser.email,
+        name: foundUser.name,
+        lastName: foundUser.lastName,
+        color: foundUser.color,
         rol: foundUser.rol
       };
 
@@ -55,7 +58,8 @@ export class AuthService {
   }
 
   //Registra un nuevo usuario en la API (in-memory para pruebas)
-  async registerUser(user: { username: string; password: string; repeatPassword: string; email: string; }): Promise<User> {
+  async registerUser(user: { username: string; password: string; repeatPassword: string; email: string; name: string, lastName: string, color: string }): Promise<User> {
+    console.log('Registrando usuario:', user);
     try {
       const newUser = await this.userService.addUser(user as User);
       return newUser;
@@ -141,36 +145,13 @@ export class AuthService {
     this.user?.rol?.name === rol;
 
 
-  //Comprueba si ya existe un usuario //!(para pruebas con mock)
-  /*   async isUsernameTaken(username: string): Promise<boolean> {
-      const users = await this.userService.getAllUsers();
-      return users.some(u => u.username === username);
-    } */
-
-  //Comprueba si ya existe un email //!(para pruebas con mock) 
-  /* async isEmailTaken(email: string): Promise<boolean> {
-    const users = await this.userService.getAllUsers();
-    return users.some(u => u.email === email);
-  } */
-
-
-  // Valida todos los datos de registro y devuelve posibles errores
-  async validateRegistration(data: {
-    username: string;
-    email: string;
+  async validatePasswords(data: {
     password: string;
     repeatPassword: string;
   }): Promise<{ valid: boolean; errors: Record<string, string> }> {
 
-
     const errs: Record<string, string> = {};
 
-    /*     if (await this.isUsernameTaken(data.username)) {
-          errs['username'] = 'Username is already taken.';
-        } */
-    /*     if (await this.isEmailTaken(data.email)) {
-          errs['email'] = 'Email is already registered.';
-        } */
     if (data.password !== data.repeatPassword) {
       errs['password'] = 'Las contraseñas no coinciden.';
     }

@@ -6,8 +6,8 @@ import { FieldConfig } from '../../models/FieldConfig.model';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { VALIDATION_MESSAGES } from '../../shared/constants/validation.constants';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -28,10 +28,13 @@ export class AuthComponent implements OnInit {
   // Campos del formulario
   fields: FieldConfig[] = [
     { key: 'userInput', label: 'Nombre de usuario o email', type: 'text', modes: ['login'] },
-    { key: 'email', label: 'Email', type: 'email', modes: ['register'] },
     { key: 'username', label: 'Nombre de usuario', type: 'text', modes: ['register'] },
+    { key: 'email', label: 'Email', type: 'email', modes: ['register'] },
+    { key: 'name', label: 'Nombre', type: 'text', modes: ['register'] },
+    { key: 'lastName', label: 'Apellidos', type: 'text', modes: ['register'] },
     { key: 'password', label: 'Contraseña', type: 'password', modes: ['login', 'register'] },
     { key: 'confirmPassword', label: 'Confirmar contraseña', type: 'password', modes: ['register'] },
+    { key: 'color', label: 'Color de usuario', type: 'color', modes: ['register'] }
   ];
 
   loginForm = new FormGroup({
@@ -42,8 +45,11 @@ export class AuthComponent implements OnInit {
   registerForm = new FormGroup({
     username: new FormControl('', [Validators.required, Validators.minLength(3)]),
     email: new FormControl('', [Validators.required, Validators.email]),
+    name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
+    lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
     password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$/)]),
-    confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$/)])
+    confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$/)]),
+    color: new FormControl('#153A7B', [Validators.required])
   }, { validators: this.passwordsMatchValidator() });
 
   constructor(
@@ -126,20 +132,24 @@ export class AuthComponent implements OnInit {
     }
 
     this.registerErrors = {};  // limpieza de errores
-    const username = this.registerForm.value.username ?? '';
-    const email = this.registerForm.value.email ?? '';
     const password = this.registerForm.value.password ?? '';
     const repeatPassword = this.registerForm.value.confirmPassword ?? '';
+    const username = this.registerForm.value.username ?? '';
+    const email = this.registerForm.value.email ?? '';
+    const name = this.registerForm.value.name ?? '';
+    const lastName = this.registerForm.value.lastName ?? '';
+    const color = this.registerForm.value.color ?? '#153A7B';
 
-    const { valid, errors } = await this.authService.validateRegistration({
-      username, email, password, repeatPassword
+
+    const { valid, errors } = await this.authService.validatePasswords({
+      password, repeatPassword, 
     });
 
     if (!valid) {
       this.registerErrors = errors;
     } else {
       try {
-        await this.authService.registerUser({ username, password, repeatPassword, email });
+        await this.authService.registerUser({ username, password, repeatPassword, email, name, lastName, color });
 
         Swal.fire({
           icon: 'success',

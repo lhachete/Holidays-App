@@ -1,3 +1,5 @@
+import { max } from "date-fns";
+
 export const VALIDATION_MESSAGES: {
     [controlName: string]: { [errorKey: string]: string }
 } = {
@@ -20,5 +22,18 @@ export const VALIDATION_MESSAGES: {
         required: 'La confirmación de contraseña es obligatoria.',
         minlength: 'Debe tener al menos {{requiredLength}} caracteres, incluir al menos una letra mayúscula y un carácter especial.',
         passwordMismatch: 'Las contraseñas no coinciden.'
+    },
+    name: {
+        required: 'El nombre es obligatorio.',
+        minlength: 'Debe tener al menos {{requiredLength}} caracteres.',
+        maxlength: 'No puede tener más de {{requiredLength}} caracteres.'
+    },
+    lastName: {
+        required: 'Los apellidos son obligatorios.',
+        minlength: 'Debe tener al menos {{requiredLength}} caracteres.',
+        maxlength: 'No puede tener más de {{requiredLength}} caracteres.'
+    },
+    color: {
+        required: 'El color es obligatorio.',
     }
 };
