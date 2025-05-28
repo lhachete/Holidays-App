@@ -16,7 +16,6 @@ public class Employee {
     private Integer id;
     private Department dept;
     private Project project;
-    private User user;
     private String nif;
     private LocalDate birthday;
     private String countryOfBirth;

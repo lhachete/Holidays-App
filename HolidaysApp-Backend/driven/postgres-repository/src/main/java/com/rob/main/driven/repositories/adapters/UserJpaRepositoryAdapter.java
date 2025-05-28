@@ -21,7 +21,6 @@ public class UserJpaRepositoryAdapter implements UserRepositoryPort {
     private final UserMOJpaRepository userMOJpaRepository;
     private final UserMOMapper userMOMapper;
 
-
     @Override
     public List<User> findByNameContaining(String name) {
         log.info("Se van a buscar usuarios que contengan el nombre: {}", name);

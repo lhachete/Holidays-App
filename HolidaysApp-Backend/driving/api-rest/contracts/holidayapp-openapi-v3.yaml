@@ -1528,41 +1528,37 @@ components:
         project:
           $ref: '#/components/schemas/ProjectDTO'
           #format: int32
-        user:
-          $ref: '#/components/schemas/UserDTO'
-          #format: int32
-        nif:
-          type: string
-        birthday:
-          type: string
-          format: date
-        country_of_birth:
-          type: string
-        birth_city:
-          type: string
-        personal_phone:
-          type: string
         first_name:
           type: string
         last_name:
           type: string
-        title:
+    EmployeeCreateDTO:
+      description: This is the Employee Response model
+      required:
+        - firstName
+        - lastName
+        - codeColor
+      type: object
+      properties:
+        name:
           type: string
-        gender:
+        lastName:
           type: string
-        marital_status:
+        codeColor:
           type: string
-        nationality:
+    EmployeeResponseDTO:
+      description: This is the Employee Response model
+      required:
+        - personId
+        - firstName
+        - lastName
+      type: object
+      properties:
+        personId:
+          type: integer
+        name:
           type: string
-        second_nationality:
-          type: string
-        primary_residence:
-          type: string
-        personal_email:
-          type: string
-        secondary_email:
-          type: string
-        work_email:
+        lastName:
           type: string
     UserDTO:
       description: This is the User model
@@ -1570,13 +1566,15 @@ components:
       properties:
         id:
           type: integer
+        employee:
+          $ref: '#/components/schemas/EmployeeResponseDTO'
         role:
           $ref: '#/components/schemas/RoleDTO'
         username:
           type: string
         email:
           type: string
-        hashedPassword:
+        codeColor:
           type: string
         enabled:
           type: boolean
@@ -1633,20 +1631,41 @@ components:
           type: string
           format: email
           description: Email of the logged-in user
+        codeColor:
+          type: string
+          minLength: 3
+          maxLength: 7
+          description: >
+            Color code for the user, typically in hex format (e.g., #FFFFFF)
+          x-field-extra-annotation: |
+            @NotBlank
+            @Size(min=3, max=7)
+            @Pattern(regexp="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", message = "Debe ser un código de color hexadecimal válido")
         rol:
           $ref: '#/components/schemas/RoleDTO'
-        hashedPassword:
-          type: string
-          description: Hashed password of the logged-in user
+        employee:
+          $ref: '#/components/schemas/EmployeeResponseDTO'
     RegisterRequest:
       description: This is the Register Request model
       type: object
       required:
+        - name
+        - lastName
         - username
         - email
         - password
         - repeatPassword
       properties:
+        name:
+          type: string
+          x-field-extra-annotation: "@NotBlank\n@Size(min=3, max=30)"
+          minLength: 3
+          maxLength: 30
+        lastName:
+          type: string
+          x-field-extra-annotation: "@NotBlank\n@Size(min=3, max=30)"
+          minLength: 3
+          maxLength: 30
         username:
           type: string
           x-field-extra-annotation: "@NotBlank\n@Size(min=3, max=30)"
@@ -1680,6 +1699,18 @@ components:
           pattern: '^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$'
           description: >
             Debe contener al menos una letra mayúscula y un carácter especial
+        codeColor:
+          type: string
+          minLength: 3
+          maxLength: 7
+          description: >
+            Color code for the user, typically in hex format (e.g., #FFFFFF)
+          x-field-extra-annotation: |
+            @NotBlank
+            @Size(min=3, max=7)
+            @Pattern(regexp="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", message = "Debe ser un código de color hexadecimal válido")
+        employee:
+          $ref: '#/components/schemas/EmployeeDTO'
         role:
           $ref: '#/components/schemas/RoleDTO'
     HolidayDTO:

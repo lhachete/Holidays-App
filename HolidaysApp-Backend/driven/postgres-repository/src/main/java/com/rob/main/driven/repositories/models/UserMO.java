@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Data
 @AllArgsConstructor
@@ -18,6 +20,11 @@ public class UserMO {
     @ColumnDefault("nextval('users_user_id_seq')")
     @Column(name = "user_id", nullable = false)
     private Integer id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.RESTRICT)
+    @JoinColumn(name = "employee_id")
+    private EmployeeMO employee;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -42,5 +49,11 @@ public class UserMO {
     @NotNull
     @Column(name = "email", nullable = false)
     private String email;
+
+    @Size(max = 7)
+    @NotNull
+    @ColumnDefault("'#000000'")
+    @Column(name = "code_color", nullable = false, length = 7)
+    private String codeColor;
 
 }

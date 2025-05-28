@@ -1,14 +1,14 @@
 package com.rob.driving.controllers.adapters;
 
+import com.rob.application.ports.driving.EmployeeServicePort;
 import com.rob.application.ports.driving.RoleServicePort;
 import com.rob.application.ports.driving.UserServicePort;
+import com.rob.domain.models.Employee;
 import com.rob.domain.models.User;
 import com.rob.driving.api.UsersApi;
 import com.rob.driving.controllers.adapters.error.ErrorResponse;
-import com.rob.driving.dtos.LoginRequest;
-import com.rob.driving.dtos.LoginResponse;
-import com.rob.driving.dtos.RegisterRequest;
-import com.rob.driving.dtos.UserDTO;
+import com.rob.driving.dtos.*;
+import com.rob.driving.mappers.EmployeeDTOMapper;
 import com.rob.driving.mappers.RoleDTOMapper;
 import com.rob.driving.mappers.UserDTOMapper;
 import jakarta.validation.Valid;
@@ -29,10 +29,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserControllerAdapter implements UsersApi {
 
+    private final EmployeeServicePort employeeServicePort;
     private final UserServicePort userServicePort;
     private final RoleServicePort roleServicePort;
     private final UserDTOMapper userDTOMapper;
     private final RoleDTOMapper roleDTOMapper;
+    private final EmployeeDTOMapper employeeDTOMapper;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(15);
 
     @GetMapping
@@ -57,13 +59,29 @@ public class UserControllerAdapter implements UsersApi {
         return ResponseEntity.ok(loginResponse);
     }
 
+    // Registra un usuario y a la vez un empleado.
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerByUsernameEmailAndPassword(@Valid @RequestBody RegisterRequest registerRequest) {
         log.info("Solicitud POST /users/register recibida con datos: {}", registerRequest);
         registerRequest.setRole(roleDTOMapper.toRoleDTO(roleServicePort.getRolesByName("USUARIO").get(0)));
         if(!registerRequest.getPassword().equals(registerRequest.getRepeatPassword()))
            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las contraseñas no coinciden");
+        if(userServicePort.usernameExists(registerRequest.getUsername())) {
+            log.error("El nombre de usuario {} ya está en uso", registerRequest.getUsername());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nombre de usuario ya en uso");
+        }
+        if (userServicePort.emailExists(registerRequest.getEmail())) {
+            log.error("El email {} ya está en uso", registerRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email ya en uso");
+        }
         log.info("Registrando usuario con username: {} y email: {}", registerRequest.getUsername(), registerRequest.getEmail());
+        Employee employee = Employee.builder()
+                .firstName(registerRequest.getName())
+                .lastName(registerRequest.getLastName())
+                .build();
+        Employee newEmployee = employeeServicePort.createEmployee(employee);
+        EmployeeDTO newEmployeeDTO = employeeDTOMapper.toEmployeeDTO(newEmployee);
+        registerRequest.setEmployee(newEmployeeDTO);
         return ResponseEntity.ok(userDTOMapper.toUserDTO(userServicePort.createUser(userDTOMapper.toUser(registerRequest))));
     }
 

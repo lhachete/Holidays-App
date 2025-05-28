@@ -22,4 +22,9 @@ public class EmployeeUseCase implements EmployeeServicePort {
             return employeeRepositoryPort.findAllEmployeesByName(name);
         }
     }
+
+    @Override
+    public Employee createEmployee(Employee employee) {
+        return employeeRepositoryPort.saveEmployee(employee);
+    }
 }

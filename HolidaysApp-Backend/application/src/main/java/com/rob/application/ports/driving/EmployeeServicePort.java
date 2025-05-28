@@ -8,4 +8,5 @@ import java.util.List;
 @Service
 public interface EmployeeServicePort {
     List<Employee> getAllEmployees(String name);
+    Employee createEmployee(Employee employee);
 }

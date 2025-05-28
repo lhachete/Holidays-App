@@ -33,4 +33,10 @@ public class EmployeeJpaRepositoryAdapter implements EmployeeRepositoryPort {
                 .map(employeeMOMapper::toEmployee)
                 .toList();
     }
+
+    @Override
+    public Employee saveEmployee(Employee employee) {
+        log.info("Se va a guardar el empleado: {}", employee);
+        return employeeMOMapper.toEmployee(employeeMOJpaRepository.save(employeeMOMapper.toEmployeeMO(employee)));
+    }
 }
