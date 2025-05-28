@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
 export class AuthComponent implements OnInit {
   mode: 'login' | 'register' = 'login';
   userNotFound = false;
-  wrongPassword = false;
+  serverError = false;
   
   faEye = faEye;
   faEyeSlash = faEyeSlash;
@@ -108,14 +108,14 @@ export class AuthComponent implements OnInit {
     const userInput = this.loginForm.value.userInput ?? '';
     const password = this.loginForm.value.password ?? '';
 
-    //this.userNotFound = this.wrongPassword = false;
-
     const result = await this.authService.login(userInput, password);
-
+    
     if (result === 'OK') {
       this.router.navigateByUrl('/vacation/show');
     } else if (result === 'USER_ERROR') {
       this.userNotFound = true;
+    } else if (result === 'SERVER_ERROR') {
+      this.serverError = true;
     }
   }
 
@@ -159,7 +159,7 @@ export class AuthComponent implements OnInit {
   }
 
   submit(): void {
-    this.userNotFound = this.wrongPassword = false;
+    this.userNotFound = this.serverError = false;
     this.mode === 'login' ? this.login() : this.register();
   }
 
@@ -201,11 +201,13 @@ export class AuthComponent implements OnInit {
         const trimmed = entry.trim();
         if (!trimmed) return;
 
-        if (trimmed.startsWith('U') || trimmed.startsWith('N')) {
+        if (trimmed.endsWith('d')) {
+          errors['confirmPassword'] = "Error al conectar con el servidor.";
+        } else if (trimmed.startsWith('U') || trimmed.startsWith('N')) {
           errors['username'] = trimmed;
         } else if (trimmed.startsWith('E')) {
           errors['email'] = trimmed;
-        }
+        } 
       }
     });
 

@@ -24,7 +24,7 @@ export class AuthService {
     }
   }
 
-  async login(userInput: string, password: string): Promise<'OK' | 'USER_ERROR' | 'PASS_ERROR'> {
+  async login(userInput: string, password: string): Promise<'OK' | 'USER_ERROR' | 'SERVER_ERROR'> {
     try {
       const foundUser = await this.userService.login(userInput, password);
       if (!foundUser) return 'USER_ERROR';
@@ -46,8 +46,11 @@ export class AuthService {
       return 'OK';
 
     } catch (err: any) {
-      // const code = err.status;
-      return 'USER_ERROR';
+      if (err.status === 0 || err.status === 500) {
+        return 'SERVER_ERROR';
+      } else {
+        return 'USER_ERROR';
+      }
     }
   }
 
