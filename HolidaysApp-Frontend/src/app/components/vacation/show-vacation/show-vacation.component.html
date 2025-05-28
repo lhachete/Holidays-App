@@ -1,8 +1,26 @@
 <div class="container text-center mt-4">
-  <h1>Ver tus vacaciones</h1>
+  <h1>Ver vacaciones</h1>
 </div>
 
+
 <div class="container py-4 calendar-size">
+
+  @if (this.user.rol.name === 'ADMIN') {
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="">Filtrar por usuario </h3>
+    <button class="btn btn-outline-secondary" (click)="clearFilters()">Quitar filtros</button>
+  </div>
+  <select class="form-select mb-4" [(ngModel)]="selectedUserId" (change)="onUserSelect($event)">
+      <option value="" disabled selected>Selecciona un usuario</option>
+
+      @for (user of availableUsers; track user.userId) {
+        <option [value]="user.userId">
+          {{ user.name }} {{ user.lastName }}
+        </option>
+      }
+    </select>
+  }
+
   <app-calendar
     [mode]="'show'"
     [events]="usersEvents"

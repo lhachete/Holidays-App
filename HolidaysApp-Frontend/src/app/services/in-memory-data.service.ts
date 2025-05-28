@@ -5,18 +5,29 @@ import { Observable } from 'rxjs';
 
 export class InMemoryDataService implements InMemoryDbService {
     createDb() {
-        //Los id son para pruebas.
-        const holidays: Holiday[] = [
-            { id: 1, holidayId: 1, userId: 1, holidayStartDate: new Date('2025-05-05'), holidayEndDate: new Date('2025-05-11'), vacationType: 'PTO' },
-            { id: 2, holidayId: 2, userId: 1, holidayStartDate: new Date('2025-06-01'), holidayEndDate: new Date('2025-06-03'), vacationType: 'PTO' },
-            { id: 3, holidayId: 3, userId: 2, holidayStartDate: new Date('2025-05-15'), holidayEndDate: new Date('2025-05-20'), vacationType: 'PTO' },
-            { id: 4, holidayId: 4, userId: 1, holidayStartDate: new Date('2025-05-19'), holidayEndDate: new Date('2025-05-25'), vacationType: 'PTO' },
-        ];
+const holidays: Holiday[] = [
+    { id: 1, holidayId: 1, userId: 1, holidayStartDate: new Date('2025-05-05'), holidayEndDate: new Date('2025-05-11'), vacationType: 'PTO' },
+    { id: 2, holidayId: 2, userId: 1, holidayStartDate: new Date('2025-06-01'), holidayEndDate: new Date('2025-06-03'), vacationType: 'PTO' },
+    { id: 3, holidayId: 3, userId: 2, holidayStartDate: new Date('2025-05-15'), holidayEndDate: new Date('2025-05-20'), vacationType: 'PTO' },
+    { id: 4, holidayId: 4, userId: 1, holidayStartDate: new Date('2025-05-19'), holidayEndDate: new Date('2025-05-25'), vacationType: 'PTO' },
+    { id: 5, holidayId: 5, userId: 3, holidayStartDate: new Date('2025-07-01'), holidayEndDate: new Date('2025-07-07'), vacationType: 'SICK' },
+    { id: 6, holidayId: 6, userId: 4, holidayStartDate: new Date('2025-08-10'), holidayEndDate: new Date('2025-08-15'), vacationType: 'PTO' },
+    { id: 7, holidayId: 7, userId: 5, holidayStartDate: new Date('2025-09-20'), holidayEndDate: new Date('2025-09-22'), vacationType: 'UNPAID' },
+    { id: 8, holidayId: 8, userId: 6, holidayStartDate: new Date('2025-07-15'), holidayEndDate: new Date('2025-07-18'), vacationType: 'PTO' },
+    { id: 9, holidayId: 9, userId: 7, holidayStartDate: new Date('2025-10-05'), holidayEndDate: new Date('2025-10-10'), vacationType: 'SICK' },
+    { id: 10, holidayId: 10, userId: 3, holidayStartDate: new Date('2025-12-24'), holidayEndDate: new Date('2025-12-31'), vacationType: 'PTO' },
+];
 
-        const users: User[] = [
-            { userId: 1, username: 'admin', email: 'admin@example.com', password: 'Dedede123º', rol: { id: 1, name: 'ADMIN' }, color: '#ff0000', name: 'Admin', lastName: 'Admin Admin' },
-            { userId: 2, username: 'user1', email: 'user1@example.com', password: 'Dedede123º', rol: { id: 2, name: 'USUARIO' }, color: '#f333ff', name: 'User', lastName: 'User User' },
-        ];
+const users: User[] = [
+    { userId: 1, username: 'admin', email: 'admin@example.com', password: 'Dedede123º', rol: { id: 1, name: 'ADMIN' }, color: '#ff0000', name: 'Admin', lastName: 'Admin Admin' },
+    { userId: 2, username: 'user1', email: 'user1@example.com', password: 'Dedede123º', rol: { id: 2, name: 'USUARIO' }, color: '#f333ff', name: 'User', lastName: 'User User' },
+    { userId: 3, username: 'alice', email: 'alice@example.com', password: 'Dedede123º', rol: { id: 2, name: 'USUARIO' }, color: '#33ccff', name: 'Alice', lastName: 'Johnson' },
+    { userId: 4, username: 'bob', email: 'bob@example.com', password: 'Dedede123º', rol: { id: 2, name: 'USUARIO' }, color: '#33ff77', name: 'Bob', lastName: 'Smith' },
+    { userId: 5, username: 'carol', email: 'carol@example.com', password: 'Dedede123º', rol: { id: 2, name: 'USUARIO' }, color: '#ffcc00', name: 'Carol', lastName: 'Davis' },
+    { userId: 6, username: 'dave', email: 'dave@example.com', password: 'Dedede123º', rol: { id: 2, name: 'USUARIO' }, color: '#9933ff', name: 'Dave', lastName: 'Miller' },
+    { userId: 7, username: 'eve', email: 'eve@example.com', password: 'Dedede123º', rol: { id: 2, name: 'USUARIO' }, color: '#ff66cc', name: 'Eve', lastName: 'Wilson' },
+];
+
 
         return { holidays, users };
     }
