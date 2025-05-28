@@ -23,6 +23,7 @@ public class MyUserDetailsServiceUseCase implements UserDetailsService, MyUserDe
             throw new UsernameNotFoundException("Creedenciales inválidas");
         }
         UserPrincipal userPrincipal = new UserPrincipal(user);
+        System.out.println("Usuario encontrado: " + userPrincipal.getUsername() + " con roles: " + userPrincipal.getAuthorities());
         return userPrincipal;
     }
 }

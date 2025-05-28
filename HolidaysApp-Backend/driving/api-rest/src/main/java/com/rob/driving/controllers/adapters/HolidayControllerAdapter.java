@@ -2,7 +2,9 @@ package com.rob.driving.controllers.adapters;
 
 import com.rob.application.ports.driving.HolidayServicePort;
 import com.rob.application.ports.driving.UserServicePort;
+import com.rob.application.services.MyUserDetailsServiceUseCase;
 import com.rob.domain.models.User;
+import com.rob.domain.models.UserPrincipal;
 import com.rob.driving.api.HolidaysApi;
 import com.rob.driving.dtos.HolidayDTO;
 import com.rob.driving.dtos.HolidayRequestDTO;
@@ -13,6 +15,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

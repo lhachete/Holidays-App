@@ -3,7 +3,12 @@ package com.rob.application.services;
 import com.rob.application.ports.driven.HolidayRepositoryPort;
 import com.rob.application.ports.driving.HolidayServicePort;
 import com.rob.domain.models.Holiday;
+import com.rob.domain.models.User;
+import com.rob.domain.models.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -17,8 +22,19 @@ public class HolidayUseCase implements HolidayServicePort {
 
     @Override
     public List<Holiday> getHolidaysByUserId(Integer userId) {
-        if(userId != null)
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+        User currentUser = principal.getUser();
+        boolean isAdmin = auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role -> role.equals("ADMIN"));
+        if(!isAdmin && userId == null) {
+            throw new IllegalArgumentException("El usuario no tiene permisos para ver todas las vacaciones.");
+        }
+        if(userId == currentUser.getId())
             return holidayRepositoryPort.findByUserId(userId);
+        else if(userId != currentUser.getId())
+            throw new IllegalArgumentException("El usuario no tiene permisos para ver las vacaciones de otro usuario.");
         return holidayRepositoryPort.findAllHolidays();
     }
 
