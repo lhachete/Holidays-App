@@ -36,19 +36,25 @@ export class ShowVacationComponent {
 
     try {
       const user = this.user;
+      console.log('Usuario', user);
       {
         user.rol.name === 'ADMIN' 
         ? this.holidays = await this.holidayService.getAllHolidays()
         : this.holidays = await this.holidayService.getHolidaysById(user.userId)
       }
-
-      //console.log('Cargando vacaciones', this.holidays);
+      
+      console.log('Cargando vacaciones', this.holidays);
       this.usersEvents = this.holidays.map(h => ({
         start: new Date(h.holidayStartDate),
-        end: new Date(h.holidayEndDate),
-        title: `Vacaciones: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+        end: new Date(h.holidayEndDate), /* //!Cambiar el username por el nombre */
+        title: `${user.rol.name === 'ADMIN' ? h.user.username : 'Vacaciones'}: 
+        ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
         type: h.vacationType,
-        holidayId: h.holidayId
+        holidayId: h.holidayId,
+        color: {
+          primary: h.user?.color,
+          secondary: `${h.user?.color}25`
+        }
       } as CalendarEvent));
     } catch (err) {
       console.error('Error al cargar todas las vacaciones', err);
@@ -63,10 +69,10 @@ export class ShowVacationComponent {
     const events = day.events as CustomCalendarEv[];
 
     if (events.length) {
-      // Construir HTML con detalles de cada vacación
+      // Construir HTML con detalles de cada vacación //! Modificar para que muestre el nombre REAL
       const html = events.map(ev => {
         const holiday = this.holidays.find(h => h.holidayId === ev.holidayId);
-        const username = holiday?.user?.username ?? 'Desconocido';
+        const username = holiday?.user?.username;
         return `<p>
           <strong>${ev.title}</strong><br>
           El tipo de la vacación es: ${ev.type}

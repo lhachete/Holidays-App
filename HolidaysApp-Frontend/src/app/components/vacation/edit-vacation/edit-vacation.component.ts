@@ -7,7 +7,7 @@ import { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate, show
 import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
 import Holiday from '../../../models/Holiday';
 import Swal from 'sweetalert2';
-import { set } from 'date-fns';
+
 
 @Component({
   selector: 'app-edit-vacation',
@@ -22,6 +22,7 @@ export class EditVacationComponent {
   }
 
   private vacationTypeOptions = vacationTypeOptions;
+  userColor: string = "";
 
   private setUTCDate = setUTCDate;
   private toDateInputValue = toDateInputValue;
@@ -35,6 +36,9 @@ export class EditVacationComponent {
   private loadUserHolidays = async (): Promise<void> => {
     const userId = this.user.userId;
     const holidays = await this.holidayService.getHolidaysById(userId);
+    if (holidays.length && holidays[0].user?.color) { //! He hecho esto porque se supone que color me viene por las holidays, y no por el usuario.
+      this.userColor = holidays[0].user.color;
+    }
     this.userEvents = holidays.map(holiday => {
       return this.mapToCalendarEvent(holiday)
     });
@@ -48,6 +52,10 @@ export class EditVacationComponent {
     title: `Vacaciones: ${new Date(holiday.holidayStartDate).toLocaleDateString()} – ${new Date(holiday.holidayEndDate).toLocaleDateString()}`,
     holidayId: holiday.holidayId,
     type: holiday.vacationType,
+    color: {
+      primary: holiday.user?.color,
+      secondary: `${holiday.user?.color}25`
+    }
   }) as CustomCalendarEv;
 
 
@@ -57,14 +65,15 @@ export class EditVacationComponent {
     /* console.log('events', day);*/
     if (events.length) {
       const data = this.prepareEditData(events[0]);
+      console.log('data', data);
       if (data) {
         const formValues = await this.openEditModal(data);
+
         if (formValues) {
           const newStart = this.setUTCDate(formValues.holidayStartDate);
           const newEnd = this.setUTCDate(formValues.holidayEndDate);
 
           if (this.isValidVacationRange(newStart, newEnd, data.holidayId)) {
-
             await this.saveChanges(data.holidayId, data.userId, newStart, newEnd, formValues.vacationType);
             this.refreshCalendar(data.holidayId, newStart, newEnd, formValues.vacationType);
             this.showSuccessToast();
@@ -76,11 +85,9 @@ export class EditVacationComponent {
 
   // Preparo los datos para la ventana modal de edición y compruebo que los id son válidos.
   private prepareEditData = (event: CustomCalendarEv) => {
-
     const holidayId = event.holidayId;
     const userId = this.user.userId;
     if (!holidayId || !userId) {
-      // console.error('Evento inválido para editar:', event);
       return null;
     } else {
       return { holidayId, userId, start: event.start, end: event.end!, type: event.type };
@@ -174,7 +181,11 @@ export class EditVacationComponent {
         start: newStart,
         end: newEnd,
         title: `Vacaciones ${newStart.toLocaleDateString()} - ${newEnd.toLocaleDateString()}`,
-        type
+        type,
+        color: {
+        primary: this.userColor,
+        secondary: `${this.userColor}25`
+      }
       } : ev
     );
   };
@@ -207,5 +218,5 @@ export class EditVacationComponent {
     });
   };
 
-  
+
 }

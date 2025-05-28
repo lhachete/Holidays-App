@@ -9,8 +9,8 @@ import { addMonths, subMonths } from 'date-fns';
   standalone: true,
   imports: [CommonModule, FormsModule, CalendarModule],
   templateUrl: './calendar.component.html',
-  
 })
+
 export class CalendarComponent implements OnInit {
   @Input() mode: 'show' | 'add' | 'put' | 'del' = 'show';
   @Input() events: CalendarEvent[] = [];

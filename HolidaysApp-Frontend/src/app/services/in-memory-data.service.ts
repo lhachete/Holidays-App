@@ -14,8 +14,8 @@ export class InMemoryDataService implements InMemoryDbService {
         ];
 
         const users: User[] = [
-            { userId: 1, username: 'admin', email: 'admin@example.com', password: 'Dedede123º', rol: { id: 1, name: 'ADMIN' } },
-            { userId: 2, username: 'user1', email: 'user1@example.com', password: 'Dedede123º', rol: { id: 2, name: 'USUARIO' } }
+            { userId: 1, username: 'admin', email: 'admin@example.com', password: 'Dedede123º', rol: { id: 1, name: 'ADMIN' }, color: '#ff0000' },
+            { userId: 2, username: 'user1', email: 'user1@example.com', password: 'Dedede123º', rol: { id: 2, name: 'USUARIO' }, color: '#f333ff' },
         ];
 
         return { holidays, users };
@@ -35,22 +35,63 @@ export class InMemoryDataService implements InMemoryDbService {
 
     // Intercepta **todos** los GET de la colección holidays
     get(reqInfo: RequestInfo): Observable<ResponseOptions> | undefined {
-        const { collectionName, query } = reqInfo;
+    const { collectionName, query } = reqInfo;
 
-        if (collectionName === 'holidays' && query.get('user_id')) {
-            const userId = Number(query.get('user_id')![0]);
-            const db = (reqInfo.utils as any).getDb();
-            const holidays: Holiday[] = db.holidays;
-            const filtered = holidays.filter(h => h.userId === userId);
+    const db = (reqInfo.utils as any).getDb();
 
-            return reqInfo.utils.createResponse$(() => ({
-                status: 200,
-                body: filtered
-            }));
+    if (collectionName === 'holidays') {
+    const db = (reqInfo.utils as any).getDb();
+    const holidays: Holiday[] = db.holidays;
+    const users: User[] = db.users;
+
+    let result = holidays;
+
+    if (query.get('userId')) {
+        const userId = Number(query.get('userId')![0]);
+        result = holidays.filter(h => h.userId === userId);
+    }
+
+    // Añadir el objeto de usuario completo (sin password)
+    const holidaysWithUser = result.map(h => {
+        const user = users.find(u => u.userId === h.userId);
+        if (!user) return h;
+
+        const { password, ...safeUser } = user;
+        return { ...h, user: safeUser }; // embebemos user
+    });
+
+    return reqInfo.utils.createResponse$(() => ({
+        status: 200,
+        body: holidaysWithUser
+    }));
+}
+
+
+    if (collectionName === 'users') {
+        const users: User[] = db.users;
+
+        // Si viene con user_id, devolvemos solo ese usuario
+        if (query.get('userId')) {
+           const holidays: Holiday[] = db.holidays;
+        const userId = Number(query.get('userId')![0]);
+        const filtered = holidays.filter(h => h.userId === userId);
+
+        return reqInfo.utils.createResponse$(() => ({
+            status: 200,
+            body: filtered
+        }));
         }
 
-        return undefined; // fallback a comportamiento por defecto
+        // Si no hay filtro, devolvemos todos los usuarios sin su contraseña
+        const safeUsers = users.map(({ password, ...rest }) => rest);
+        return reqInfo.utils.createResponse$(() => ({
+            status: 200,
+            body: safeUsers
+        }));
     }
+
+    return undefined; // fallback a comportamiento por defecto
+}
 
 
     // Intercepta **todos** los POST
@@ -66,14 +107,14 @@ export class InMemoryDataService implements InMemoryDbService {
 
     private authenticate(reqInfo: RequestInfo): Observable<ResponseOptions> {
         // Body del POST
-        const { userInput, password } = reqInfo.utils.getJsonBody(reqInfo.req);
+        const { usernameOrEmail, password } = reqInfo.utils.getJsonBody(reqInfo.req);
 
         // Coge la "DB" completa y extrae el array de usuarios
         const db = (reqInfo.utils as any).getDb(); // > any para sortear TS
         const users: User[] = db.users;
 
         const found = users.find(u =>
-            u.username === userInput /* || u.email === userInput */
+            u.username === usernameOrEmail /* || u.email === usernameOrEmail */
         );
 
         return reqInfo.utils.createResponse$(() => {

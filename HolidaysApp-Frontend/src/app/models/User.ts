@@ -8,4 +8,5 @@ export default interface User {
     repeatPassword?: string; // No es necesario en el frontend, pero lo dejo por si hace falta.
     rol: Role;
     token?: string; // Para cuando se creen los tokens de acceso.
+    color?: string; // Color del usuario, para personalizar el calendario.
 }

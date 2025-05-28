@@ -1,7 +1,13 @@
+import User from "./User";
+
 export default interface Holiday {
     id?: number; // opcional , solo es para pruebas
     holidayId?: number;
     userId: number;
+
+    //! Añadido nuevo, ver si el userId se puede quitar
+    user?: User;
+
     holidayStartDate: Date;
     holidayEndDate: Date;
     reviewDate?: Date;

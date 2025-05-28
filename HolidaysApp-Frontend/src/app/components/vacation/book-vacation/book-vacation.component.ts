@@ -17,6 +17,7 @@ export class BookVacationComponent {
   get user(): any {
     return this.authService.user;
   }
+  userColor: string = "";
 
   selectedStart: Date | null = null;
   selectedEnd: Date | null = null;
@@ -37,7 +38,7 @@ export class BookVacationComponent {
   private setUTCDate = setUTCDate;
   public toDateInputValue = toDateInputValue;
 
-    // Fecha mínima para el select en Start date
+  // Fecha mínima para el select en Start date
   public get minStartDate(): string {
     return this.toDateInputValue(new Date());
   }
@@ -53,11 +54,20 @@ export class BookVacationComponent {
   async ngOnInit(): Promise<void> {
     const userId = this.user.userId;
     const holidays = await this.holidayService.getHolidaysById(userId);
+    console.log('Cargando vacaciones del  actual', holidays);
+    if (holidays.length && holidays[0].user?.color) { //! He hecho esto porque se supone que color me viene por las holidays, y no por el usuario.
+      this.userColor = holidays[0].user.color;
+    }
     this.userEvents = holidays.map(h => ({
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
-      title: `Holiday ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+      title: `Vacaciones ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+      color: {
+        primary: h.user?.color,
+        secondary: `${h.user?.color}25`
+      }
     } as CalendarEvent));
+
   }
 
   // Combina eventos pasados junto con los seleccionados
@@ -104,14 +114,14 @@ export class BookVacationComponent {
         start: this.selectedStart,
         end: this.selectedEnd,
         title: 'Seleccionado',
-        color: { primary: '#38e51d', secondary: '#D1E8FF' },
+        color: { primary: '#38e51d', secondary: '#38e51d' },
       }];
     } else if (this.selectedStart) {
       this.selectionEvents = [{
         start: this.selectedStart,
         end: new Date(this.selectedStart),
         title: 'Seleccionado',
-        color: { primary: '#ffaa00', secondary: '#D1E8FF' },
+        color: { primary: '#ffaa00', secondary: '#ffaa00' },
       }];
     } else {
       this.selectionEvents = [];
@@ -158,7 +168,11 @@ export class BookVacationComponent {
         {
           start: new Date(newHoliday.holidayStartDate),
           end: new Date(newHoliday.holidayEndDate),
-          title: `Vacaciones: ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`
+          title: `Vacaciones: ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`,
+          color: {
+            primary: this.userColor,
+            secondary: `${this.userColor}25`
+          },
         }
         ];
 

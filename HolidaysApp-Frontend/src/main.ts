@@ -26,11 +26,11 @@ bootstrapApplication(AppComponent, {
         useFactory: adapterFactory
       }),
 
-      /* InMemoryWebApiModule.forRoot(InMemoryDataService, {
+      InMemoryWebApiModule.forRoot(InMemoryDataService, {
         dataEncapsulation: false,    // devuelve el array “directo”, no { data: [...] }
         passThruUnknownUrl:  true,    // deja pasar otras URLs reales
         apiBase: "api/"
-      }) */
+      })
     ),
 
     { provide: LOCALE_ID, useValue: 'es-ES' },

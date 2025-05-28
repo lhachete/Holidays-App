@@ -16,7 +16,7 @@ export class UserService {
     this.registerUrl  = `${this.api.getApiUrl()}/users/register`;
   }
 
-  // Login via POST /login --> userInput para mock, usernameOrEmail para la API
+  // Login via POST /login 
   login(usernameOrEmail: string, password: string): Promise<User> {
     return this.api.post<User>(this.loginUrl, { usernameOrEmail, password });
   }

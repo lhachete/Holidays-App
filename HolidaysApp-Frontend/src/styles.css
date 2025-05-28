@@ -10,6 +10,12 @@ app-login {
   align-items: center;
 }
 
+@media (min-width: 768px) {
+  .calendar-size {
+    width: 75%; 
+  }
+}
+
 /* 
   * Color azul GFT1 (main) #213E7F
   * Color azul GFT2 #133E78
