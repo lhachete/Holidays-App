@@ -3,14 +3,14 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { HolidayService } from '../../../services/holiday.service';
 import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
-
-import Swal from 'sweetalert2';
 import { AuthService } from '../../../services/auth.service';
+import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-show-vacation',
   standalone: true,
-  imports: [CalendarComponent],
+  imports: [CalendarComponent, FormsModule],
   templateUrl: './show-vacation.component.html',
 })
 export class ShowVacationComponent {
@@ -24,6 +24,10 @@ export class ShowVacationComponent {
   selectedDayDetail: CalendarMonthViewDay<CalendarEvent> | null = null;
   // Lista de vacaciones
   holidays: any[] = [];
+  // ID del usuario seleccionado para ver sus vacaciones
+  selectedUserId: number | null = null;
+  availableUsers: { userId: number; name: string; lastName: string }[] = [];
+
 
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
@@ -38,11 +42,11 @@ export class ShowVacationComponent {
       const user = this.user;
       console.log('Usuario', user);
       {
-        user.rol.name === 'ADMIN' 
-        ? this.holidays = await this.holidayService.getAllHolidays()
-        : this.holidays = await this.holidayService.getHolidaysById(user.userId)
+        user.rol.name === 'ADMIN'
+          ? this.holidays = await this.holidayService.getAllHolidays()
+          : this.holidays = await this.holidayService.getHolidaysById(user.userId)
       }
-      
+
       console.log('Cargando vacaciones', this.holidays);
       this.usersEvents = this.holidays.map(h => ({
         start: new Date(h.holidayStartDate),
@@ -56,10 +60,70 @@ export class ShowVacationComponent {
           secondary: `${h.user?.color}25`
         }
       } as CalendarEvent));
+
+      //
+      if (this.user.rol.name === 'ADMIN') {
+        const userMap = new Map();
+        for (const h of this.holidays) {
+          if (!userMap.has(h.user.userId)) {
+            userMap.set(h.user.userId, {
+              userId: h.user.userId,
+              name: h.user.name,
+              lastName: h.user.lastName
+            });
+          }
+        }
+        this.availableUsers = Array.from(userMap.values());
+      }
+
+
     } catch (err) {
       console.error('Error al cargar todas las vacaciones', err);
     }
   };
+
+  loadHolidaysByUserId = async (userId: number): Promise<void> => {
+  try {
+    const holidays = await this.holidayService.getHolidaysById(userId);
+    this.usersEvents = holidays.map(h => ({
+      start: new Date(h.holidayStartDate),
+      end: new Date(h.holidayEndDate),
+      title: `${h.user!.name} ${h.user!.lastName}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+      type: h.vacationType,
+      holidayId: h.holidayId,
+      color: {
+        primary: h.user?.color,
+        secondary: `${h.user?.color}25`
+      }
+    } as CalendarEvent));
+  } catch (err) {
+    console.error('Error al cargar vacaciones por ID', err);
+  }
+};
+
+onUserSelect = (event: Event): void => {
+  const target = event.target as HTMLSelectElement;
+  const userId = Number(target.value);
+  if (userId) {
+    this.loadHolidaysByUserId(userId);
+  }
+};
+
+clearFilters = (): void => {
+  this.selectedUserId = null;
+  this.usersEvents = this.holidays.map(h => ({
+    start: new Date(h.holidayStartDate),
+    end: new Date(h.holidayEndDate),
+    title: `${h.user.name} ${h.user.lastName}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+    type: h.vacationType,
+    holidayId: h.holidayId,
+    color: {
+      primary: h.user?.color,
+      secondary: `${h.user?.color}25`
+    }
+  } as CalendarEvent));
+};
+
 
   // 
   onDayDetails = async (day: CalendarMonthViewDay<CalendarEvent>): Promise<void> => {
