@@ -147,7 +147,6 @@ public class UserControllerAdapterTest {
     @Test
     @DisplayName("Should return a LoginResponse with a token when login is successful")
     void shouldReturnLoginResponseByUsernameOk() {
-        // Arrange
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsernameOrEmail("username");
         loginRequest.setPassword("password");
@@ -196,7 +195,6 @@ public class UserControllerAdapterTest {
     @Test
     @DisplayName("Should return a LoginResponse with a token when login is successful")
     void shouldReturnLoginResponseByEmailOk() {
-        // Arrange
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsernameOrEmail("email@gmail.com");
         loginRequest.setPassword("password");
