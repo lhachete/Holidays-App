@@ -11,5 +11,5 @@ export default interface User {
 
     name: string; 
     lastName: string; 
-    color: string; // para personalizar el calendario.
+    codeColor: string; // para personalizar el calendario.
 }

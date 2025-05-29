@@ -34,7 +34,7 @@ export class AuthComponent implements OnInit {
     { key: 'lastName', label: 'Apellidos', type: 'text', modes: ['register'] },
     { key: 'password', label: 'Contraseña', type: 'password', modes: ['login', 'register'] },
     { key: 'confirmPassword', label: 'Confirmar contraseña', type: 'password', modes: ['register'] },
-    { key: 'color', label: 'Color de usuario', type: 'color', modes: ['register'] }
+    { key: 'codeColor', label: 'Color de usuario', type: 'color', modes: ['register'] }
   ];
 
   loginForm = new FormGroup({
@@ -49,7 +49,7 @@ export class AuthComponent implements OnInit {
     lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
     password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$/)]),
     confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$/)]),
-    color: new FormControl('#153A7B', [Validators.required])
+    codeColor: new FormControl('#153A7B', [Validators.required])
   }, { validators: this.passwordsMatchValidator() });
 
   constructor(
@@ -138,7 +138,7 @@ export class AuthComponent implements OnInit {
     const email = this.registerForm.value.email ?? '';
     const name = this.registerForm.value.name ?? '';
     const lastName = this.registerForm.value.lastName ?? '';
-    const color = this.registerForm.value.color ?? '#153A7B';
+    const codeColor = this.registerForm.value.codeColor ?? '#153A7B';
 
 
     const { valid, errors } = await this.authService.validatePasswords({
@@ -149,7 +149,7 @@ export class AuthComponent implements OnInit {
       this.registerErrors = errors;
     } else {
       try {
-        await this.authService.registerUser({ username, password, repeatPassword, email, name, lastName, color });
+        await this.authService.registerUser({ username, password, repeatPassword, email, name, lastName, codeColor });
 
         Swal.fire({
           icon: 'success',

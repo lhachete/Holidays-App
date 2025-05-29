@@ -17,8 +17,7 @@ export class BookVacationComponent {
   get user(): any {
     return this.authService.user;
   }
-  userColor: string = "";
-
+  
   selectedStart: Date | null = null;
   selectedEnd: Date | null = null;
   // valores para los inputs <date>
@@ -53,18 +52,19 @@ export class BookVacationComponent {
   // Inicializa cargando las vacaciones del usuario
   async ngOnInit(): Promise<void> {
     const userId = this.user.userId;
+    console.log('Usuario actual', this.user);
     const holidays = await this.holidayService.getHolidaysById(userId);
     console.log('Cargando vacaciones del  actual', holidays);
-    if (holidays.length && holidays[0].user?.color) { //! He hecho esto porque se supone que color me viene por las holidays, y no por el usuario.
-      this.userColor = holidays[0].user.color;
-    }
+    
+    
+
     this.userEvents = holidays.map(h => ({
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
       title: `Vacaciones ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
-      color: {
-        primary: h.user?.color,
-        secondary: `${h.user?.color}25`
+      codeColor: { //! Ver bien esto como llega, como todo cuando este la API...
+        primary: h.employee?.codeColor,
+        secondary: `${h.employee?.codeColor}25`
       }
     } as CalendarEvent));
 
@@ -170,8 +170,8 @@ export class BookVacationComponent {
           end: new Date(newHoliday.holidayEndDate),
           title: `Vacaciones: ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`,
           color: {
-            primary: this.userColor,
-            secondary: `${this.userColor}25`
+            primary: this.user?.codeColor,
+            secondary: `${this.user?.codeColor}25`
           },
         }
         ];

@@ -21,7 +21,7 @@ export class ApiService {
     }
 
     get<T>(url: string): Promise<T> {
-        return firstValueFrom(this.http.get<T>(url, { headers: this.getAuthHeaders() }));
+        return firstValueFrom( this.http.get<{ data: T }>(url, { headers: this.getAuthHeaders() })).then(response => response.data);
     }
 
     post<T>(url: string, body: any): Promise<T> {

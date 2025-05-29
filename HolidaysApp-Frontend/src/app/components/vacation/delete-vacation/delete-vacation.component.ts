@@ -32,8 +32,8 @@ export class DeleteVacationComponent {
       title: `Vacaciones: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
       holidayId: h.holidayId,
       color: {
-        primary: h.user?.color,
-        secondary: `${h.user?.color}25`
+        primary: h.user?.codeColor,
+        secondary: `${h.user?.codeColor}25`
       }
     } as CalendarEvent));
   }

@@ -26,7 +26,7 @@ export class ShowVacationComponent {
   holidays: any[] = [];
   // ID del usuario seleccionado para ver sus vacaciones
   selectedUserId: number | null = null;
-  availableUsers: { userId: number; name: string; lastName: string }[] = [];
+  availableUsers: { personId: number; name: string; lastName: string }[] = [];
 
 
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
@@ -51,25 +51,26 @@ export class ShowVacationComponent {
       this.usersEvents = this.holidays.map(h => ({
         start: new Date(h.holidayStartDate),
         end: new Date(h.holidayEndDate), /* //!Cambiar el username por el nombre */
-        title: `${user.rol.name === 'ADMIN' ? h.user.username : 'Vacaciones'}: 
+        title: `${user.rol.name === 'ADMIN' ? h.employee.name : 'Vacaciones'}: 
         ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
         type: h.vacationType,
         holidayId: h.holidayId,
         color: {
-          primary: h.user?.color,
-          secondary: `${h.user?.color}25`
+          primary: h.codeColor,
+          secondary: `${h.codeColor}25`
         }
       } as CalendarEvent));
 
       //
       if (this.user.rol.name === 'ADMIN') {
         const userMap = new Map();
-        for (const h of this.holidays) {
-          if (!userMap.has(h.user.userId)) {
-            userMap.set(h.user.userId, {
-              userId: h.user.userId,
-              name: h.user.name,
-              lastName: h.user.lastName
+        console.log(this.holidays)
+        for (const h of this.holidays) { //! AQUI EN LA API, EN VEZ DE SER userId ES personId
+          if (!userMap.has(h.employee.userId)) {
+            userMap.set(h.employee.userId, {
+              personId: h.employee.userId,
+              name: h.employee.name,
+              lastName: h.employee.lastName
             });
           }
         }
@@ -82,47 +83,54 @@ export class ShowVacationComponent {
     }
   };
 
-  loadHolidaysByUserId = async (userId: number): Promise<void> => {
-  try {
-    const holidays = await this.holidayService.getHolidaysById(userId);
-    this.usersEvents = holidays.map(h => ({
+  loadHolidaysByUserId = async (personId: number): Promise<void> => {
+    try {
+      const holidays = await this.holidayService.getHolidaysById(personId);
+      console.log(await this.holidayService.getHolidaysById(personId))
+
+      this.usersEvents = holidays.map(h => ({
+        start: new Date(h.holidayStartDate),
+        end: new Date(h.holidayEndDate),
+        title: `${h.employee!.name} ${h.employee!.lastName}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+        type: h.vacationType,
+        holidayId: h.holidayId,
+        /*       color: { //! Descomentar y cambiar / comprobar cuando vaya la API
+                primary: h.codeColor,
+                secondary: `${h.codeColor}25`
+              } */
+        color: {
+          primary: h.employee?.codeColor,
+          secondary: `${h.employee?.codeColor}25`
+        }
+      } as CalendarEvent));
+    } catch (err) {
+      console.error('Error al cargar vacaciones por ID', err);
+    }
+  };
+
+  onUserSelect = (event: Event): void => {
+    const target = event.target as HTMLSelectElement;
+    console.log('Evento de selección de usuario', target.value);
+    const personId = Number(target.value);
+    if (personId) {
+      this.loadHolidaysByUserId(personId);
+    }
+  };
+
+  clearFilters = (): void => {
+    this.selectedUserId = null;
+    this.usersEvents = this.holidays.map(h => ({
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
-      title: `${h.user!.name} ${h.user!.lastName}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+      title: `${h.employee.name} ${h.employee.lastName}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
       type: h.vacationType,
       holidayId: h.holidayId,
       color: {
-        primary: h.user?.color,
-        secondary: `${h.user?.color}25`
+        primary: h.codeColor,
+        secondary: `${h.codeColor}25`
       }
     } as CalendarEvent));
-  } catch (err) {
-    console.error('Error al cargar vacaciones por ID', err);
-  }
-};
-
-onUserSelect = (event: Event): void => {
-  const target = event.target as HTMLSelectElement;
-  const userId = Number(target.value);
-  if (userId) {
-    this.loadHolidaysByUserId(userId);
-  }
-};
-
-clearFilters = (): void => {
-  this.selectedUserId = null;
-  this.usersEvents = this.holidays.map(h => ({
-    start: new Date(h.holidayStartDate),
-    end: new Date(h.holidayEndDate),
-    title: `${h.user.name} ${h.user.lastName}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
-    type: h.vacationType,
-    holidayId: h.holidayId,
-    color: {
-      primary: h.user?.color,
-      secondary: `${h.user?.color}25`
-    }
-  } as CalendarEvent));
-};
+  };
 
 
   // 
@@ -136,7 +144,7 @@ clearFilters = (): void => {
       // Construir HTML con detalles de cada vacación //! Modificar para que muestre el nombre REAL
       const html = events.map(ev => {
         const holiday = this.holidays.find(h => h.holidayId === ev.holidayId);
-        const username = holiday?.user?.username;
+        const username = holiday?.employee?.username;
         return `<p>
           <strong>${ev.title}</strong><br>
           El tipo de la vacación es: ${ev.type}

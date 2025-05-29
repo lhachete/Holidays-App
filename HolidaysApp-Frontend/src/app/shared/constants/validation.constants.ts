@@ -33,7 +33,7 @@ export const VALIDATION_MESSAGES: {
         minlength: 'Debe tener al menos {{requiredLength}} caracteres.',
         maxlength: 'No puede tener más de {{requiredLength}} caracteres.'
     },
-    color: {
+    codeColor: {
         required: 'El color es obligatorio.',
     }
 };

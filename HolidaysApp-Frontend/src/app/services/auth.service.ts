@@ -38,7 +38,7 @@ export class AuthService {
         email: foundUser.email,
         name: foundUser.name,
         lastName: foundUser.lastName,
-        color: foundUser.color,
+        codeColor: foundUser.codeColor,
         rol: foundUser.rol
       };
 
@@ -58,7 +58,7 @@ export class AuthService {
   }
 
   //Registra un nuevo usuario en la API (in-memory para pruebas)
-  async registerUser(user: { username: string; password: string; repeatPassword: string; email: string; name: string, lastName: string, color: string }): Promise<User> {
+  async registerUser(user: { username: string; password: string; repeatPassword: string; email: string; name: string, lastName: string, codeColor: string }): Promise<User> {
     console.log('Registrando usuario:', user);
     try {
       const newUser = await this.userService.addUser(user as User);
