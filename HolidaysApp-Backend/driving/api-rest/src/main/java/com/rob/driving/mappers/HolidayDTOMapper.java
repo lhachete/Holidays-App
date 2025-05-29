@@ -26,6 +26,11 @@ public interface HolidayDTOMapper {
     @Mapping(source = "createdBy", target = "data.createdBy")
     @Mapping(source = "updatedBy", target = "data.updatedBy")
     @Mapping(source = "deletedBy", target = "data.deletedBy")
+    @Mapping(source = "createdAt", target = "data.createdAt")
+    @Mapping(source = "holidayEndDate", target = "data.holidayEndDate")
+    @Mapping(source = "holidayStartDate", target = "data.holidayStartDate")
+    @Mapping(source = "vacationType", target = "data.vacationType")
+    @Mapping(source = "vacationState", target = "data.vacationState")
     HolidayResponse toHolidayResponse(Holiday holiday);
 
     default HolidayCollectionResponse toHolidayCollectionResponse(List<Holiday> holidays) {
