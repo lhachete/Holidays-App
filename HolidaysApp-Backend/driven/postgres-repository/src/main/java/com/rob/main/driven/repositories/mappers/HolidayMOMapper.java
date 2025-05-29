@@ -13,6 +13,7 @@ public interface HolidayMOMapper {
     @Mapping(source = "createdBy", target = "createdBy")
     @Mapping(source = "updatedBy", target = "updatedBy")
     @Mapping(source = "deletedBy", target = "deletedBy")
+    @Mapping(source = "vacationState", target = "vacationState")
     HolidayMO toHolidayMO(Holiday holiday);
 
     @Mapping(source = "user", target = "user")
@@ -20,5 +21,6 @@ public interface HolidayMOMapper {
     @Mapping(source = "createdBy", target = "createdBy")
     @Mapping(source = "updatedBy", target = "updatedBy")
     @Mapping(source = "deletedBy", target = "deletedBy")
+    @Mapping(source = "vacationState", target = "vacationState")
     Holiday toHoliday(HolidayMO holidayMO);
 }
