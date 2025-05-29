@@ -35,10 +35,10 @@ public class UserUseCase implements UserServicePort {
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(role -> role.equals("ADMIN"));
         if(!isAdmin && username == null) {
-            throw new IllegalArgumentException("El usuario no tiene permisos para ver todos los usuarios.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "El usuario no tiene permisos para ver todos los usuarios.");
         }
         else if(!isAdmin && !username.equals(currentUser.getUsername())) {
-            throw new IllegalArgumentException("El usuario no tiene permisos para ver los usuarios que no son el mismo.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"El usuario no tiene permisos para ver los usuarios que no son el mismo.");
         }
         else if(username == null || username.isEmpty()) {
             return userRepositoryPort.findAll();

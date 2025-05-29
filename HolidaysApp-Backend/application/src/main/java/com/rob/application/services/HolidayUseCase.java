@@ -7,10 +7,13 @@ import com.rob.domain.models.User;
 import com.rob.domain.models.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -31,12 +34,12 @@ public class HolidayUseCase implements HolidayServicePort {
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(role -> role.equals("ADMIN"));
         if(!isAdmin && userId == null) {
-            throw new IllegalArgumentException("El usuario no tiene permisos para ver todas las vacaciones.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "El usuario no tiene permisos para ver las vacaciones de todos los usuarios.");
         }
         if(userId == currentUser.getId())
             return holidayRepositoryPort.findByUserId(userId);
         else if(userId != currentUser.getId() && !isAdmin)
-            throw new IllegalArgumentException("El usuario no tiene permisos para ver las vacaciones de otro usuario.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "El usuario no tiene permisos para ver las vacaciones de otros usuarios.");
         return holidayRepositoryPort.findAllHolidays();
     }
 
