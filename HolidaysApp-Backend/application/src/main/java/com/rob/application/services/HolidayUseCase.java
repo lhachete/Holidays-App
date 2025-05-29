@@ -46,7 +46,7 @@ public class HolidayUseCase implements HolidayServicePort {
     @Override
     public Holiday addHoliday(Holiday holiday) {
         log.info("Se va a añadir la vacación: {}", holiday);
-        if(isValidHoliday(holiday)) {
+        if(isValidHoliday(holiday, true)) {
             holiday.setCreatedAt(OffsetDateTime.now());
             holiday.setCreatedBy(holiday.getUser());
             holiday.setVacationState("aprobada");
@@ -71,7 +71,7 @@ public class HolidayUseCase implements HolidayServicePort {
     public Holiday updateHoliday(Holiday holiday) {
         if(holidayRepositoryPort.findByIdAndUserId(holiday.getId(), holiday.getUser().getId()) == null)
             throw new IllegalArgumentException("La vacacion no pertenece al usuario.");
-        if(isValidHoliday(holiday)) {
+        if(isValidHoliday(holiday, false)) {
             Holiday holidayToUpdate = holidayRepositoryPort.findById(holiday.getId());
             holidayToUpdate.setHolidayStartDate(holiday.getHolidayStartDate());
             holidayToUpdate.setHolidayEndDate(holiday.getHolidayEndDate());
@@ -83,11 +83,17 @@ public class HolidayUseCase implements HolidayServicePort {
         return null;
     }
 
-    public boolean isValidHoliday(Holiday holiday) {
+    public boolean isValidHoliday(Holiday holiday, boolean isCreation) {
         if(holiday.getHolidayEndDate().isBefore(holiday.getHolidayStartDate()))
             throw new IllegalArgumentException("La fecha de fin de vacaciones no puede ser anterior a la fecha de inicio.");
-        if(holidayRepositoryPort.countOverlappingVacations(holiday.getUser().getId(),
-                holiday.getHolidayStartDate(), holiday.getHolidayEndDate(),holiday.getId()) > 0)
+        long countOverlappingHolidays;
+        if(isCreation)
+            countOverlappingHolidays = holidayRepositoryPort.countOverlappingVacationsForCreation(holiday.getUser().getId(),
+                    holiday.getHolidayStartDate(), holiday.getHolidayEndDate());
+        else
+            countOverlappingHolidays = holidayRepositoryPort.countOverlappingVacationsForUpdate(holiday.getUser().getId(),
+                holiday.getHolidayStartDate(), holiday.getHolidayEndDate(),holiday.getId());
+        if(countOverlappingHolidays > 0)
             throw new IllegalArgumentException("Las fechas de vacaciones se solapan con otras vacaciones existentes.");
         return true;
     }

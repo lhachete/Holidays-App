@@ -24,6 +24,28 @@ public interface HolidayMOJpaRepository extends JpaRepository<HolidayMO, Integer
             @Param("holidayId") Integer holidayId
     );
 
+    @Query("SELECT COUNT(h) FROM HolidayMO h " +
+            "WHERE h.user.id = :userId " +
+            "AND h.holidayStartDate <= :endDate " +
+            "AND h.holidayEndDate >= :startDate")
+    long countOverlappingVacationsForCreation(
+            @Param("userId") Integer userId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
+
+    @Query("SELECT COUNT(h) FROM HolidayMO h " +
+            "WHERE h.user.id = :userId " +
+            "AND h.holidayStartDate <= :endDate " +
+            "AND h.holidayEndDate >= :startDate " +
+            "AND h.id <> :holidayId")
+    long countOverlappingVacationsForUpdate(
+            @Param("userId") Integer userId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("holidayId") Integer holidayId
+    );
+
     Optional<HolidayMO> findById(Integer id);
 
     Optional<HolidayMO> findByIdAndUser_Id(Integer id, Integer userId);

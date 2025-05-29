@@ -38,10 +38,17 @@ public class HolidayRepositoryJpaAdapter implements HolidayRepositoryPort {
     }
 
     @Override
-    public long countOverlappingVacations(Integer userId, LocalDate startDate, LocalDate endDate, Integer holidayId) {
-        log.info("Se van a contar las vacaciones superpuestas para el usuario con ID: {}, desde: {}, hasta: {}, excluyendo ID de vacación: {}",
+    public long countOverlappingVacationsForCreation(Integer userId, LocalDate startDate, LocalDate endDate) {
+        log.info("Se van a contar las vacaciones superpuestas para la creación del usuario con ID: {}, desde: {}, hasta: {}",
+                 userId, startDate, endDate);
+        return holidayMOJpaRepository.countOverlappingVacationsForCreation(userId, startDate, endDate);
+    }
+
+    @Override
+    public long countOverlappingVacationsForUpdate(Integer userId, LocalDate startDate, LocalDate endDate, Integer holidayId) {
+        log.info("Se van a contar las vacaciones superpuestas para la actualización del usuario con ID: {}, desde: {}, hasta: {}, excluyendo ID de vacación: {}",
                  userId, startDate, endDate, holidayId);
-        return holidayMOJpaRepository.countOverlappingVacations(userId, startDate, endDate, holidayId);
+        return holidayMOJpaRepository.countOverlappingVacationsForUpdate(userId, startDate, endDate, holidayId);
     }
 
     @Override
