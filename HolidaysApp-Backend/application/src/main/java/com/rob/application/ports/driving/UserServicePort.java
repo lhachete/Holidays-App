@@ -9,6 +9,7 @@ public interface UserServicePort {
     User getUserByUsernameOrEmailAndHashedPassword(String usernameOrEmail, String password);
     boolean usernameExists(String username);
     boolean emailExists(String email);
+    boolean colorCodeExists(String colorCode);
     User createUser(User user);
     String verify(User user);
     User getUserById(Integer userId);

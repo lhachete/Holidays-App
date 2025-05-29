@@ -74,4 +74,10 @@ public class UserJpaRepositoryAdapter implements UserRepositoryPort {
         log.info("Se va a buscar un usuario por nombre de usuario o email: {}, {}", username, email);
         return userMOMapper.toUser(userMOJpaRepository.findByUsernameOrEmail(username, email).get());
     }
+
+    @Override
+    public User findByCodeColor(String colorCode) {
+        log.info("Se va a buscar un usuario por código de color: {}", colorCode);
+        return userMOMapper.toUser(userMOJpaRepository.findByCodeColor(colorCode).get());
+    }
 }

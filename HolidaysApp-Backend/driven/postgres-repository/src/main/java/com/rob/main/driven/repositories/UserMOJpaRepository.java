@@ -20,5 +20,5 @@ public interface UserMOJpaRepository extends JpaRepository<UserMO, Integer> {
     @NonNull Optional<UserMO> findById(@NonNull Integer id);
 
     Optional<UserMO> findByUsernameOrEmail(String username, String email);
-
+    Optional<UserMO> findByCodeColor(String colorCode);
 }

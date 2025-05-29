@@ -71,6 +71,10 @@ public class UserControllerAdapter implements UsersApi {
             log.error("El email {} ya está en uso", registerRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email ya en uso");
         }
+        if(userServicePort.colorCodeExists(registerRequest.getCodeColor())) {
+            log.error("El código de color {} ya está en uso", registerRequest.getCodeColor());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código de color ya en uso");
+        }
         log.info("Registrando usuario con username: {} y email: {}", registerRequest.getUsername(), registerRequest.getEmail());
         Employee employee = Employee.builder()
                 .firstName(registerRequest.getName())
