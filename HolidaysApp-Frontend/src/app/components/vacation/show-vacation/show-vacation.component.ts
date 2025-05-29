@@ -102,15 +102,14 @@ export class ShowVacationComponent {
     }
   };
 
-  onUserSelect = (event: Event): void => {
-    console.log('Evento de selección de usuario:', event.target as HTMLSelectElement);
-    const target = event.target as HTMLSelectElement;
-    console.log('Evento de selección de usuario con id:', target.value);
-    const personId = Number(target.value);
-    if (personId) {
-      this.loadHolidaysByUserId(personId);
-    }
-  };
+  onUserSelect(personId: number) {
+    
+    console.log('selección de usuario con id:', personId);
+    
+    if (personId != null) {
+    this.loadHolidaysByUserId(personId);
+  }
+}
 
   clearFilters = (): void => { 
     this.selectedUserId = null;

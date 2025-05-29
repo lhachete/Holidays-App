@@ -10,11 +10,11 @@
     <h3 class="">Filtrar por usuario </h3>
     <button class="btn btn-blueGFT" (click)="clearFilters()">Quitar filtros</button>
   </div>
-  <select class="form-select mb-4" [(ngModel)]="selectedUserId" (change)="onUserSelect($event)">
+  <select class="form-select mb-4" [(ngModel)]="selectedUserId" (ngModelChange)="onUserSelect($event)">
       <option [ngValue]="null" disabled>Selecciona un usuario</option>
 
       @for (user of availableUsers; track user.personId) {
-        <option [value]="user.personId">
+        <option [ngValue]="user.personId">
           {{ user.name }} {{ user.lastName }}
         </option>
       }
