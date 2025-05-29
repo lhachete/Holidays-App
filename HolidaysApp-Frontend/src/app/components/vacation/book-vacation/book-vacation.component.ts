@@ -62,9 +62,9 @@ export class BookVacationComponent {
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
       title: `Vacaciones ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
-      codeColor: { //! Ver bien esto como llega, como todo cuando este la API...
-        primary: h.employee?.codeColor,
-        secondary: `${h.employee?.codeColor}25`
+      color: { 
+        primary: this.user.codeColor,
+        secondary: `${this.user.codeColor}25`
       }
     } as CalendarEvent));
 
@@ -163,19 +163,20 @@ export class BookVacationComponent {
           vacationType: selectedType,
         });
 
-        // Actualizo la lista de vacaiones del usuario
+        // Actualizo la lista de vacaiones del usuario //! Llegan nulos desdes el backend, ESPERAR, por eso no se actualiza el calendario
         this.userEvents = [...this.userEvents,
-        {
-          start: new Date(newHoliday.holidayStartDate),
-          end: new Date(newHoliday.holidayEndDate),
-          title: `Vacaciones: ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`,
-          color: {
-            primary: this.user?.codeColor,
-            secondary: `${this.user?.codeColor}25`
-          },
-        }
+          {
+            start: new Date(newHoliday.holidayStartDate),
+            end: new Date(newHoliday.holidayEndDate),
+            title: `Vacaciones: ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`,
+            color: {
+              primary: this.user.codeColor,
+              secondary: `${this.user.codeColor}25`
+            },
+          }
         ];
-
+        console.log('Nueva vacación añadida:', newHoliday);
+        console.log('Eventos de usuario actualizados:', this.userEvents);
         this.clearSelection();
         await Swal.fire({
           toast: true,

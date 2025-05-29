@@ -217,7 +217,7 @@ export class AuthComponent implements OnInit {
           errors['username'] = trimmed;
         } else if (trimmed.startsWith('E')) {
           errors['email'] = trimmed;
-        } else if (trimmed.startsWith('C')|| trimmed.endsWith('D')) { //quitar <<D>> al final
+        } else if (trimmed.startsWith('C')) {
           errors['codeColor'] = trimmed;
         }
       }

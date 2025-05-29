@@ -50,14 +50,14 @@ export class ShowVacationComponent {
       console.log('Cargando vacaciones', this.holidays);
       this.usersEvents = this.holidays.map(h => ({
         start: new Date(h.holidayStartDate),
-        end: new Date(h.holidayEndDate), /* //!Cambiar el username por el nombre */
-        title: `${user.rol.name === 'ADMIN' ? h.employee.name : 'Vacaciones'}: 
+        end: new Date(h.holidayEndDate), /* //!Comprobar el nombre en modo ADMIN */
+        title: `${user.rol.name === 'ADMIN' ? h.employee.name : h.user.employee.name}: 
         ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
         type: h.vacationType,
         holidayId: h.holidayId,
         color: {
-          primary: h.codeColor,
-          secondary: `${h.codeColor}25`
+          primary: this.user.codeColor,
+          secondary: `${this.user.codeColor}25`
         }
       } as CalendarEvent));
 
@@ -65,7 +65,7 @@ export class ShowVacationComponent {
       if (this.user.rol.name === 'ADMIN') {
         const userMap = new Map();
         console.log(this.holidays)
-        for (const h of this.holidays) { //! AQUI EN LA API, EN VEZ DE SER userId ES personId
+        for (const h of this.holidays) { //! AQUI EN LA API, EN VEZ DE SER userId ES personId / modo ADMIN
           if (!userMap.has(h.employee.userId)) {
             userMap.set(h.employee.userId, {
               personId: h.employee.userId,
@@ -94,7 +94,7 @@ export class ShowVacationComponent {
         title: `${h.employee!.name} ${h.employee!.lastName}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
         type: h.vacationType,
         holidayId: h.holidayId,
-        /*       color: { //! Descomentar y cambiar / comprobar cuando vaya la API
+        /*       color: { //! Descomentar y cambiar / comprobar cuando vaya la API / modo ADMIN
                 primary: h.codeColor,
                 secondary: `${h.codeColor}25`
               } */
