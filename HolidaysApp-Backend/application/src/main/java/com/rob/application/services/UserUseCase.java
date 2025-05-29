@@ -57,20 +57,17 @@ public class UserUseCase implements UserServicePort {
 
     @Override
     public boolean usernameExists(String username) {
-        User user = userRepositoryPort.findByUsername(username);
-        if(user != null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Nombre de usuario ya en uso", null);
-        }
-        return false;
+        return userRepositoryPort.findByUsername(username) != null;
     }
 
     @Override
     public boolean emailExists(String email) {
-        User user = userRepositoryPort.findByEmail(email);
-        if(user != null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email ya en uso", null);
-        }
-        return false;
+        return userRepositoryPort.findByEmail(email) != null;
+    }
+
+    @Override
+    public boolean colorCodeExists(String colorCode) {
+        return userRepositoryPort.findByCodeColor(colorCode) != null;
     }
 
     @Override

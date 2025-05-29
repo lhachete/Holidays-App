@@ -23,4 +23,6 @@ public interface UserRepositoryPort {
     User findById(Integer userId);
 
     User findByUsernameOrEmail(String username, String email);
+
+    User findByCodeColor(String colorCode);
 }
