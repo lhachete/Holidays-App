@@ -6,6 +6,7 @@ import com.rob.domain.models.Holiday;
 import com.rob.domain.models.User;
 import com.rob.domain.models.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class HolidayUseCase implements HolidayServicePort {
 
     private final HolidayRepositoryPort holidayRepositoryPort;
@@ -33,14 +35,14 @@ public class HolidayUseCase implements HolidayServicePort {
         }
         if(userId == currentUser.getId())
             return holidayRepositoryPort.findByUserId(userId);
-        else if(userId != currentUser.getId())
+        else if(userId != currentUser.getId() && !isAdmin)
             throw new IllegalArgumentException("El usuario no tiene permisos para ver las vacaciones de otro usuario.");
         return holidayRepositoryPort.findAllHolidays();
     }
 
     @Override
     public Holiday addHoliday(Holiday holiday) {
-        System.out.println("Holiday: " + holiday);
+        log.info("Se va a añadir la vacación: {}", holiday);
         if(isValidHoliday(holiday)) {
             holiday.setCreatedAt(OffsetDateTime.now());
             holiday.setCreatedBy(holiday.getUser());
