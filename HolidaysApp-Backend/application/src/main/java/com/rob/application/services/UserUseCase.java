@@ -67,7 +67,7 @@ public class UserUseCase implements UserServicePort {
 
     @Override
     public boolean colorCodeExists(String colorCode) {
-        return userRepositoryPort.findByCodeColor(colorCode) != null;
+        return userRepositoryPort.findByCodeColor(colorCode);
     }
 
     @Override

@@ -76,8 +76,8 @@ public class UserJpaRepositoryAdapter implements UserRepositoryPort {
     }
 
     @Override
-    public User findByCodeColor(String colorCode) {
+    public boolean findByCodeColor(String colorCode) {
         log.info("Se va a buscar un usuario por código de color: {}", colorCode);
-        return userMOMapper.toUser(userMOJpaRepository.findByCodeColor(colorCode).get());
+        return userMOJpaRepository.existsByCodeColor(colorCode);
     }
 }
