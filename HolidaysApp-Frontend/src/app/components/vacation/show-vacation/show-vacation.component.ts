@@ -50,9 +50,8 @@ export class ShowVacationComponent {
       console.log('Cargando vacaciones', this.holidays);
       this.usersEvents = this.holidays.map(h => ({
         start: new Date(h.holidayStartDate),
-        end: new Date(h.holidayEndDate), /* //!Comprobar el nombre en modo ADMIN */
-        title: `${user.rol.name === 'ADMIN' ? h.employee.name : h.user.employee.name}: 
-        ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+        end: new Date(h.holidayEndDate), 
+        title: `${h.user.employee.name}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
         type: h.vacationType,
         holidayId: h.holidayId,
         color: {
@@ -61,16 +60,15 @@ export class ShowVacationComponent {
         }
       } as CalendarEvent));
 
-      //
+      // Si el usuario es ADMIN, cargamos los usuarios disponibles para la lista desplegable
       if (this.user.rol.name === 'ADMIN') {
         const userMap = new Map();
-        console.log(this.holidays)
-        for (const h of this.holidays) { //! AQUI EN LA API, EN VEZ DE SER userId ES personId / modo ADMIN
-          if (!userMap.has(h.employee.userId)) {
-            userMap.set(h.employee.userId, {
-              personId: h.employee.userId,
-              name: h.employee.name,
-              lastName: h.employee.lastName
+        for (const h of this.holidays) {
+          if (!userMap.has(h.user.employee.personId)) {
+            userMap.set(h.user.employee.personId, {
+              personId: h.user.employee.personId,
+              name: h.user.employee.name,
+              lastName: h.user.employee.lastName
             });
           }
         }
@@ -91,7 +89,7 @@ export class ShowVacationComponent {
       this.usersEvents = holidays.map(h => ({
         start: new Date(h.holidayStartDate),
         end: new Date(h.holidayEndDate),
-        title: `${h.employee!.name} ${h.employee!.lastName}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+        title: `${h.user?.employee?.name} ${h.user?.employee?.lastName}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
         type: h.vacationType,
         holidayId: h.holidayId,
         /*       color: { //! Descomentar y cambiar / comprobar cuando vaya la API / modo ADMIN
