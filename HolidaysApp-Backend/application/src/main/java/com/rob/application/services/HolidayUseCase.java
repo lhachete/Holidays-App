@@ -66,8 +66,7 @@ public class HolidayUseCase implements HolidayServicePort {
         return holidayRepositoryPort.deleteById(holidayId);
     }
 
-    //meter validacion si al usuario le pertenece la vacacion
-    @Override
+    //en el update by se le emte el usauirio que tiene el token con la sesion iniciada
     public Holiday updateHoliday(Holiday holiday) {
         if(holidayRepositoryPort.findByIdAndUserId(holiday.getId(), holiday.getUser().getId()) == null)
             throw new IllegalArgumentException("La vacacion no pertenece al usuario.");
@@ -78,7 +77,10 @@ public class HolidayUseCase implements HolidayServicePort {
             holidayToUpdate.setVacationState("aprobada");
             holidayToUpdate.setVacationType(holiday.getVacationType());
             holidayToUpdate.setUpdatedAt(OffsetDateTime.now());
-            holidayToUpdate.setUpdatedBy(holiday.getUser());
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+            User currentUser = principal.getUser();
+            holidayToUpdate.setUpdatedBy(currentUser);
             return holidayRepositoryPort.save(holidayToUpdate);
         }
         return null;
