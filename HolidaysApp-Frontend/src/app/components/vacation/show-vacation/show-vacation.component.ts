@@ -92,13 +92,9 @@ export class ShowVacationComponent {
         title: `${h.user?.employee?.name} ${h.user?.employee?.lastName}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
         type: h.vacationType,
         holidayId: h.holidayId,
-        /*       color: { //! Descomentar y cambiar / comprobar cuando vaya la API / modo ADMIN
-                primary: h.codeColor,
-                secondary: `${h.codeColor}25`
-              } */
         color: {
-          primary: h.employee?.codeColor,
-          secondary: `${h.employee?.codeColor}25`
+          primary: h.user?.codeColor,
+          secondary: `${h.user?.codeColor}25`
         }
       } as CalendarEvent));
     } catch (err) {
@@ -107,42 +103,42 @@ export class ShowVacationComponent {
   };
 
   onUserSelect = (event: Event): void => {
+    console.log('Evento de selección de usuario:', event.target as HTMLSelectElement);
     const target = event.target as HTMLSelectElement;
-    console.log('Evento de selección de usuario', target.value);
+    console.log('Evento de selección de usuario con id:', target.value);
     const personId = Number(target.value);
     if (personId) {
       this.loadHolidaysByUserId(personId);
     }
   };
 
-  clearFilters = (): void => {
+  clearFilters = (): void => { 
     this.selectedUserId = null;
     this.usersEvents = this.holidays.map(h => ({
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
-      title: `${h.employee.name} ${h.employee.lastName}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+      title: `${h.user.employee.name} ${h.user.employee.lastName}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
       type: h.vacationType,
       holidayId: h.holidayId,
       color: {
-        primary: h.codeColor,
-        secondary: `${h.codeColor}25`
+        primary: h.user.codeColor,
+        secondary: `${h.user.codeColor}25`
       }
     } as CalendarEvent));
+    console.log('Filtros limpiados, mostrando todas las vacaciones', this.usersEvents);
   };
 
 
   // 
   onDayDetails = async (day: CalendarMonthViewDay<CalendarEvent>): Promise<void> => {
-    this.selectedDayDetail = day;
-
     //He tenido que añadirlo para que reconozca las propiedades personalizadas.
     const events = day.events as CustomCalendarEv[];
 
     if (events.length) {
-      // Construir HTML con detalles de cada vacación //! Modificar para que muestre el nombre REAL
+      // Construir HTML con detalles de cada vacación
       const html = events.map(ev => {
         const holiday = this.holidays.find(h => h.holidayId === ev.holidayId);
-        const username = holiday?.employee?.username;
+        const username = holiday.user.username;
         return `<p>
           <strong>${ev.title}</strong><br>
           El tipo de la vacación es: ${ev.type}

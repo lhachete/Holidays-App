@@ -16,5 +16,6 @@ export default interface User {
     employee?: {
         personId: number;
         name: string;
-        lastName: string;}
+        lastName: string;
+    }
 }
