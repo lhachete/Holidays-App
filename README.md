@@ -2,25 +2,25 @@
 
 ## 🛠️ Requisitos Previos
 
-Antes de comenzar, asegúrate de tener instaladas las siguientes herramientas en tu sistema:
+Antes de comenzar, hay que asegurarse de tener instaladas las siguientes herramientas en tu sistema:
 
 1. **Node.js**  
-   Descárgalo e instálalo desde [https://nodejs.org/](https://nodejs.org/).  
-   Verifica la instalación con:
+   Enlace para descargarlo desde [https://nodejs.org/](https://nodejs.org/).  
+   Para verificar la instalación:
    ```bash
    node -v
    npm -v
    ```
 
 2. **Angular CLI**  
-   Instálalo globalmente con:
+   Para instalarlo globalmente:
    ```bash
    npm install -g @angular/cli
    ```
 
 3. **Docker o Rancher**  
    Es necesario tener instalado Docker (o Rancher Desktop) para levantar el backend con `docker-compose`.  
-   Puedes instalar Docker desde [https://www.docker.com/](https://www.docker.com/).
+   Enlace de descarga de Docker [https://www.docker.com/](https://www.docker.com/).
 
 4. **IDE recomendados**
    - **Frontend**: [Visual Studio Code](https://code.visualstudio.com/)
@@ -30,7 +30,7 @@ Antes de comenzar, asegúrate de tener instaladas las siguientes herramientas en
 
 ## 🚀 Puesta en Marcha
 
-Sigue estos pasos para poner en funcionamiento toda la aplicación:
+A continuación los pasos para poner en funcionamiento toda la aplicación:
 
 ### 1. Clonar el repositorio
 
@@ -41,7 +41,7 @@ cd <nombre-del-proyecto>
 
 ### 2. Levantar la base de datos PostgreSQL con Docker
 
-Dentro del directorio raíz del backend, ejecuta:
+Dentro del directorio raíz del backend, ejecutar el docker compose o con el comando:
 
 ```bash
 docker-compose up -d
@@ -52,13 +52,13 @@ docker-compose up -d
 > Contraseña: `gft`  
 > Base de datos: `holidays_app`  
 >  
-> Puedes modificar estos valores en el archivo `docker-compose.yml`.
+> Se pueden modificar estos valores en el archivo `docker-compose.yml`.
 
-**Nota:** Si no existe la base de datos `holidays_app`, Docker la creará automáticamente según la configuración del `docker-compose.yml`. No es necesario crearla manualmente.
+**Nota:** La base de datos `holidays_app` debe existir previamente en el sistema PostgreSQL. Puedes crearla manualmente desde PgAdmin o cualquier cliente PostgreSQL antes de ejecutar el backend.
 
 ### 3. Ejecutar el backend (Spring Boot)
 
-Abre el proyecto en IntelliJ IDEA y ejecuta la clase `BootApplication`.
+Abre el proyecto en IntelliJ IDEA y ejecutar la clase `BootApplication` dentro del modulo de **boot**.
 
 Esto:
 - Arrancará el servidor backend.
@@ -66,7 +66,7 @@ Esto:
 
 ### 4. Instalar dependencias del frontend
 
-Desde la carpeta del frontend:
+Desde la carpeta del frontend ejecutar el comando:
 
 ```bash
 npm install
@@ -74,7 +74,7 @@ npm install
 
 ### 5. Levantar la aplicación Angular
 
-Una vez instaladas las dependencias, arranca la aplicación con:
+Una vez instaladas las dependencias, arrancar la aplicación con:
 
 ```bash
 ng serve
