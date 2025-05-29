@@ -55,27 +55,6 @@ public interface UserDTOMapper {
     @Mapping(source = "password" , target = "hashedPassword")
     User toUser(RegisterRequest registerRequest);
 
-    @Mapping(source = "username", target = "username")
-    @Mapping(source = "email", target = "email")
-    @Mapping(source = "role" , target = "rol")
-    @Mapping(source = "employee" , target = "employee")
-    LoginResponse toLoginResponse(UserDTO userDTO);
-
-    @Mapping(source = "id", target = "userId")
-    @Mapping(source = "username", target = "username")
-    @Mapping(source = "email", target = "email")
-    @Mapping(source = "role" , target = "rol")
-    @Mapping(source = "codeColor" , target = "codeColor")
-    @Mapping(source = "employee.id" , target = "employee.personId")
-    @Mapping(source = "employee.firstName" , target = "employee.name")
-    @Mapping(source = "employee.lastName" , target = "employee.lastName")
-    LoginResponse toLoginResponse(User user);
-
-    @Mapping(source = "username", target = "username")
-    @Mapping(source = "email", target = "email")
-    @Mapping(source = "rol" , target = "role")
-    User toUser(LoginResponse loginResponse);
-
     @Mapping(source = "usernameOrEmail", target = "username")
     @Mapping(source = "usernameOrEmail", target = "email")
     @Mapping(source = "password", target = "hashedPassword")
