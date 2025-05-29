@@ -22,7 +22,6 @@ export class EditVacationComponent {
   }
 
   private vacationTypeOptions = vacationTypeOptions;
-  userColor: string = "";
 
   private setUTCDate = setUTCDate;
   private toDateInputValue = toDateInputValue;
@@ -36,9 +35,9 @@ export class EditVacationComponent {
   private loadUserHolidays = async (): Promise<void> => {
     const userId = this.user.userId;
     const holidays = await this.holidayService.getHolidaysById(userId);
-    if (holidays.length && holidays[0].user?.codeColor) { //! He hecho esto porque se supone que codeColor me viene por las holidays, y no por el usuario.
-      this.userColor = holidays[0].user.codeColor;
-    }
+
+    console.log('Cargando vacaciones del usuario', holidays);
+
     this.userEvents = holidays.map(holiday => {
       return this.mapToCalendarEvent(holiday)
     });
@@ -52,9 +51,9 @@ export class EditVacationComponent {
     title: `Vacaciones: ${new Date(holiday.holidayStartDate).toLocaleDateString()} – ${new Date(holiday.holidayEndDate).toLocaleDateString()}`,
     holidayId: holiday.holidayId,
     type: holiday.vacationType,
-    codeColor: {
-      primary: holiday.user?.codeColor,
-      secondary: `${holiday.user?.codeColor}25`
+    color: {
+      primary: this.user.codeColor,
+      secondary: `${this.user.codeColor}25`
     }
   }) as CustomCalendarEv;
 
@@ -182,8 +181,8 @@ export class EditVacationComponent {
         title: `Vacaciones ${newStart.toLocaleDateString()} - ${newEnd.toLocaleDateString()}`,
         type,
         color: {
-          primary: this.userColor,
-          secondary: `${this.userColor}25`
+          primary: this.user.codeColor,
+          secondary: `${this.user.codeColor}25`
         }
       } : ev
     );

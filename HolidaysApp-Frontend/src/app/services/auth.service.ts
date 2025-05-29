@@ -27,6 +27,7 @@ export class AuthService {
   async login(userInput: string, password: string): Promise<'OK' | 'USER_ERROR' | 'SERVER_ERROR'> {
     try {
       const foundUser = await this.userService.login(userInput, password);
+      console.log('Usuario encontrado:', foundUser);
       if (!foundUser) return 'USER_ERROR';
 
       const token = foundUser.token!;
@@ -49,6 +50,7 @@ export class AuthService {
       return 'OK';
 
     } catch (err: any) {
+      
       if (err.status === 0 || err.status === 500) {
         return 'SERVER_ERROR';
       } else {
@@ -66,7 +68,7 @@ export class AuthService {
     } catch (err: any) {
 
       if (err.error && err.error.message) {
-        console.error('Error al registrar el usuario:', err.error.message);
+        console.error('Error al registrar el usuario:', err);
         throw err.error.message; // envio el mensaje de error
       } else {
         throw 'Unknown error occurred';
@@ -140,9 +142,8 @@ export class AuthService {
     return this.isAuthenticated;
   }
 
-  //Compruebo si el usuario tiene el rol indicado
-  hasRole = (rol: string): boolean =>
-    this.user?.rol?.name === rol;
+  //Comprobar si el usuario tiene el rol indicado
+  hasRole = (rol: string): boolean => this.user?.rol?.name === rol;
 
 
   async validatePasswords(data: {
