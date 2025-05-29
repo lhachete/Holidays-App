@@ -38,30 +38,27 @@ public class UserControllerAdapter implements UsersApi {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(15);
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam(value = "username", required = false) String username) {
+    public ResponseEntity<UserCollectionResponse> getAllUsers(@RequestParam(value = "username", required = false) String username) {
         log.info("Solicitud GET /users recibida{}", username != null ? " con username=" + username : " sin username");
         List<User> users = userServicePort.getUsersByUsername(username);
         log.debug("Se encontraron {} usuarios{}", users.size(), username != null ? " con username=" + username : "");
-        return ResponseEntity.ok(userServicePort.getUsersByUsername(username)
-                .stream()
-                .map(userDTOMapper::toUserDTO)
-                .toList());
+        return ResponseEntity.ok(userDTOMapper.toUserCollectionResponse(userServicePort.getUsersByUsername(username)));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> getUserByUsernameOrEmailAndPassword(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginUserResponseDTO> getUserByUsernameOrEmailAndPassword(@RequestBody LoginRequest loginRequest) {
         log.info("Solicitud POST /users/login recibida con datos: {}", loginRequest);
-        LoginResponse loginResponse = userDTOMapper.toLoginResponse(userServicePort.getUserByUsernameOrEmailAndHashedPassword(loginRequest.getUsernameOrEmail(), loginRequest.getPassword()));
-        loginRequest.setUsernameOrEmail(loginResponse.getUsername());
+        LoginUserResponseDTO loginUserResponseDTO = userDTOMapper.toLoginUserResponse(userServicePort.getUserByUsernameOrEmailAndHashedPassword(loginRequest.getUsernameOrEmail(), loginRequest.getPassword()));
+        loginRequest.setUsernameOrEmail(loginUserResponseDTO.getData().getUsername());
         String token = userServicePort.verify(userDTOMapper.toUser(loginRequest));
-        loginResponse.setToken(token);
-        log.info("Se ha generado un token para el usuario: {} con token: {}", loginResponse.getUsername(), token);
-        return ResponseEntity.ok(loginResponse);
+        loginUserResponseDTO.getData().setToken(token);
+        log.info("Se ha generado un token para el usuario: {} con token: {}", loginUserResponseDTO.getData().getUsername(), token);
+        return ResponseEntity.ok(loginUserResponseDTO);
     }
 
     // Registra un usuario y a la vez un empleado.
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerByUsernameEmailAndPassword(@Valid @RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<UserResponse> registerByUsernameEmailAndPassword(@Valid @RequestBody RegisterRequest registerRequest) {
         log.info("Solicitud POST /users/register recibida con datos: {}", registerRequest);
         registerRequest.setRole(roleDTOMapper.toRoleDTO(roleServicePort.getRolesByName("USUARIO").get(0)));
         if(!registerRequest.getPassword().equals(registerRequest.getRepeatPassword()))
@@ -82,12 +79,12 @@ public class UserControllerAdapter implements UsersApi {
         Employee newEmployee = employeeServicePort.createEmployee(employee);
         EmployeeDTO newEmployeeDTO = employeeDTOMapper.toEmployeeDTO(newEmployee);
         registerRequest.setEmployee(newEmployeeDTO);
-        return ResponseEntity.ok(userDTOMapper.toUserDTO(userServicePort.createUser(userDTOMapper.toUser(registerRequest))));
+        return ResponseEntity.ok(userDTOMapper.toUserResponseDTO(userServicePort.createUser(userDTOMapper.toUser(registerRequest))));
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Integer userId) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Integer userId) {
         log.info("Solicitud GET /users/{} recibida", userId);
-        return ResponseEntity.ok(userDTOMapper.toUserDTO(userServicePort.getUserById(userId)));
+        return ResponseEntity.ok(userDTOMapper.toUserResponseDTO(userServicePort.getUserById(userId)));
     }
 }

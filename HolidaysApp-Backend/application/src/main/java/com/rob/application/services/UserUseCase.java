@@ -3,11 +3,14 @@ package com.rob.application.services;
 import com.rob.application.ports.driven.UserRepositoryPort;
 import com.rob.application.ports.driving.UserServicePort;
 import com.rob.domain.models.User;
+import com.rob.domain.models.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,7 +28,19 @@ public class UserUseCase implements UserServicePort {
 
     @Override
     public List<User> getUsersByUsername(String username) {
-        if(username == null || username.isEmpty()) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+        User currentUser = principal.getUser();
+        boolean isAdmin = auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role -> role.equals("ADMIN"));
+        if(!isAdmin && username == null) {
+            throw new IllegalArgumentException("El usuario no tiene permisos para ver todos los usuarios.");
+        }
+        else if(!isAdmin && !username.equals(currentUser.getUsername())) {
+            throw new IllegalArgumentException("El usuario no tiene permisos para ver los usuarios que no son el mismo.");
+        }
+        else if(username == null || username.isEmpty()) {
             return userRepositoryPort.findAll();
         }
         return userRepositoryPort.findByNameContaining(username);
