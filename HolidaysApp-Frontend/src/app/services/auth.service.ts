@@ -27,6 +27,7 @@ export class AuthService {
   async login(userInput: string, password: string): Promise<'OK' | 'USER_ERROR' | 'SERVER_ERROR'> {
     try {
       const foundUser = await this.userService.login(userInput, password);
+      console.log('Usuario encontrado:', foundUser);
       if (!foundUser) return 'USER_ERROR';
 
       const token = foundUser.token!;
@@ -49,6 +50,7 @@ export class AuthService {
       return 'OK';
 
     } catch (err: any) {
+      
       if (err.status === 0 || err.status === 500) {
         return 'SERVER_ERROR';
       } else {

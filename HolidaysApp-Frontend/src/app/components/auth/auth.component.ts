@@ -212,12 +212,14 @@ export class AuthComponent implements OnInit {
         if (!trimmed) return;
 
         if (trimmed.endsWith('d')) {
-          errors['confirmPassword'] = "Error al conectar con el servidor.";
+          errors['codeColor'] = "Error al conectar con el servidor.";
         } else if (trimmed.startsWith('U') || trimmed.startsWith('N')) {
           errors['username'] = trimmed;
         } else if (trimmed.startsWith('E')) {
           errors['email'] = trimmed;
-        } 
+        } else if (trimmed.startsWith('C')|| trimmed.endsWith('D')) { //quitar <<D>> al final
+          errors['codeColor'] = trimmed;
+        }
       }
     });
 
