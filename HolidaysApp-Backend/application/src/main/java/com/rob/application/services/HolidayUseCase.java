@@ -81,7 +81,7 @@ public class HolidayUseCase implements HolidayServicePort {
                 .anyMatch(role -> role.equals("ADMIN"));
         Holiday holidayToDelete = holidayRepositoryPort.findById(holidayId);
         if(!isAdmin && currentUser.getId() != holidayToDelete.getUser().getId())
-            throw new IllegalArgumentException("La vacacion no pertenece al usuario y no tiene permisos para eliminar vacaciones para otro usuario..");
+            throw new IllegalArgumentException("La vacacion no pertenece al usuario y no tiene permisos para eliminar vacaciones para otro usuario.");
         return holidayRepositoryPort.deleteById(holidayId);
     }
 
@@ -95,7 +95,7 @@ public class HolidayUseCase implements HolidayServicePort {
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(role -> role.equals("ADMIN"));
         if(!isAdmin && holidayRepositoryPort.findByIdAndUserId(holiday.getId(), currentUser.getId()) == null)
-            throw new IllegalArgumentException("La vacacion no pertenece al usuario y no tiene permisos para modificar vacaciones para otro usuario..");
+            throw new IllegalArgumentException("La vacacion no pertenece al usuario y no tiene permisos para modificar vacaciones para otro usuario.");
         if(isValidHoliday(holiday, false)) {
             Holiday holidayToUpdate = holidayRepositoryPort.findById(holiday.getId());
             holidayToUpdate.setHolidayStartDate(holiday.getHolidayStartDate());
