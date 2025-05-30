@@ -34,24 +34,20 @@ public class UserUseCase implements UserServicePort {
         boolean isAdmin = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(role -> role.equals("ADMIN"));
-        if(!isAdmin && username == null) {
+        if(!isAdmin && username == null)
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "El usuario no tiene permisos para ver todos los usuarios.");
-        }
-        else if(!isAdmin && !username.equals(currentUser.getUsername())) {
+        else if(!isAdmin && !username.equals(currentUser.getUsername()))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"El usuario no tiene permisos para ver los usuarios que no son el mismo.");
-        }
-        else if(username == null || username.isEmpty()) {
+        else if(username == null || username.isEmpty())
             return userRepositoryPort.findAll();
-        }
         return userRepositoryPort.findByNameContaining(username);
     }
 
     @Override
     public User getUserByUsernameOrEmailAndHashedPassword(String usernameOrEmail, String password) {
         User user = userRepositoryPort.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
-        if(user == null || !encoder.matches(password, user.getHashedPassword())) {
+        if(user == null || !encoder.matches(password, user.getHashedPassword()))
             throw new org.springframework.web.server.ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username/email o contraseñas invalidas", null);
-        }
         return user;
     }
 
@@ -83,19 +79,17 @@ public class UserUseCase implements UserServicePort {
     @Override
     public String verify(User user) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getHashedPassword()));
-        if (authentication.isAuthenticated()) {
+        if (authentication.isAuthenticated())
             return jwtServiceUseCase.generateToken(user.getUsername());
-        } else {
+        else
             return "fail";
-        }
     }
 
     @Override
     public User getUserById(Integer userId) {
         User user = userRepositoryPort.findById(userId);
-        if(user == null) {
+        if(user == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado", null);
-        }
         return user;
     }
 }

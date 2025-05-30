@@ -48,6 +48,13 @@ public class HolidayUseCase implements HolidayServicePort {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
         User currentUser = principal.getUser();
+        boolean isAdmin = auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role -> role.equals("ADMIN"));
+        if(!isAdmin && holiday.getUser().getId() != currentUser.getId()) {
+            log.error("El usuario no tiene permisos para añadir vacaciones para otro usuario.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "El usuario no tiene permisos para añadir vacaciones para otro usuario.");
+        }
         log.info("Se va a añadir la vacación: {}", holiday);
         if(isValidHoliday(holiday, true)) {
             holiday.setCreatedAt(OffsetDateTime.now());
@@ -66,14 +73,29 @@ public class HolidayUseCase implements HolidayServicePort {
 
     @Override
     public Holiday deleteHolidayById(Integer holidayId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+        User currentUser = principal.getUser();
+        boolean isAdmin = auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role -> role.equals("ADMIN"));
+        Holiday holidayToDelete = holidayRepositoryPort.findById(holidayId);
+        if(!isAdmin && currentUser.getId() != holidayToDelete.getUser().getId())
+            throw new IllegalArgumentException("La vacacion no pertenece al usuario y no tiene permisos para eliminar vacaciones para otro usuario..");
         return holidayRepositoryPort.deleteById(holidayId);
     }
 
     //en el update by se le emte el usauirio que tiene el token con la sesion iniciada
     // si el usuario que tiene la sesion iniciada no es el mismo que el de la vacacion tirar una excepcion
     public Holiday updateHoliday(Holiday holiday) {
-        if(holidayRepositoryPort.findByIdAndUserId(holiday.getId(), holiday.getUser().getId()) == null)
-            throw new IllegalArgumentException("La vacacion no pertenece al usuario.");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+        User currentUser = principal.getUser();
+        boolean isAdmin = auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role -> role.equals("ADMIN"));
+        if(!isAdmin && holidayRepositoryPort.findByIdAndUserId(holiday.getId(), currentUser.getId()) == null)
+            throw new IllegalArgumentException("La vacacion no pertenece al usuario y no tiene permisos para modificar vacaciones para otro usuario..");
         if(isValidHoliday(holiday, false)) {
             Holiday holidayToUpdate = holidayRepositoryPort.findById(holiday.getId());
             holidayToUpdate.setHolidayStartDate(holiday.getHolidayStartDate());
@@ -81,9 +103,6 @@ public class HolidayUseCase implements HolidayServicePort {
             holidayToUpdate.setVacationState("aprobada");
             holidayToUpdate.setVacationType(holiday.getVacationType());
             holidayToUpdate.setUpdatedAt(OffsetDateTime.now());
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
-            User currentUser = principal.getUser();
             holidayToUpdate.setUpdatedBy(currentUser);
             return holidayRepositoryPort.save(holidayToUpdate);
         }
