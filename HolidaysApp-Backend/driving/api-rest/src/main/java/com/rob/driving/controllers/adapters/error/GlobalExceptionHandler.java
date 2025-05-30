@@ -1,6 +1,5 @@
 package com.rob.driving.controllers.adapters.error;
 
-import com.rob.driving.controllers.adapters.response.WrapperResponseData;
 import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.core.MethodParameter;
 import org.springframework.dao.DataIntegrityViolationException;
