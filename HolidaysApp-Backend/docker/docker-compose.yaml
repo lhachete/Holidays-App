@@ -1,4 +1,4 @@
-name: holidays-app
+name: holidays_app
 services:
   db:
     image: postgres:17.0-bookworm
@@ -9,6 +9,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: gft
+      POSTGRES_DB: holidays_app
     volumes:
       - holidays_app_postgres_data:/var/lib/postgresql/data
   pgadmin:

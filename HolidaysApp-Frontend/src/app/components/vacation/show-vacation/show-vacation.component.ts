@@ -55,8 +55,8 @@ export class ShowVacationComponent {
         type: h.vacationType,
         holidayId: h.holidayId,
         color: {
-          primary: this.user.codeColor,
-          secondary: `${this.user.codeColor}25`
+          primary: h.user.codeColor,
+          secondary: `${h.user.codeColor}25`
         }
       } as CalendarEvent));
 
