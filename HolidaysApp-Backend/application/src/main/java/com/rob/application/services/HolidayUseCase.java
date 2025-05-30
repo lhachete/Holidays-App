@@ -33,18 +33,21 @@ public class HolidayUseCase implements HolidayServicePort {
         boolean isAdmin = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(role -> role.equals("ADMIN"));
-        if(!isAdmin && userId == null) {
+        if(!isAdmin && userId == null)
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "El usuario no tiene permisos para ver las vacaciones de todos los usuarios.");
-        }
-        if(userId == currentUser.getId())
-            return holidayRepositoryPort.findByUserId(userId);
         else if(userId != currentUser.getId() && !isAdmin)
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "El usuario no tiene permisos para ver las vacaciones de otros usuarios.");
+        if(userId != null)
+            return holidayRepositoryPort.findByUserId(userId);
         return holidayRepositoryPort.findAllHolidays();
     }
 
+    // si el usuario que tiene la sision iniciada no es el mismo que el de la vacacion tirar una excepcion
     @Override
     public Holiday addHoliday(Holiday holiday) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+        User currentUser = principal.getUser();
         log.info("Se va a añadir la vacación: {}", holiday);
         if(isValidHoliday(holiday, true)) {
             holiday.setCreatedAt(OffsetDateTime.now());
@@ -67,6 +70,7 @@ public class HolidayUseCase implements HolidayServicePort {
     }
 
     //en el update by se le emte el usauirio que tiene el token con la sesion iniciada
+    // si el usuario que tiene la sesion iniciada no es el mismo que el de la vacacion tirar una excepcion
     public Holiday updateHoliday(Holiday holiday) {
         if(holidayRepositoryPort.findByIdAndUserId(holiday.getId(), holiday.getUser().getId()) == null)
             throw new IllegalArgumentException("La vacacion no pertenece al usuario.");
