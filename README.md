@@ -1,28 +1,31 @@
-# Holidays App
+# Holidays App - Guía de Configuración
 
-## 🛠️ Requisitos Previos
+## Requisitos Previos
 
 Antes de comenzar, hay que asegurarse de tener instaladas las siguientes herramientas en tu sistema:
 
-1. **Node.js**  
-   Enlace para descargarlo desde [https://nodejs.org/](https://nodejs.org/).  
-   Para verificar la instalación:
+1. **Node.js y npm**  
+   Son necesarios para ejecutar el frontend desarrollado en Angular.  
+   Puedes descargar Node.js desde su sitio oficial: [https://nodejs.org/](https://nodejs.org/)  
+   Para comprobar que está instalado correctamente, ejecuta en la terminal:
    ```bash
    node -v
    npm -v
    ```
 
 2. **Angular CLI**  
-   Para instalarlo globalmente:
+   Es la herramienta de línea de comandos para trabajar con proyectos Angular.  
+   Se instala globalmente con el siguiente comando:
    ```bash
    npm install -g @angular/cli
    ```
 
 3. **Docker o Rancher**  
-   Es necesario tener instalado Docker (o Rancher Desktop) para levantar el backend con `docker-compose`.  
+   Necesitarás uno de estos sistemas para ejecutar los contenedores del backend (especialmente la base de datos).  
    Enlace de descarga de Docker [https://www.docker.com/](https://www.docker.com/).
+   Enlace de descarga de Rancher https://github.com/rancher-sandbox/rancher-desktop/releases
 
-4. **IDE recomendados**
+5. **IDE recomendados**
    - **Frontend**: [Visual Studio Code](https://code.visualstudio.com/)
    - **Backend**: [IntelliJ IDEA](https://www.jetbrains.com/idea/)
 
@@ -30,22 +33,26 @@ Antes de comenzar, hay que asegurarse de tener instaladas las siguientes herrami
 
 ## 🚀 Puesta en Marcha
 
-A continuación los pasos para poner en funcionamiento toda la aplicación:
+A continuación, te explicamos paso a paso cómo levantar todo el entorno de desarrollo, tanto frontend como backend.
 
 ### 1. Clonar el repositorio
 
+Primero, clona el repositorio del proyecto en tu máquina:
+
 ```bash
-git clone <URL-del-repositorio>
-cd <nombre-del-proyecto>
+git clone https://github.com/lhachete/Holidays-App-GFT.git
+cd Holidays-App-GFT
 ```
 
 ### 2. Levantar la base de datos PostgreSQL con Docker
 
-Dentro del directorio raíz del backend, ejecutar el docker compose o con el comando:
+Dentro del directorio raíz del backend, ejecuta el siguiente comando para levantar el servicio de PostgreSQL:
 
 ```bash
 docker-compose up -d
 ```
+
+Esto iniciará un contenedor con la base de datos necesaria para el backend.  Las credenciales por defecto configuradas en el `docker-compose.yml` son:
 
 > 🔐 Las credenciales por defecto para PostgreSQL son:  
 > Usuario: `postgres`  
@@ -54,23 +61,28 @@ docker-compose up -d
 >  
 > Se pueden modificar estos valores en el archivo `docker-compose.yml`.
 
-**Nota:** La base de datos `holidays_app` debe existir previamente en el sistema PostgreSQL. Puedes crearla manualmente desde PgAdmin o cualquier cliente PostgreSQL antes de ejecutar el backend.
+	⚠️ Asegúrate de que la base de datos `holidays_app` exista antes de arrancar el      backend.  
+	Puedes crearla fácilmente usando PgAdmin o cualquier cliente para PostgreSQL.
 
-### 3. Ejecutar el backend (Spring Boot)
+### 3. Levantar el Backend con Spring Boot
 
-Abre el proyecto en IntelliJ IDEA y ejecutar la clase `BootApplication` dentro del modulo de **boot**.
+Abre el proyecto en IntelliJ IDEA y ejecuta la clase principal `BootApplication`, que se encuentra en el módulo `boot`.
 
-Esto:
-- Arrancará el servidor backend.
-- Aplicará las migraciones de Flyway para crear automáticamente todas las tablas necesarias en PostgreSQL.
+Esto realizará varias acciones automáticamente:
+
+- Inicia el servidor backend en el puerto configurado.
+    
+- Ejecuta las migraciones con **Flyway**, generando todas las tablas necesarias en la base de datos si aún no existen.
 
 ### 4. Instalar dependencias del frontend
 
-Desde la carpeta del frontend ejecutar el comando:
+Accede a la carpeta del frontend y ejecuta la instalación de dependencias con:
 
 ```bash
 npm install
 ```
+
+Este paso descargará todos los paquetes y módulos necesarios definidos en `package.json`.
 
 ### 5. Levantar la aplicación Angular
 
@@ -80,12 +92,12 @@ Una vez instaladas las dependencias, arrancar la aplicación con:
 ng serve
 ```
 
-La aplicación estará disponible en [http://localhost:4200](http://localhost:4200)
+Angular iniciará un servidor de desarrollo, y podrás acceder a la aplicación desde tu navegador en: [http://localhost:4200](http://localhost:4200)
 
 ---
 
-## ✅ Aplicación en funcionamiento
+## Aplicación en funcionamiento
 
-- **Frontend**: Angular, servido por defecto en el puerto `4200`.  
-- **Backend**: Spring Boot, con conexión a base de datos PostgreSQL (Docker).  
-- **Base de datos**: `holidays_app`, migrada automáticamente por Flyway.
+- **Frontend**: Angular, accesible en `http://localhost:4200`.
+- **Backend**: Spring Boot conectado a PostgreSQL.
+- **Base de Datos**: `holidays_app`, inicializada automáticamente por Flyway al arrancar el backend.
