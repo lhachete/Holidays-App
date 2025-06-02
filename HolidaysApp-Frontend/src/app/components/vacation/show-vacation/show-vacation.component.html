@@ -8,30 +8,38 @@
       <h3>Filtrar por usuario</h3>
       <button class="btn btn-blueGFT" (click)="clearFilters()">Quitar filtros</button>
     </div>
-
+    
     <!-- Input de búsqueda en lugar de <select> -->
     <div class="mb-4 position-relative">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Busca un usuario..."
-        [(ngModel)]="searchTerm"
-        (ngModelChange)="onSearchTermChange($event)"
-        (keydown.enter)="selectUserFromInput()"
-        (focus)="showDropdown = true"
-        (blur)="hideDropdown()"
+  <div class="input-group">
+    <!-- Icono de lupa -->
+    
+    <!-- Tu input de búsqueda -->
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Busca un usuario..."
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchTermChange($event)"
+      (keydown)="onInputKeyDown($event)"
+      (focus)="showDropdown = true"
+      (blur)="hideDropdown()"
       />
+  </div>
 
       <!-- Dropdown de sugerencias -->
-      @if (showDropdown && filteredUsers.length) {
-        <ul class="list-group position-absolute w-100" style="z-index:10;">
-          @for (user of filteredUsers; track user.personId) {
-            <li class="list-group-item list-group-item-action" (mousedown)="onUserSelect(user.personId)">
-              {{ user.name }} {{ user.lastName }}
-            </li>
-          }
-        </ul>
-      }
+     @if (showDropdown && filteredUsers.length) {
+      <ul class="list-group position-absolute w-100" style="z-index:10; max-height:200px; overflow-y:auto;">
+        @for (user of filteredUsers; track user.personId) {
+          <li
+            class="list-group-item list-group-item-action suggestion-item"
+            [class.active]="filteredUsers.indexOf(user) === activeIndex"
+            (mousedown)="onUserSelect(user.personId)"> 
+            {{ user.name }} {{ user.lastName }}
+          </li>
+        }
+      </ul>
+    }
     </div>
   }
 

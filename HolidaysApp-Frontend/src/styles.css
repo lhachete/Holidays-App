@@ -104,3 +104,7 @@ app-login {
   float: right;
   width: 42px;
 }
+.list-group-item.active{
+  background-color: #153A7B !important;
+  border-color: #153A7B !important;
+}

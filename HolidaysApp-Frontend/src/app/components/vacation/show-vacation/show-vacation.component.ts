@@ -29,7 +29,7 @@ export class ShowVacationComponent {
   availableUsers: { personId: number; name: string; lastName: string }[] = [];
   searchTerm: string = '';
   showDropdown: boolean = false;
-
+  activeIndex = -1; // índice de la opción destacada
 
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
@@ -113,6 +113,7 @@ export class ShowVacationComponent {
     this.selectedUserId = personId;
     this.loadHolidaysByUserId(personId);
     this.showDropdown = false;
+    this.activeIndex = -1;
   };
 }
 
@@ -180,6 +181,7 @@ export class ShowVacationComponent {
   onSearchTermChange(value: string) {
     this.searchTerm = value;
     this.showDropdown = true;
+    this.activeIndex = 0; 
   }
 
   // Cuando el usuario pulsa Enter en el input
@@ -197,5 +199,27 @@ export class ShowVacationComponent {
   hideDropdown() {
     setTimeout(() => this.showDropdown = false);
   }
+
+  // Para manejar las teclas de flecha arriba/abajo y Enter en el input
+  onInputKeyDown(event: KeyboardEvent) {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (this.activeIndex < this.filteredUsers.length - 1) {
+        this.activeIndex++;
+      }
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (this.activeIndex > 0) {
+        this.activeIndex--;
+      }
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      if (this.activeIndex >= 0 && this.activeIndex < this.filteredUsers.length) {
+        const selectedUser = this.filteredUsers[this.activeIndex];
+        this.onUserSelect(selectedUser.personId);
+      }
+    }
+  }
+    
 
 }
