@@ -43,14 +43,12 @@ export class ShowVacationComponent {
 
     try {
       const user = this.user;
-      console.log('Usuario', user);
       {
         user.rol.name === 'ADMIN'
           ? this.holidays = await this.holidayService.getAllHolidays()
           : this.holidays = await this.holidayService.getHolidaysById(user.userId)
       }
 
-      console.log('Cargando vacaciones', this.holidays);
       this.usersEvents = this.holidays.map(h => ({
         start: new Date(h.holidayStartDate),
         end: new Date(h.holidayEndDate),
@@ -87,7 +85,6 @@ export class ShowVacationComponent {
   loadHolidaysByUserId = async (personId: number): Promise<void> => {
     try {
       const holidays = await this.holidayService.getHolidaysById(personId);
-      console.log(await this.holidayService.getHolidaysById(personId))
 
       this.usersEvents = holidays.map(h => ({
         start: new Date(h.holidayStartDate),
@@ -133,7 +130,6 @@ export class ShowVacationComponent {
         secondary: `${h.user.codeColor}25`
       }
     } as CalendarEvent));
-    console.log('Filtros limpiados, mostrando todas las vacaciones', this.usersEvents);
   };
 
 
