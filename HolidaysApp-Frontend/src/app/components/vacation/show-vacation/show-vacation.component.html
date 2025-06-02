@@ -1,51 +1,38 @@
 <div class="container text-center mt-4">
-  <h1>Ver vacaciones</h1>
+  <h1 class="fs-3">Ver vacaciones</h1>
 </div>
 
 <div class="container py-4 calendar-size">
   @if (this.user.rol.name === 'ADMIN') {
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h3>Filtrar por usuario</h3>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fs-5 mb-0">Filtrar por usuario</h3>
+    <div>
+      <button class="btn btn-blueGFT me-2" (click)="exportToExcel()">Exportar a EXCEL</button>
       <button class="btn btn-blueGFT" (click)="clearFilters()">Quitar filtros</button>
     </div>
-    
-    <!-- Input de búsqueda en lugar de <select> -->
-    <div class="mb-4 position-relative">
-  <div class="input-group">
-    <!-- Icono de lupa -->
-    
-    <!-- Tu input de búsqueda -->
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Busca un usuario..."
-      [(ngModel)]="searchTerm"
-      (ngModelChange)="onSearchTermChange($event)"
-      (keydown)="onInputKeyDown($event)"
-      (focus)="showDropdown = true"
-      (blur)="hideDropdown()"
-      />
   </div>
 
-      <!-- Dropdown de sugerencias -->
-     @if (showDropdown && filteredUsers.length) {
-      <ul class="list-group position-absolute w-100" style="z-index:10; max-height:200px; overflow-y:auto;">
-        @for (user of filteredUsers; track user.personId) {
-          <li
-            class="list-group-item list-group-item-action suggestion-item"
-            [class.active]="filteredUsers.indexOf(user) === activeIndex"
-            (mousedown)="onUserSelect(user.personId)"> 
-            {{ user.name }} {{ user.lastName }}
-          </li>
-        }
-      </ul>
-    }
+  <!-- Input de búsqueda -->
+  <div class="mb-4 position-relative">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Busca un usuario..." [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchTermChange($event)" (keydown)="onInputKeyDown($event)" (focus)="showDropdown = true"
+        (blur)="hideDropdown()" />
     </div>
+
+    <!-- menu desplegable con los usuarios -->
+    @if (showDropdown && filteredUsers.length) {
+    <ul class="list-group position-absolute w-100" style="z-index:10; max-height:200px; overflow-y:auto;">
+      @for (user of filteredUsers; track user.personId) {
+      <li class="list-group-item list-group-item-action suggestion-item"
+        [class.active]="filteredUsers.indexOf(user) === activeIndex" (mousedown)="onUserSelect(user.personId)">
+        {{ user.name }} {{ user.lastName }}
+      </li>
+      }
+    </ul>
+    }
+  </div>
   }
 
-  <app-calendar
-    [mode]="'show'"
-    [events]="usersEvents"
-    (dayDetails)="onDayDetails($event)"
-  ></app-calendar>
+  <app-calendar [mode]="'show'" [events]="usersEvents" (dayDetails)="onDayDetails($event)"></app-calendar>
 </div>

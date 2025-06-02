@@ -6,6 +6,7 @@ import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
 import { AuthService } from '../../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-show-vacation',
@@ -221,5 +222,27 @@ export class ShowVacationComponent {
     }
   }
     
+  exportToExcel(): void {
+    // Si hay un usuario seleccionado, filtra; si no, toma todas las vacaciones
+    const source = this.selectedUserId
+      ? this.holidays.filter(h => h.user.employee.personId === this.selectedUserId)
+      : this.holidays;
+
+    const exportData = source.map(h => ({
+      'ID Vacación': h.holidayId,
+      'Nombre': h.user.employee.name,
+      'Apellido': h.user.employee.lastName,
+      'Inicio': new Date(h.holidayStartDate).toLocaleDateString(),
+      'Fin': new Date(h.holidayEndDate).toLocaleDateString(),
+      'Tipo': h.vacationType,
+      'Estado': h.vacationState
+    }));
+
+    // Crea la hoja y el libro
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Vacaciones');
+    XLSX.writeFile(wb, 'vacaciones.xlsx');
+  }
 
 }
