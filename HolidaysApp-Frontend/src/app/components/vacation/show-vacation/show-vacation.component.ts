@@ -27,6 +27,8 @@ export class ShowVacationComponent {
   // ID del usuario seleccionado para ver sus vacaciones
   selectedUserId: number | null = null;
   availableUsers: { personId: number; name: string; lastName: string }[] = [];
+  searchTerm: string = '';
+  showDropdown: boolean = false;
 
 
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
@@ -50,7 +52,7 @@ export class ShowVacationComponent {
       console.log('Cargando vacaciones', this.holidays);
       this.usersEvents = this.holidays.map(h => ({
         start: new Date(h.holidayStartDate),
-        end: new Date(h.holidayEndDate), 
+        end: new Date(h.holidayEndDate),
         title: `${h.user.employee.name}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
         type: h.vacationType,
         holidayId: h.holidayId,
@@ -103,16 +105,21 @@ export class ShowVacationComponent {
   };
 
   onUserSelect(personId: number) {
-    
-    console.log('selección de usuario con id:', personId);
-    
-    if (personId != null) {
+  const user = this.availableUsers.find(u => u.personId === personId);
+
+  // carga las vacaciones, asigno el valor y oculto el dropdown
+  if (user){
+    this.searchTerm = `${user.name} ${user.lastName}`;
+    this.selectedUserId = personId;
     this.loadHolidaysByUserId(personId);
-  }
+    this.showDropdown = false;
+  };
 }
 
-  clearFilters = (): void => { 
+
+  clearFilters = (): void => {
     this.selectedUserId = null;
+    this.searchTerm = '';
     this.usersEvents = this.holidays.map(h => ({
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
@@ -156,4 +163,39 @@ export class ShowVacationComponent {
       });
     }
   };
+
+  // Getter que devuelve solo los usuarios cuyo nombre o apellido contenga el searchTerm (ignorando mayúsc./minúsc.)
+  get filteredUsers() {
+    const term = this.searchTerm.toLowerCase().trim();
+    if (!term) {
+      return this.availableUsers;
+    } else {
+      return this.availableUsers.filter(user =>
+        (`${user.name} ${user.lastName}`).toLowerCase().includes(term)
+      );
+    }
+  }
+
+  // Cuando cambie el input, volvemos a mostrar el desplegable
+  onSearchTermChange(value: string) {
+    this.searchTerm = value;
+    this.showDropdown = true;
+  }
+
+  // Cuando el usuario pulsa Enter en el input
+  selectUserFromInput() {
+    // Intentamos emparejar con la primera sugerencia
+    if (this.filteredUsers.length) {
+      const first = this.filteredUsers[0];
+      this.onUserSelect(first.personId);
+      this.searchTerm = `${first.name} ${first.lastName}`;
+      this.showDropdown = false;
+    }
+  }
+
+  // Para que el desplegable se cierre al hacer clic fuera de él
+  hideDropdown() {
+    setTimeout(() => this.showDropdown = false);
+  }
+
 }
