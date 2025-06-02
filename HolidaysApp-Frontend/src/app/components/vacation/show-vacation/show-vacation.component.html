@@ -12,7 +12,6 @@
   </div>
   <select class="form-select mb-4" [(ngModel)]="selectedUserId" (ngModelChange)="onUserSelect($event)">
       <option [ngValue]="null" disabled>Selecciona un usuario</option>
-
       @for (user of availableUsers; track user.personId) {
         <option [ngValue]="user.personId">
           {{ user.name }} {{ user.lastName }}

@@ -7,6 +7,7 @@ import { AuthService } from '../../../services/auth.service';
 import { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate, showErrorAlert } from '../../../shared/constants/vacation.constants';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-book-vacation',
@@ -47,7 +48,7 @@ export class BookVacationComponent {
     return this.startInput || this.minStartDate;
   }
 
-  constructor(private holidayService: HolidayService, private authService: AuthService) { }
+  constructor(private holidayService: HolidayService, private authService: AuthService, public router: Router) { }
 
   // Inicializa cargando las vacaciones del usuario
   async ngOnInit(): Promise<void> {
@@ -163,7 +164,6 @@ export class BookVacationComponent {
           vacationType: selectedType,
         });
 
-        // Actualizo la lista de vacaiones del usuario //! Llegan nulos desdes el backend, ESPERAR, por eso no se actualiza el calendario
         this.userEvents = [...this.userEvents,
           {
             start: new Date(newHoliday.holidayStartDate),
@@ -178,6 +178,13 @@ export class BookVacationComponent {
         console.log('Nueva vacación añadida:', newHoliday);
         console.log('Eventos de usuario actualizados:', this.userEvents);
         this.clearSelection();
+        //rediriguir a la vista de vacaciones donde se han guardado
+        // En BookVacationComponent
+        this.router.navigate(['/vacation/show'], {
+          queryParams: { date: new Date(newHoliday.holidayStartDate).toISOString() }
+        });
+
+
         await Swal.fire({
           toast: true,
           icon: 'success',
@@ -222,7 +229,7 @@ export class BookVacationComponent {
 
     if (type === 'start') {
       this.selectedStart = date;
-      //Si ya había end y ahora es anterior, lo ajustas:
+      
       if (this.selectedEnd && this.selectedEnd < date) {
         Swal.fire('Rango inválido', 'La fecha final no puede ser anterior a la fecha inicial.', 'error');
         this.selectedEnd = date;

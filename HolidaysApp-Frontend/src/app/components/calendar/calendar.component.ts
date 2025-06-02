@@ -1,8 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule, CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { addMonths, subMonths } from 'date-fns';
+import { ActivatedRoute  } from '@angular/router';
 
 @Component({
   selector: 'app-calendar',
@@ -28,6 +29,7 @@ export class CalendarComponent implements OnInit {
   'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
 ];
 
+constructor(private route: ActivatedRoute) {}
 
   //Inicializa viewDate y se generan los años disponibles.
   ngOnInit(): void {
@@ -38,6 +40,13 @@ export class CalendarComponent implements OnInit {
     for (let y = today.getFullYear() - 1; y <= today.getFullYear() + 5; y++) {
       this.years.push(y);
     }
+
+    this.route.queryParams.subscribe(params => {
+      if (params['date']) {
+        const date = new Date(params['date']);
+        this.scrollToDate(date);
+      }
+    });
   }
 
 
@@ -71,4 +80,12 @@ export class CalendarComponent implements OnInit {
   updateViewDate(): void {
     this.viewDate = new Date(this.viewYear, this.viewMonth, 1);
   }
+
+  // Método para navegar a una fecha específica
+  scrollToDate(date: Date): void {
+    this.viewDate = date;
+    this.viewMonth = date.getMonth();
+    this.viewYear = date.getFullYear();
+  }
+
 }

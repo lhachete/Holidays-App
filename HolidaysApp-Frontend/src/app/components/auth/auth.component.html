@@ -14,7 +14,7 @@
                         <div class="mb-3">
                             <label [for]="field.key" class="form-label">{{ field.label }}</label>
 
-                            <div class="input-group">
+                            <div class="input-group" [ngClass]="{'campo-color': field.type === 'color'}">
                                 <input
                                     [type]="field.type === 'password' && showPasswordFields[field.key] ? 'text' : field.type"
                                     class="form-control" [id]="field.key" [formControlName]="field.key"
