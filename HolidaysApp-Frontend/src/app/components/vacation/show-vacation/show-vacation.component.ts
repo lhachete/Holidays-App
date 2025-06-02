@@ -133,7 +133,6 @@ export class ShowVacationComponent {
   };
 
 
-  // 
   onDayDetails = async (day: CalendarMonthViewDay<CalendarEvent>): Promise<void> => {
     //He tenido que añadirlo para que reconozca las propiedades personalizadas.
     const events = day.events as CustomCalendarEv[];
