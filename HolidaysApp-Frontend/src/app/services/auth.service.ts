@@ -27,7 +27,7 @@ export class AuthService {
   async login(userInput: string, password: string): Promise<'OK' | 'USER_ERROR' | 'SERVER_ERROR'> {
     try {
       const foundUser = await this.userService.login(userInput, password);
-      console.log('Usuario encontrado:', foundUser);
+
       if (!foundUser) return 'USER_ERROR';
 
       const token = foundUser.token!;
@@ -61,14 +61,13 @@ export class AuthService {
 
   //Registra un nuevo usuario en la API (in-memory para pruebas)
   async registerUser(user: { username: string; password: string; repeatPassword: string; email: string; name: string, lastName: string, codeColor: string }): Promise<User> {
-    console.log('Registrando usuario:', user);
+
     try {
       const newUser = await this.userService.addUser(user as User);
       return newUser;
     } catch (err: any) {
 
       if (err.error && err.error.message) {
-        console.error('Error al registrar el usuario:', err);
         throw err.error.message; // envio el mensaje de error
       } else {
         throw 'Unknown error occurred';

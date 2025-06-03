@@ -6,6 +6,7 @@ import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
 import { AuthService } from '../../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-show-vacation',
@@ -27,7 +28,9 @@ export class ShowVacationComponent {
   // ID del usuario seleccionado para ver sus vacaciones
   selectedUserId: number | null = null;
   availableUsers: { personId: number; name: string; lastName: string }[] = [];
-
+  searchTerm: string = '';
+  showDropdown: boolean = false;
+  activeIndex = -1; // índice de la opción destacada
 
   constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
@@ -40,17 +43,15 @@ export class ShowVacationComponent {
 
     try {
       const user = this.user;
-      console.log('Usuario', user);
       {
         user.rol.name === 'ADMIN'
           ? this.holidays = await this.holidayService.getAllHolidays()
           : this.holidays = await this.holidayService.getHolidaysById(user.userId)
       }
 
-      console.log('Cargando vacaciones', this.holidays);
       this.usersEvents = this.holidays.map(h => ({
         start: new Date(h.holidayStartDate),
-        end: new Date(h.holidayEndDate), 
+        end: new Date(h.holidayEndDate),
         title: `${h.user.employee.name}: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
         type: h.vacationType,
         holidayId: h.holidayId,
@@ -84,7 +85,6 @@ export class ShowVacationComponent {
   loadHolidaysByUserId = async (personId: number): Promise<void> => {
     try {
       const holidays = await this.holidayService.getHolidaysById(personId);
-      console.log(await this.holidayService.getHolidaysById(personId))
 
       this.usersEvents = holidays.map(h => ({
         start: new Date(h.holidayStartDate),
@@ -103,16 +103,22 @@ export class ShowVacationComponent {
   };
 
   onUserSelect(personId: number) {
-    
-    console.log('selección de usuario con id:', personId);
-    
-    if (personId != null) {
+  const user = this.availableUsers.find(u => u.personId === personId);
+
+  // carga las vacaciones, asigno el valor y oculto el dropdown
+  if (user){
+    this.searchTerm = `${user.name} ${user.lastName}`;
+    this.selectedUserId = personId;
     this.loadHolidaysByUserId(personId);
-  }
+    this.showDropdown = false;
+    this.activeIndex = -1;
+  };
 }
 
-  clearFilters = (): void => { 
+
+  clearFilters = (): void => {
     this.selectedUserId = null;
+    this.searchTerm = '';
     this.usersEvents = this.holidays.map(h => ({
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
@@ -124,11 +130,9 @@ export class ShowVacationComponent {
         secondary: `${h.user.codeColor}25`
       }
     } as CalendarEvent));
-    console.log('Filtros limpiados, mostrando todas las vacaciones', this.usersEvents);
   };
 
 
-  // 
   onDayDetails = async (day: CalendarMonthViewDay<CalendarEvent>): Promise<void> => {
     //He tenido que añadirlo para que reconozca las propiedades personalizadas.
     const events = day.events as CustomCalendarEv[];
@@ -156,4 +160,84 @@ export class ShowVacationComponent {
       });
     }
   };
+
+  // Getter que devuelve solo los usuarios cuyo nombre o apellido contenga el searchTerm (ignorando mayúsc./minúsc.)
+  get filteredUsers() {
+    const term = this.searchTerm.toLowerCase().trim();
+    if (!term) {
+      return this.availableUsers;
+    } else {
+      return this.availableUsers.filter(user =>
+        (`${user.name} ${user.lastName}`).toLowerCase().includes(term)
+      );
+    }
+  }
+
+  // Cuando cambie el input, volvemos a mostrar el desplegable
+  onSearchTermChange(value: string) {
+    this.searchTerm = value;
+    this.showDropdown = true;
+    this.activeIndex = 0; 
+  }
+
+  // Cuando el usuario pulsa Enter en el input
+  selectUserFromInput() {
+    // Intentamos emparejar con la primera sugerencia
+    if (this.filteredUsers.length) {
+      const first = this.filteredUsers[0];
+      this.onUserSelect(first.personId);
+      this.searchTerm = `${first.name} ${first.lastName}`;
+      this.showDropdown = false;
+    }
+  }
+
+  // Para que el desplegable se cierre al hacer clic fuera de él
+  hideDropdown() {
+    setTimeout(() => this.showDropdown = false);
+  }
+
+  // Para manejar las teclas de flecha arriba/abajo y Enter en el input
+  onInputKeyDown(event: KeyboardEvent) {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (this.activeIndex < this.filteredUsers.length - 1) {
+        this.activeIndex++;
+      }
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (this.activeIndex > 0) {
+        this.activeIndex--;
+      }
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      if (this.activeIndex >= 0 && this.activeIndex < this.filteredUsers.length) {
+        const selectedUser = this.filteredUsers[this.activeIndex];
+        this.onUserSelect(selectedUser.personId);
+      }
+    }
+  }
+    
+  exportToExcel(): void {
+    // Si hay un usuario seleccionado, filtra; si no, toma todas las vacaciones
+    const source = this.selectedUserId
+      ? this.holidays.filter(h => h.user.employee.personId === this.selectedUserId)
+      : this.holidays;
+
+    const exportData = source.map(h => ({
+      'ID Vacación': h.holidayId,
+      'Nombre': h.user.employee.name,
+      'Apellido': h.user.employee.lastName,
+      'Inicio': new Date(h.holidayStartDate).toLocaleDateString(),
+      'Fin': new Date(h.holidayEndDate).toLocaleDateString(),
+      'Tipo': h.vacationType,
+      'Estado': h.vacationState
+    }));
+
+    // Crea la hoja y el libro
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Vacaciones');
+    XLSX.writeFile(wb, 'vacaciones.xlsx');
+  }
+
 }

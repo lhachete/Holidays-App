@@ -10,25 +10,35 @@ app-login {
   align-items: center;
 }
 
+/* Forzar tamaño del calendario */
+
 @media (min-width: 768px) {
   .calendar-size {
-    width: 75%; 
+    width: 50%; 
   }
+}
+.cal-month-view .cal-day-cell {
+  height: 75px !important; 
+  min-height: unset !important;
+}
+
+.cal-month-view .cal-cell-top {
+  min-height: 0px !important;
 }
 
 /* 
-  * Color azul GFT1 (main) #213E7F
-  * Color azul GFT2 #133E78
+* Color azul GFT1 (main) #213E7F
+* Color azul GFT2 #133E78
 
-  * Color mas intenso (deskbee) #153A7B
-  * Color azul hover GFT1 #405990
+* Color mas intenso (deskbee) #153A7B
+* Color azul hover GFT1 #405990
 
   * Color azul claro GFT1 #0097D9
   * Color azul muy claro GFT2 #297ADF
-
+  
   * Púrpura GFT #B02A87
   * Purpura GFT hover #972875
-
+  
   * box-shadow: 0 2px 2px #00000040;
 */
 
@@ -76,7 +86,6 @@ app-login {
   color: white;
 }
 
-
 .dropdown-item {
   cursor: pointer;
 }
@@ -96,4 +105,22 @@ app-login {
   width: 80px;
   margin-right: 16px;
   padding-bottom: 2px;
+}
+
+.fs-xs {
+  font-size: 12px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Estilos para el input de color */
+.campo-color {
+  float: right;
+  width: 42px;
+}
+.list-group-item.active{
+  background-color: #153A7B !important;
+  border-color: #153A7B !important;
 }

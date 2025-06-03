@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { FieldConfig } from '../../models/FieldConfig.model';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { VALIDATION_MESSAGES } from '../../shared/constants/validation.constants';
+import { getRandomColor } from '../../shared/constants/vacation.constants';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
@@ -49,7 +50,7 @@ export class AuthComponent implements OnInit {
     lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
     password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$/)]),
     confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$/)]),
-    codeColor: new FormControl('#153A7B', [Validators.required])
+    codeColor: new FormControl(getRandomColor(), [Validators.required])
   }, { validators: this.passwordsMatchValidator() });
 
   constructor(

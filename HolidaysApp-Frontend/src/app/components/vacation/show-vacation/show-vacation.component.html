@@ -1,30 +1,36 @@
-<div class="container text-center mt-4">
-  <h1>Ver vacaciones</h1>
-</div>
-
-
 <div class="container py-4 calendar-size">
+  <div class="text-center d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fs-3 mb-0">Ver vacaciones</h1>
+    <button class="btn btn-blueGFT fs-xs" (click)="exportToExcel()">Exportar a EXCEL</button>
+  </div>
 
   @if (this.user.rol.name === 'ADMIN') {
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="">Filtrar por usuario </h3>
+    <h3 class="fs-5 mb-0">Filtrar por usuario</h3>
     <button class="btn btn-blueGFT" (click)="clearFilters()">Quitar filtros</button>
   </div>
-  <select class="form-select mb-4" [(ngModel)]="selectedUserId" (ngModelChange)="onUserSelect($event)">
-      <option [ngValue]="null" disabled>Selecciona un usuario</option>
 
-      @for (user of availableUsers; track user.personId) {
-        <option [ngValue]="user.personId">
-          {{ user.name }} {{ user.lastName }}
-        </option>
+  <!-- Input de búsqueda -->
+  <div class="mb-4 position-relative">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Busca un usuario..." [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchTermChange($event)" (keydown)="onInputKeyDown($event)" (focus)="showDropdown = true"
+        (blur)="hideDropdown()" />
+    </div>
+
+    <!-- menu desplegable con los usuarios -->
+    @if (showDropdown && filteredUsers.length) {
+    <ul class="list-group position-absolute w-100" style="z-index:10; max-height:200px; overflow-y:auto;">
+      @for (user of filteredUsers; track user.personId) {
+      <li class="list-group-item list-group-item-action suggestion-item"
+        [class.active]="filteredUsers.indexOf(user) === activeIndex" (mousedown)="onUserSelect(user.personId)">
+        {{ user.name }} {{ user.lastName }}
+      </li>
       }
-    </select>
+    </ul>
+    }
+  </div>
   }
 
-  <app-calendar
-    [mode]="'show'"
-    [events]="usersEvents"
-    (dayDetails)="onDayDetails($event)"
-  ></app-calendar>
+  <app-calendar [mode]="'show'" [events]="usersEvents" (dayDetails)="onDayDetails($event)"></app-calendar>
 </div>
-
