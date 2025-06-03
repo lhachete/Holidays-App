@@ -21,7 +21,7 @@ describe('AuthComponent', () => {
   // Simulación de AuthService
   let mockAuthService: {
     login: jasmine.Spy<(user: string, pass: string) => Promise<string>>;
-    validateRegistration: jasmine.Spy<() => Promise<{ valid: boolean; errors: any }>>;
+    validatePasswords: jasmine.Spy<() => Promise<{ valid: boolean; errors: any }>>;
     registerUser: jasmine.Spy<() => Promise<void>>;
   };
 
@@ -31,7 +31,7 @@ describe('AuthComponent', () => {
   const setup = async (mode: 'login' | 'register') => {
     mockAuthService = {
       login: jasmine.createSpy('login'),
-      validateRegistration: jasmine.createSpy('validateRegistration'),
+      validatePasswords: jasmine.createSpy('validatePasswords'),
       registerUser: jasmine.createSpy('registerUser'),
     };
 
@@ -193,6 +193,9 @@ describe('AuthComponent', () => {
       component.registerForm.setValue({
         username: 'newuser',
         email: 'a@b.com',
+        name: 'Nombre',
+        lastName: 'Apellido',
+        codeColor: '#123456',
         password: 'Password123!',
         confirmPassword: 'Diferente1!'
       });
@@ -203,22 +206,25 @@ describe('AuthComponent', () => {
       expect(errorEl?.textContent).toContain('Las contraseñas no coinciden');
     });
 
-    it('se debería llamar a validateRegistration y registerUser si el registro es válido', async () => {
+    it('se debería llamar a validatePassword y registerUser si el registro es válido', async () => {
       await setup('register');
       component.registerForm.setValue({
         username: 'newuser',
         email: 'a@b.com',
         password: 'Passw0rd!',
-        confirmPassword: 'Passw0rd!'
+        confirmPassword: 'Passw0rd!',
+        name: 'Nombre',
+        lastName: 'Apellido',
+        codeColor: '#123456'
       });
-      mockAuthService.validateRegistration.and.returnValue(
+      mockAuthService.validatePasswords.and.returnValue(
         Promise.resolve({ valid: true, errors: {} })
       );
       mockAuthService.registerUser.and.returnValue(Promise.resolve());
       spyOn(Swal, 'fire');
       spyOn(router, 'navigateByUrl');
       await component.register();
-      expect(mockAuthService.validateRegistration).toHaveBeenCalled();
+      expect(mockAuthService.validatePasswords).toHaveBeenCalled();
       expect(mockAuthService.registerUser).toHaveBeenCalled();
       expect(Swal.fire).toHaveBeenCalled();
       expect(router.navigateByUrl).toHaveBeenCalledWith('/login');
@@ -230,9 +236,12 @@ describe('AuthComponent', () => {
         username: 'existe',
         email: 'a@b.com',
         password: 'Passw0rd!',
-        confirmPassword: 'Passw0rd!'
+        confirmPassword: 'Passw0rd!',
+        name: 'Nombre',
+        lastName: 'Apellido',
+        codeColor: '#123456'
       });
-      mockAuthService.validateRegistration.and.returnValue(
+      mockAuthService.validatePasswords.and.returnValue(
         Promise.resolve({ valid: true, errors: {} })
       );
       mockAuthService.registerUser.and.returnValue(
@@ -254,9 +263,12 @@ describe('AuthComponent', () => {
         username: 'newuser',
         email: 'existe@b.com',
         password: 'Passw0rd!',
-        confirmPassword: 'Passw0rd!'
+        confirmPassword: 'Passw0rd!',
+        name: 'Nombre',
+        lastName: 'Apellido',
+        codeColor: '#123456'
       });
-      mockAuthService.validateRegistration.and.returnValue(
+      mockAuthService.validatePasswords.and.returnValue(
         Promise.resolve({ valid: true, errors: {} })
       );
       mockAuthService.registerUser.and.returnValue(
