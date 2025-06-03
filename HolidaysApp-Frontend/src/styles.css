@@ -10,10 +10,20 @@ app-login {
   align-items: center;
 }
 
+/* Forzar tamaño del calendario */
+
 @media (min-width: 768px) {
   .calendar-size {
-    width: 75%; 
+    width: 50%; 
   }
+}
+.cal-month-view .cal-day-cell {
+  height: 75px !important; 
+  min-height: unset !important;
+}
+
+.cal-month-view .cal-cell-top {
+  min-height: 0px !important;
 }
 
 
