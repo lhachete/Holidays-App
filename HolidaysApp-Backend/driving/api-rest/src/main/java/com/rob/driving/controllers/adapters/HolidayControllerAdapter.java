@@ -86,8 +86,9 @@ public class HolidayControllerAdapter implements HolidaysApi {
     }
 
     @GetMapping("/report/xlsx")
-    public ResponseEntity<org.springframework.core.io.Resource> generateHolidaysReport(@RequestParam(value = "getAll", required = false) boolean getAll) {
-        List<Holiday> holidays = holidayServicePort.getAllHolidaysOrByUser(getAll);
+    public ResponseEntity<org.springframework.core.io.Resource> generateHolidaysReport(@RequestParam(value = "getAll", required = false) boolean getAll,
+                                                                                       @RequestParam(value = "userId", required = false) Integer userId) {
+        List<Holiday> holidays = holidayServicePort.getAllHolidaysOrByUser(getAll, userId);
         log.info("Solicitud GET /holidays/report/xlsx recibida con getAll={}", getAll);
         org.springframework.core.io.Resource report = holidaysGeneratorPort.exportHolidayReport(holidays);
         log.debug("Reporte de vacaciones generado exitosamente");
