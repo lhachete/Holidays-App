@@ -38,11 +38,23 @@ public class UserControllerAdapter implements UsersApi {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(15);
 
     @GetMapping
-    public ResponseEntity<UserCollectionResponse> getAllUsers(@RequestParam(value = "username", required = false) String username) {
+    public ResponseEntity<UserCollectionResponse> getAllUsers(@RequestParam(value = "username", required = false) String username,
+                                                              @RequestParam(value = "nameAndLastName", required = false) String nameAndLastName) {
         log.info("Solicitud GET /users recibida{}", username != null ? " con username=" + username : " sin username");
-        List<User> users = userServicePort.getUsersByUsername(username);
-        log.debug("Se encontraron {} usuarios{}", users.size(), username != null ? " con username=" + username : "");
-        return ResponseEntity.ok(userDTOMapper.toUserCollectionResponse(userServicePort.getUsersByUsername(username)));
+        List<User> users;
+        if(nameAndLastName != null && username != null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se puede filtrar por nombre y apellido y por username al mismo tiempo");
+        else if (username != null) {
+            users = userServicePort.getUsersByUsername(username);
+            log.info("Buscando usuarios por username: {}", username);
+        } else if (nameAndLastName != null) {
+            users = userServicePort.findByFullName(nameAndLastName);
+            log.info("Buscando usuarios por nombre completo: {}", nameAndLastName);
+        } else {
+            users = userServicePort.getUsersByUsername(username);
+            log.info("Obteniendo todos los usuarios sin filtros");
+        }
+        return ResponseEntity.ok(userDTOMapper.toUserCollectionResponse(users));
     }
 
     @PostMapping("/login")
@@ -56,7 +68,6 @@ public class UserControllerAdapter implements UsersApi {
         return ResponseEntity.ok(loginUserResponseDTO);
     }
 
-    // Registra un usuario y a la vez un empleado.
     @PostMapping("/register")
     public ResponseEntity<UserResponse> registerByUsernameEmailAndPassword(@Valid @RequestBody RegisterRequest registerRequest) {
         log.info("Solicitud POST /users/register recibida con datos: {}", registerRequest);

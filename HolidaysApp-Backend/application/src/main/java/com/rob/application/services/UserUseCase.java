@@ -40,7 +40,7 @@ public class UserUseCase implements UserServicePort {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"El usuario no tiene permisos para ver los usuarios que no son el mismo.");
         else if(username == null || username.isEmpty())
             return userRepositoryPort.findAll();
-        return userRepositoryPort.findByNameContaining(username);
+        return userRepositoryPort.findByUsernameContaining(username);
     }
 
     @Override
@@ -91,5 +91,15 @@ public class UserUseCase implements UserServicePort {
         if(user == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado", null);
         return user;
+    }
+
+    @Override
+    public List<User> findByFullName(String nameAndLastName) {
+        if(nameAndLastName == null || nameAndLastName.isEmpty())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre y apellido no pueden estar vacíos");
+        List<User> users = userRepositoryPort.findByFullName(nameAndLastName);
+        if(users.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se encontraron usuarios con el nombre y apellido proporcionados");
+        return users;
     }
 }

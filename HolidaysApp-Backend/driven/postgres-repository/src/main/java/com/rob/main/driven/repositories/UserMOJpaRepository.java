@@ -2,6 +2,8 @@ package com.rob.main.driven.repositories;
 
 import com.rob.main.driven.repositories.models.UserMO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
@@ -11,8 +13,6 @@ public interface UserMOJpaRepository extends JpaRepository<UserMO, Integer> {
     List<UserMO> findByUsernameContaining(String username);
     @NonNull List<UserMO> findAll();
 
-    UserMO findByUsernameOrEmailAndHashedPassword(String username, String email, String password);
-    
     UserMO findByUsername(String username);
 
     UserMO findByEmail(String email);
@@ -22,4 +22,8 @@ public interface UserMOJpaRepository extends JpaRepository<UserMO, Integer> {
     Optional<UserMO> findByUsernameOrEmail(String username, String email);
 
     boolean existsByCodeColor(String codeColor);
+
+    @Query("SELECT u FROM UserMO u WHERE LOWER(CONCAT(u.employee.firstName, ' ', u.employee.lastName)) LIKE LOWER(CONCAT('%', :nameAndLastName, '%'))")
+    List<UserMO> findByFullName(@Param("nameAndLastName") String nameAndLastName);
+
 }

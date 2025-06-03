@@ -1,6 +1,5 @@
 package com.rob.application.ports.driven;
 
-import com.rob.domain.models.Role;
 import com.rob.domain.models.User;
 import org.springframework.stereotype.Repository;
 
@@ -8,11 +7,9 @@ import java.util.List;
 
 @Repository
 public interface UserRepositoryPort {
-    List<User> findByNameContaining(String name);
+    List<User> findByUsernameContaining(String name);
 
     List<User> findAll();
-
-    User findByUsernameOrEmailAndHashedPassword(String usernameOrEmail, String password);
 
     User findByUsername(String username);
 
@@ -25,4 +22,6 @@ public interface UserRepositoryPort {
     User findByUsernameOrEmail(String username, String email);
 
     boolean findByCodeColor(String colorCode);
+
+    List<User> findByFullName(String nameAndLastName);
 }
