@@ -1452,6 +1452,12 @@ paths: # Todos los endpoints de la API
           required: false
           schema:
             type: boolean
+        - name: userId
+          in: query
+          description: Optional userId to filter holidays by user
+          required: false
+          schema:
+            type: integer
       responses:
         200:
           description: The generated categories report xls

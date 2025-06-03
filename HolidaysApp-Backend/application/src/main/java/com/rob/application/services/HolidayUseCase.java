@@ -43,7 +43,7 @@ public class HolidayUseCase implements HolidayServicePort {
     }
 
     @Override
-    public List<Holiday> getAllHolidaysOrByUser(boolean getAll) {
+    public List<Holiday> getAllHolidaysOrByUser(boolean getAll, Integer userId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
         User currentUser = principal.getUser();
@@ -52,9 +52,14 @@ public class HolidayUseCase implements HolidayServicePort {
                 .anyMatch(role -> role.equals("ADMIN"));
         if(!isAdmin && getAll)
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "El usuario no tiene permisos para ver las vacaciones de todos los usuarios.");
-        // aqui meto la logica de que si getAll es true entonces se devuelven todas las vacaciones tal tal
+        else if(userId != null && getAll)
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "El usuario no puede ver las vacaciones de un usuario especifico si getAll es true.");
+        else if(!isAdmin && userId != null && userId != currentUser.getId())
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "El usuario no tiene permisos para ver las vacaciones de otros usuarios.");
         else if(getAll)
             return holidayRepositoryPort.findAllHolidays();
+        else if(userId != null)
+            return holidayRepositoryPort.findByUserId(userId);
         return holidayRepositoryPort.findByUserId(currentUser.getId());
     }
 
