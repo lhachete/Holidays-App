@@ -11,6 +11,7 @@ export class AuthService {
   public user: User | null = null;
   public isAuthenticated = false;
   private sessionTimeoutId?: number;
+  public loading: boolean = false;
 
   constructor(
     private router: Router,
@@ -25,10 +26,18 @@ export class AuthService {
   }
 
   async login(userInput: string, password: string): Promise<'OK' | 'USER_ERROR' | 'SERVER_ERROR'> {
+    // para evitar llamadas simultáneas
+    if (this.loading) {
+      return 'SERVER_ERROR';
+    }
+
+    this.loading = true;
     try {
       const foundUser = await this.userService.login(userInput, password);
 
-      if (!foundUser) return 'USER_ERROR';
+      if (!foundUser) {
+        return 'USER_ERROR';
+      }
 
       const token = foundUser.token!;
       localStorage.setItem('authToken', token);
@@ -45,17 +54,17 @@ export class AuthService {
 
       this.isAuthenticated = true;
       localStorage.setItem('userSession', JSON.stringify(this.user));
-
       this.scheduleSessionExpiration();
-      return 'OK';
 
+      return 'OK';
     } catch (err: any) {
-      
       if (err.status === 0 || err.status === 500) {
         return 'SERVER_ERROR';
       } else {
         return 'USER_ERROR';
       }
+    } finally {
+      this.loading = false;
     }
   }
 
@@ -131,14 +140,18 @@ export class AuthService {
 
   logout(): void {
     this.isAuthenticated = false;
-    this.user = null;
     localStorage.removeItem('userSession');
     localStorage.removeItem('authToken');
     this.router.navigateByUrl('/login');
+    this.user = null;
   }
 
   get isLoggedIn(): boolean {
     return this.isAuthenticated;
+  }
+
+   get isLoading(): boolean {
+    return this.loading;
   }
 
   //Comprobar si el usuario tiene el rol indicado

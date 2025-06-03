@@ -13,4 +13,5 @@ public interface UserServicePort {
     User createUser(User user);
     String verify(User user);
     User getUserById(Integer userId);
+    List<User> findByFullName(String nameAndLastName);
 }

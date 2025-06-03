@@ -22,7 +22,7 @@ public class UserJpaRepositoryAdapter implements UserRepositoryPort {
     private final UserMOMapper userMOMapper;
 
     @Override
-    public List<User> findByNameContaining(String name) {
+    public List<User> findByUsernameContaining(String name) {
         log.info("Se van a buscar usuarios que contengan el nombre: {}", name);
         return userMOJpaRepository.findByUsernameContaining(name)
                 .stream()
@@ -37,12 +37,6 @@ public class UserJpaRepositoryAdapter implements UserRepositoryPort {
                 .stream()
                 .map(userMOMapper::toUser)
                 .toList();
-    }
-
-    @Override
-    public User findByUsernameOrEmailAndHashedPassword(String usernameOrEmail, String password) {
-        log.info("Se va a buscar un usuario por nombre de usuario o email y contraseña");
-        return userMOMapper.toUser(userMOJpaRepository.findByUsernameOrEmailAndHashedPassword(usernameOrEmail,usernameOrEmail,password));
     }
 
     @Override
@@ -79,5 +73,14 @@ public class UserJpaRepositoryAdapter implements UserRepositoryPort {
     public boolean findByCodeColor(String colorCode) {
         log.info("Se va a buscar un usuario por código de color: {}", colorCode);
         return userMOJpaRepository.existsByCodeColor(colorCode);
+    }
+
+    @Override
+    public List<User> findByFullName(String nameAndLastName) {
+        log.info("Se van a buscar usuarios por nombre y apellido: {}", nameAndLastName);
+        return userMOJpaRepository.findByFullName(nameAndLastName)
+                .stream()
+                .map(userMOMapper::toUser)
+                .toList();
     }
 }

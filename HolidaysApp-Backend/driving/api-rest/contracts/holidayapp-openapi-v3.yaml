@@ -702,13 +702,19 @@ paths: # Todos los endpoints de la API
     get:
       tags:
         - Users
-      summary: Get all Users (optionally filtered by name or last name)
-      description: Get all users or filter by name or last name using query parameter
+      summary: Get all Users (optionally filtered by username or name and last name)
+      description: Get all users or filter by username or name and last name using query parameter
       operationId: getAllUsers
       parameters:
         - name: username
           in: query
           description: Optional username to filter users
+          required: false
+          schema:
+            type: string
+        - name: nameAndLastName
+          in: query
+          description: Optional name or/and last name to filter users
           required: false
           schema:
             type: string
@@ -1432,7 +1438,6 @@ paths: # Todos los endpoints de la API
                 timestamp: '2025-05-20T19:00:00Z'
                 status: 500
                 message: Unexpected error occurred
-
 components:
   schemas:
     OrganizationDTO:
