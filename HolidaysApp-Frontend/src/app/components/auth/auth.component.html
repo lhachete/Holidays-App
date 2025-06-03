@@ -56,11 +56,14 @@
                             </div>
                         </div>
                         }
-
-                        <button type="submit" [disabled]="form.invalid"
+                        <button
+                            type="submit"
+                            [disabled]="form.invalid || authService.loading"
                             class="btn btn-primary mt-1 w-100 bg-blueGFT bg-blueGFT-hover">
-                            {{ mode === 'login' ? 'Iniciar sesión' : 'Registrarse' }}
-                        </button>
+                            {{ authService.loading
+                                ? 'Iniciando sesión…'
+                                : (mode === 'login' ? 'Iniciar sesión' : 'Registrarse') }}
+                            </button>
                     </form>
 
                     <div class="text-center mt-4">

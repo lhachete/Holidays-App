@@ -29,6 +29,10 @@ export class UserService {
     return this.api.get<User>(`${this.usersUrl}/${id}`);
   }
 
+  getUsersByNameAndLastName(fullName: string): Promise<User[]> {
+    return this.api.get<User[]>(`${this.usersUrl}?nameAndLastName=${fullName}`);
+  }
+
   addUser(user: User): Promise<User> {
     return this.api.post<User>(this.registerUrl, user);
   }
