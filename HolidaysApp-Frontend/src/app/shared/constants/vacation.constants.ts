@@ -38,4 +38,7 @@ const showErrorAlert = (text: string): void => {
   });
 };
 
-export { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate, showErrorAlert };
+const getRandomColor = () => '#' + Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, '0');
+
+
+export { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate, showErrorAlert, getRandomColor };
