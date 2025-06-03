@@ -31,4 +31,18 @@ export class HolidayService {
     return this.api.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  //?Vacaciones en excel
+  //admins
+  getAllHolidaysInExcel(): Promise<Blob> {
+    return this.api.getBlob(`${this.apiUrl}/report/xlsx?getAll=true`);
+  }
+  getHolidaysByIdInExcel(userId: number): Promise<Blob> {
+    return this.api.getBlob(`${this.apiUrl}/report/xlsx?getAll=false&userId=${userId}`);
+  }
+
+  //Usuarios
+  getHolidaysByInExcelForUser(): Promise<Blob> {
+    return this.api.getBlob(`${this.apiUrl}/report/xlsx`);
+  }
+
 }

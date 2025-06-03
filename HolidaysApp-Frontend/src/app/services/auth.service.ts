@@ -139,10 +139,10 @@ export class AuthService {
 
 
   logout(): void {
-    this.isAuthenticated = false;
     localStorage.removeItem('userSession');
     localStorage.removeItem('authToken');
     this.router.navigateByUrl('/login');
+    this.isAuthenticated = false;
     this.user = null;
   }
 
