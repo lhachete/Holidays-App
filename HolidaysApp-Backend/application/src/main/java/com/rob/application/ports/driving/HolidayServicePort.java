@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 public interface HolidayServicePort {
-
+    List<Holiday> getAllHolidaysOrByUser(boolean getAll);
     List<Holiday> getHolidaysByUserId(Integer id);
     Holiday addHoliday(Holiday holiday);
     Holiday getHolidayById(Integer id);

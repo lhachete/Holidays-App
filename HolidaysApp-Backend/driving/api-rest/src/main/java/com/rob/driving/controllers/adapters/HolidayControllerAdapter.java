@@ -1,8 +1,10 @@
 package com.rob.driving.controllers.adapters;
 
 import com.rob.application.ports.driving.HolidayServicePort;
+import com.rob.application.ports.driving.HolidaysGeneratorPort;
 import com.rob.application.ports.driving.UserServicePort;
 import com.rob.application.services.MyUserDetailsServiceUseCase;
+import com.rob.domain.models.Holiday;
 import com.rob.domain.models.User;
 import com.rob.domain.models.UserPrincipal;
 import com.rob.driving.api.HolidaysApi;
@@ -12,11 +14,14 @@ import com.rob.driving.mappers.UserDTOMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -28,6 +33,7 @@ public class HolidayControllerAdapter implements HolidaysApi {
 
     private final HolidayServicePort holidayServicePort;
     private final UserServicePort userServicePort;
+    private final HolidaysGeneratorPort holidaysGeneratorPort;
     private final HolidayDTOMapper holidayDTOMapper;
     private final UserDTOMapper userDTOMapper;
 
@@ -77,5 +83,17 @@ public class HolidayControllerAdapter implements HolidaysApi {
         return ResponseEntity.ok(holidayDTOMapper.toHolidayResponse(
                 holidayServicePort.updateHoliday(holidayDTOMapper.toHoliday(newHoliday))
         ));
+    }
+
+    @GetMapping("/report/xlsx")
+    public ResponseEntity<org.springframework.core.io.Resource> generateHolidaysReport(@RequestParam(value = "getAll", required = false) boolean getAll) {
+        List<Holiday> holidays = holidayServicePort.getAllHolidaysOrByUser(getAll);
+        log.info("Solicitud GET /holidays/report/xlsx recibida con getAll={}", getAll);
+        org.springframework.core.io.Resource report = holidaysGeneratorPort.exportHolidayReport(holidays);
+        log.debug("Reporte de vacaciones generado exitosamente");
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=holidays-report.xlsx")
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(report);
     }
 }

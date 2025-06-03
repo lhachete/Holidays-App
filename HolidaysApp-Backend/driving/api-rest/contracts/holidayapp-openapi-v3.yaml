@@ -1438,6 +1438,78 @@ paths: # Todos los endpoints de la API
                 timestamp: '2025-05-20T19:00:00Z'
                 status: 500
                 message: Unexpected error occurred
+  /api-rest/holidays/report/xlsx:
+    get:
+      tags:
+        - Holidays
+      summary: Method to generate a XLSX report of holidays
+      description: Method to generate a XLSX report of holidays
+      operationId: generateHolidaysReport
+      parameters:
+        - name: getAll
+          in: query
+          description: Optional if getAll is true, it will generate a report with all holidays if you are admin
+          required: false
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: The generated categories report xls
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Wrong Request – invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 400
+                message: invalid input data
+        '401':
+          description: Not authorized – invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 401
+                message: No valid token provided
+        '403':
+          description: Denied – no permission to access the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 403
+                message: You do not have permission to access this resource
+        '404':
+          description: Holiday not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 404
+                message: The Holiday was not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2025-05-20T19:00:00Z'
+                status: 500
+                message: Unexpected error occurred
 components:
   schemas:
     OrganizationDTO:
