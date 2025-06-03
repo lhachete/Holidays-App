@@ -2,6 +2,7 @@ package com.rob.driving.mappers;
 
 import com.rob.domain.models.Employee;
 import com.rob.driving.dtos.EmployeeDTO;
+import com.rob.main.driven.repositories.models.EmployeeMO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -12,15 +13,31 @@ import org.mapstruct.Mapping;
 })
 public interface EmployeeDTOMapper {
 
-    @Mapping(source = "user", target = "user")
-    @Mapping(source = "project", target = "project")
-    @Mapping(source = "dept", target = "dept")
-    @Mapping(source = "id", target = "personId")
-    EmployeeDTO toEmployeeDTO(Employee employee);
+    default EmployeeDTO toEmployeeDTO(Employee employee) {
+        if(employee == null) {
+            return null;
+        }
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        if(employee.getId() != null)
+            employeeDTO.setPersonId(employee.getId());
+        if(employeeDTO.getDept() == null && employeeDTO.getProject() == null) {
+            employeeDTO.setFirstName(employee.getFirstName());
+            employeeDTO.setLastName(employee.getLastName());
+        }
+        return employeeDTO;
+    }
 
-    @Mapping(source = "user", target = "user")
-    @Mapping(source = "project", target = "project")
-    @Mapping(source = "dept", target = "dept")
-    @Mapping(source = "personId", target = "id")
-    Employee toEmployee(EmployeeDTO employeeDTO);
+    default Employee toEmployee(EmployeeDTO employeeDTO) {
+        if(employeeDTO == null) {
+            return null;
+        }
+        Employee employee = new Employee();
+        if(employeeDTO.getPersonId() != null)
+            employee.setId(employeeDTO.getPersonId());
+        if(employeeDTO.getDept() == null && employeeDTO.getProject() == null) {
+            employee.setFirstName(employeeDTO.getFirstName());
+            employee.setLastName(employeeDTO.getLastName());
+        }
+        return employee;
+    }
 }

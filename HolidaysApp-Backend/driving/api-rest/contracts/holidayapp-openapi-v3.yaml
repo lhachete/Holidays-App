@@ -2,6 +2,8 @@ openapi: 3.0.0
 
 info: # Información general sobre la API
   title: HolidaysApp API Rest
+  # si hago un cambio, aumento la versión s arreglo un bug aumento el tercer 0 de la derecha
+  # si es una nueva funcionalidad aumento el segundo 0 de la derecha
   version: 1.0.0
   description: API Rest for HolidaysApp
 servers: # URLs base del servidor
@@ -716,9 +718,7 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserDTO'
+                  $ref: '#/components/schemas/UserCollectionResponse'
         '400':
           description: Wrong Request – invalid parameters
           content:
@@ -783,14 +783,14 @@ paths: # Todos los endpoints de la API
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserDTO'
+              $ref: '#/components/schemas/UserUpdateRequestDTO'
       responses:
         '200':
           description: User updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDTO'
+                $ref: '#/components/schemas/UserResponse'
         '400':
           description: Wrong Request – invalid parameters
           content:
@@ -849,7 +849,7 @@ paths: # Todos los endpoints de la API
       tags:
         - Users
       summary: Login with the User's username or email and password
-      description: Login with the User's username and password using a request body
+      description: Login with the User's username or email and password using a request body
       operationId: getUserByUsernameOrEmailAndPassword
       requestBody:
         required: true
@@ -864,7 +864,7 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDTO'
+                $ref: '#/components/schemas/LoginUserResponseDTO'
         '400':
           description: Wrong Request – invalid parameters
           content:
@@ -922,8 +922,8 @@ paths: # Todos los endpoints de la API
     post:
       tags:
         - Users
-      summary: Register with the User's username, password and repeated password
-      description: Register with the User's username and password using a request body
+      summary: Register with the User's username, email, password and repeated password
+      description: Register with the User's username, email, password and repeat password using a request body
       operationId: registerByUsernameEmailAndPassword
       requestBody:
         required: true
@@ -938,7 +938,7 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDTO'
+                $ref: '#/components/schemas/UserResponse'
         '400':
           description: Wrong Request – invalid parameters
           content:
@@ -1012,7 +1012,7 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDTO'
+                $ref: '#/components/schemas/UserResponse'
         '400':
           description: Wrong Request – invalid parameters
           content:
@@ -1086,9 +1086,7 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/HolidayDTO'
+                $ref: '#/components/schemas/HolidayCollectionResponse'
         '400':
           description: Wrong Request – invalid parameters
           content:
@@ -1160,7 +1158,7 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HolidayDTO'
+                $ref: '#/components/schemas/HolidayResponse'
         '400':
           description: Wrong Request – invalid parameters
           content:
@@ -1233,7 +1231,7 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HolidayDTO'
+                $ref: '#/components/schemas/HolidayResponse'
         '400':
           description: Wrong Request – invalid parameters
           content:
@@ -1307,7 +1305,7 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HolidayDTO'
+                $ref: '#/components/schemas/HolidayResponse'
         '400':
           description: Wrong Request – invalid parameters
           content:
@@ -1380,7 +1378,7 @@ paths: # Todos los endpoints de la API
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HolidayDTO'
+                $ref: '#/components/schemas/HolidayResponse'
         '400':
           description: Wrong Request – invalid parameters
           content:
@@ -1526,41 +1524,37 @@ components:
         project:
           $ref: '#/components/schemas/ProjectDTO'
           #format: int32
-        user:
-          $ref: '#/components/schemas/UserDTO'
-          #format: int32
-        nif:
-          type: string
-        birthday:
-          type: string
-          format: date
-        country_of_birth:
-          type: string
-        birth_city:
-          type: string
-        personal_phone:
-          type: string
         first_name:
           type: string
         last_name:
           type: string
-        title:
+    EmployeeCreateDTO:
+      description: This is the Employee Response model
+      required:
+        - firstName
+        - lastName
+        - codeColor
+      type: object
+      properties:
+        name:
           type: string
-        gender:
+        lastName:
           type: string
-        marital_status:
+        codeColor:
           type: string
-        nationality:
+    EmployeeResponseDTO:
+      description: This is the Employee Response model
+      required:
+        - personId
+        - firstName
+        - lastName
+      type: object
+      properties:
+        personId:
+          type: integer
+        name:
           type: string
-        second_nationality:
-          type: string
-        primary_residence:
-          type: string
-        personal_email:
-          type: string
-        secondary_email:
-          type: string
-        work_email:
+        lastName:
           type: string
     UserDTO:
       description: This is the User model
@@ -1568,29 +1562,59 @@ components:
       properties:
         id:
           type: integer
+        employee:
+          $ref: '#/components/schemas/EmployeeResponseDTO'
         role:
           $ref: '#/components/schemas/RoleDTO'
         username:
           type: string
         email:
           type: string
-        password:
+        codeColor:
           type: string
         enabled:
           type: boolean
-    UserUpdateDTO:
+    UserResponse:
+      description: This is the User Response model
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UserDTO'
+    UserCollection:
+      description: This is the User Collection model
+      type: array
+      items:
+        $ref: '#/components/schemas/UserDTO'
+    UserCollectionResponse:
+      description: This is the User Response model
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UserCollection'
+    UserUpdateRequestDTO:
       description: This is the User Update model
       type: object
       required:
         - id
+        - roleId
+        - employeeId
+        - username
+        - email
+        - codeColor
+        - enabled
+        - password
       properties:
         id:
+          type: integer
+        employeeId:
           type: integer
         roleId:
           type: integer
         username:
           type: string
         email:
+          type: string
+        codeColor:
           type: string
         password:
           type: string
@@ -1614,15 +1638,61 @@ components:
           pattern: '^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$'
           description: >
             Debe contener al menos una letra mayúscula y un carácter especial
+    LoginUserDTO:
+      description: This is the Login Response model
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT token for authentication
+        userId:
+          type: integer
+          description: ID of the logged-in user
+        username:
+          type: string
+          description: Username of the logged-in user
+        email:
+          type: string
+          format: email
+          description: Email of the logged-in user
+        codeColor:
+          type: string
+          minLength: 3
+          maxLength: 7
+          description: >
+            Color code for the user, typically in hex format (e.g., #FFFFFF)
+        rol:
+          $ref: '#/components/schemas/RoleDTO'
+        employee:
+          $ref: '#/components/schemas/EmployeeResponseDTO'
+    LoginUserResponseDTO:
+        description: This is the Login Response model
+        type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/LoginUserDTO'
     RegisterRequest:
       description: This is the Register Request model
       type: object
       required:
+        - name
+        - lastName
         - username
         - email
         - password
         - repeatPassword
+        - codeColor
       properties:
+        name:
+          type: string
+          x-field-extra-annotation: "@NotBlank\n@Size(min=3, max=30)"
+          minLength: 3
+          maxLength: 30
+        lastName:
+          type: string
+          x-field-extra-annotation: "@NotBlank\n@Size(min=3, max=30)"
+          minLength: 3
+          maxLength: 30
         username:
           type: string
           x-field-extra-annotation: "@NotBlank\n@Size(min=3, max=30)"
@@ -1656,6 +1726,18 @@ components:
           pattern: '^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$'
           description: >
             Debe contener al menos una letra mayúscula y un carácter especial
+        codeColor:
+          type: string
+          minLength: 3
+          maxLength: 7
+          description: >
+            Color code for the user, typically in hex format (e.g., #FFFFFF)
+          x-field-extra-annotation: |
+            @NotBlank
+            @Size(min=3, max=7)
+            @Pattern(regexp="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", message = "Debe ser un código de color hexadecimal válido")
+        employee:
+          $ref: '#/components/schemas/EmployeeDTO'
         role:
           $ref: '#/components/schemas/RoleDTO'
     HolidayDTO:
@@ -1709,6 +1791,23 @@ components:
           $ref: '#/components/schemas/UserDTO'
         isDeleted:
           type: boolean
+    HolidayResponse:
+      type: object
+      description: This is the Holiday Response model
+      properties:
+        data:
+          $ref: '#/components/schemas/HolidayDTO'
+    HolidayCollection:
+      description: This is the Holiday Collection model
+      type: array
+      items:
+        $ref: '#/components/schemas/HolidayDTO'
+    HolidayCollectionResponse:
+      description: This is the Holiday Response model
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/HolidayCollection'
     HolidayRequestDTO:
         type: object
         description: This is the Holiday Request model to add a new holiday

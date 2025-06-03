@@ -20,7 +20,7 @@ export class HolidayService {
   
   // Crear una nueva vacación
   addHoliday(holiday: Holiday): Promise<Holiday> {
-    return this.api.post<Holiday>(this.apiUrl, holiday);
+      return this.api.post<{ data: Holiday }>(this.apiUrl, holiday).then(res => res.data);
   }
 
   updateHoliday(holiday: Holiday): Promise<Holiday> {

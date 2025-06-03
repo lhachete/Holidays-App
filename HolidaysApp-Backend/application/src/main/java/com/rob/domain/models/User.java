@@ -12,9 +12,11 @@ import lombok.NoArgsConstructor;
 public class User {
 
     private Integer id;
+    private Employee employee;
+    private String codeColor;
     private Role role;
     private String username;
     private String email;
-    private String password;
+    private String hashedPassword;
     private Boolean enabled;
 }

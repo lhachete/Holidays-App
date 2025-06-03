@@ -12,13 +12,35 @@ import org.mapstruct.Mapping;
 })
 public interface EmployeeMOMapper {
 
-    @Mapping(source = "user", target = "user")
-    @Mapping(source = "project", target = "project")
-    @Mapping(source = "dept", target = "dept")
-    EmployeeMO toEmployeeMO(Employee employee);
+    //@Mapping(source = "project", target = "project")
+    //@Mapping(source = "dept", target = "dept")
+    default EmployeeMO toEmployeeMO(Employee employee) {
+        if(employee == null) {
+            return null;
+        }
+        EmployeeMO employeeMO = new EmployeeMO();
+        if(employee.getId() != null)
+            employeeMO.setId(employee.getId());
+        if(employeeMO.getDept() == null && employeeMO.getProject() == null) {
+            employeeMO.setFirstName(employee.getFirstName());
+            employeeMO.setLastName(employee.getLastName());
+        }
+        return employeeMO;
+    }
 
-    @Mapping(source = "user", target = "user")
-    @Mapping(source = "project", target = "project")
-    @Mapping(source = "dept", target = "dept")
-    Employee toEmployee(EmployeeMO employeeMO);
+//    @Mapping(source = "project", target = "project")
+//    @Mapping(source = "dept", target = "dept")
+    default Employee toEmployee(EmployeeMO employeeMO) {
+        if(employeeMO == null) {
+            return null;
+        }
+        Employee employee = new Employee();
+        if(employeeMO.getId() != null)
+            employee.setId(employeeMO.getId());
+        if(employeeMO.getDept() == null && employeeMO.getProject() == null) {
+            employee.setFirstName(employeeMO.getFirstName());
+            employee.setLastName(employeeMO.getLastName());
+        }
+        return employee;
+    }
 }

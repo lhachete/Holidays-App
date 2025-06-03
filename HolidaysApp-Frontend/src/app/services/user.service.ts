@@ -16,9 +16,9 @@ export class UserService {
     this.registerUrl  = `${this.api.getApiUrl()}/users/register`;
   }
 
-  // Login via POST /login --> userInput para mock, usernameOrEmail para la API
+  // Login via POST /login 
   login(usernameOrEmail: string, password: string): Promise<User> {
-    return this.api.post<User>(this.loginUrl, { usernameOrEmail, password });
+    return this.api.post<{ data: User }>(this.loginUrl, { usernameOrEmail, password }).then(res => res.data);
   }
 
   getAllUsers(): Promise<User[]> {
@@ -34,7 +34,7 @@ export class UserService {
   }
 
   updateUser(user: User): Promise<User> {
-    return this.api.put<User>(`${this.usersUrl}/${user.id}`, user);
+    return this.api.put<User>(`${this.usersUrl}/${user.userId}`, user);
   }
 
   deleteUser(id: number): Promise<void> {

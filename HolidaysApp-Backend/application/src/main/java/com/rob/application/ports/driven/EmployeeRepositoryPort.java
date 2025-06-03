@@ -11,4 +11,6 @@ public interface EmployeeRepositoryPort {
     List<Employee> findAllEmployees();
 
     List<Employee> findAllEmployeesByName(String name);
+
+    Employee saveEmployee(Employee employee);
 }

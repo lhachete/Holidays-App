@@ -8,5 +8,5 @@ import { NavbarComponent } from './components/structure/navbar/navbar.component'
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-  title = 'vacaciones';
+  
 }

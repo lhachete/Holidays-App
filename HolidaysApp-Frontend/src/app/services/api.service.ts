@@ -15,27 +15,25 @@ export class ApiService {
             ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         });
     }
-
-    //Luego añadir esto enm las peticiones -> , { headers: this.getAuthHeaders() }
-
+    
     getApiUrl(): string {
         return environment.apiUrl;
     }
 
     get<T>(url: string): Promise<T> {
-        return firstValueFrom(this.http.get<T>(url));
+        return firstValueFrom( this.http.get<{ data: T }>(url, { headers: this.getAuthHeaders() })).then(response => response.data);
     }
 
     post<T>(url: string, body: any): Promise<T> {
-        return firstValueFrom(this.http.post<T>(url, body));
+        return firstValueFrom(this.http.post<T>(url, body, { headers: this.getAuthHeaders() }));
     }
 
     put<T>(url: string, body: any): Promise<T> {
-        return firstValueFrom(this.http.put<T>(url, body));
+        return firstValueFrom(this.http.put<T>(url, body, { headers: this.getAuthHeaders() }));
     }
 
     delete<T>(url: string): Promise<T> {
-        return firstValueFrom(this.http.delete<T>(url));
+        return firstValueFrom(this.http.delete<T>(url, { headers: this.getAuthHeaders() }));
     }
 
 }

@@ -10,9 +10,13 @@ import org.springframework.stereotype.Component;
 @Mapper(componentModel = "spring", uses = {RoleMOMapper.class})
 public interface UserMOMapper {
 
+    @Mapping(source = "employee", target = "employee")
     @Mapping(source = "role", target = "rol")
+    @Mapping(source = "codeColor", target = "codeColor")
     UserMO toUserMO(User user);
 
+    @Mapping(source = "employee", target = "employee")
     @Mapping(source = "rol", target = "role")
+    @Mapping(source = "codeColor", target = "codeColor")
     User toUser(UserMO userMO);
 }

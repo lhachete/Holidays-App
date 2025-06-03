@@ -7,6 +7,7 @@ import { AuthService } from '../../../services/auth.service';
 import { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate, showErrorAlert } from '../../../shared/constants/vacation.constants';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-book-vacation',
@@ -31,13 +32,15 @@ export class BookVacationComponent {
   // Vacaciones que el usuario está seleccionando (resaltadas)
   selectionEvents: CalendarEvent[] = [];
 
-  saving: Boolean = false;
+  saving: boolean = false;
 
   private vacationTypeOptions = vacationTypeOptions;
   private setUTCDate = setUTCDate;
   public toDateInputValue = toDateInputValue;
 
-    // Fecha mínima para el select en Start date
+  constructor(private holidayService: HolidayService, private authService: AuthService, public router: Router) { }
+
+  // Fecha mínima para el select en Start date
   public get minStartDate(): string {
     return this.toDateInputValue(new Date());
   }
@@ -47,17 +50,21 @@ export class BookVacationComponent {
     return this.startInput || this.minStartDate;
   }
 
-  constructor(private holidayService: HolidayService, private authService: AuthService) { }
 
   // Inicializa cargando las vacaciones del usuario
   async ngOnInit(): Promise<void> {
-    const userId = this.user.id;
+    const userId = this.user.userId;
     const holidays = await this.holidayService.getHolidaysById(userId);
     this.userEvents = holidays.map(h => ({
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
-      title: `Holiday ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+      title: `Vacaciones ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
+      color: {
+        primary: this.user.codeColor,
+        secondary: `${this.user.codeColor}25`
+      }
     } as CalendarEvent));
+
   }
 
   // Combina eventos pasados junto con los seleccionados
@@ -89,40 +96,69 @@ export class BookVacationComponent {
         this.selectedStart = date;
         this.selectedEnd = null;
       }
-      // Actualizo los inputs y los eventos de selección.
-      this.startInput = this.toDateInputValue(this.selectedStart);
+
+      if (this.selectedStart && this.selectedEnd && this.containsWeekend(this.selectedStart, this.selectedEnd)) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Rango no permitido',
+          text: 'Las vacaciones no pueden incluir sábados ni domingos.',
+          confirmButtonColor: '#153A7B'
+        });
+        this.clearSelection();
+        return;
+      }
+
+      this.startInput = this.toDateInputValue(this.selectedStart!);
       this.endInput = this.selectedEnd ? this.toDateInputValue(this.selectedEnd) : '';
       this.updateSelectionEvents();
     }
   }
 
+  private containsWeekend(start: Date, end: Date): boolean {
+    const day = new Date(start);
+    while (day <= end) {
+      const numDay = day.getDay();
+      if (numDay === 0 || numDay === 6) {
+        return true;
+      }
+      day.setDate(day.getDate() + 1);
+    }
+    return false;
+  }
 
-  // Genera los eventos visuales para la selección de las fechas
   private updateSelectionEvents = (): void => {
     if (this.selectedStart && this.selectedEnd) {
       this.selectionEvents = [{
         start: this.selectedStart,
         end: this.selectedEnd,
         title: 'Seleccionado',
-        color: { primary: '#38e51d', secondary: '#D1E8FF' },
+        color: { primary: '#38e51d', secondary: '#38e51d' },
       }];
     } else if (this.selectedStart) {
       this.selectionEvents = [{
         start: this.selectedStart,
         end: new Date(this.selectedStart),
         title: 'Seleccionado',
-        color: { primary: '#ffaa00', secondary: '#D1E8FF' },
+        color: { primary: '#ffaa00', secondary: '#ffaa00' },
       }];
     } else {
       this.selectionEvents = [];
     }
   };
 
-
   addHolidayRange = async (): Promise<void> => {
     if (!this.selectedStart || !this.selectedEnd) return;
 
-    // Validación de solapamiento
+    if (this.containsWeekend(this.selectedStart, this.selectedEnd)) {
+      await Swal.fire({
+        icon: 'warning',
+        title: 'Rango no permitido',
+        text: 'Las vacaciones no pueden incluir sábados ni domingos.',
+        confirmButtonColor: '#153A7B'
+      });
+      return;
+    }
+
     const overlap = this.userEvents.some(ev =>
       startOfDay(this.selectedStart!) <= ev.end! &&
       endOfDay(this.selectedEnd!) >= ev.start!
@@ -139,30 +175,30 @@ export class BookVacationComponent {
     }
 
     const selectedType = await this.promptVacationType();
-
     if (selectedType) {
       if (!this.saving) {
         this.saving = true;
-        const startDateUTC = this.setUTCDate(this.selectedStart);
-        const endDateUTC = this.setUTCDate(this.selectedEnd);
-
+        const startDateUTC = this.setUTCDate(this.selectedStart!);
+        const endDateUTC = this.setUTCDate(this.selectedEnd!);
         const newHoliday = await this.holidayService.addHoliday({
-          userId: this.user.id,
+          userId: this.user.userId,
           holidayStartDate: startDateUTC,
           holidayEndDate: endDateUTC,
           vacationType: selectedType,
         });
-
-        // Actualizo la lista de vacaiones del usuario
-        this.userEvents = [...this.userEvents,
-        {
+        this.userEvents = [...this.userEvents, {
           start: new Date(newHoliday.holidayStartDate),
           end: new Date(newHoliday.holidayEndDate),
-          title: `Vacaciones: ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`
-        }
-        ];
-
+          title: `Vacaciones: ${new Date(newHoliday.holidayStartDate).toLocaleDateString()} – ${new Date(newHoliday.holidayEndDate).toLocaleDateString()}`,
+          color: {
+            primary: this.user.codeColor,
+            secondary: `${this.user.codeColor}25`
+          },
+        }];
         this.clearSelection();
+        this.router.navigate(['/vacation/show'], {
+          queryParams: { date: new Date(newHoliday.holidayStartDate).toISOString() }
+        });
         await Swal.fire({
           toast: true,
           icon: 'success',
@@ -191,23 +227,17 @@ export class BookVacationComponent {
     return value ?? undefined;
   };
 
-
-  //Para que el input de fechas funcione bien
   onDateInputChange(type: 'start' | 'end', value: string) {
     const date = parseInputDate(value);
     const today = startOfDay(new Date());
-
-    // No permitir hoy ni fechas pasadas
     if (date <= today) {
       Swal.fire('Fecha no válida', 'La fecha debe ser posterior a hoy.', 'error');
       if (type === 'start') this.startInput = '';
       else this.endInput = '';
       return;
     }
-
     if (type === 'start') {
       this.selectedStart = date;
-      //Si ya había end y ahora es anterior, lo ajustas:
       if (this.selectedEnd && this.selectedEnd < date) {
         Swal.fire('Rango inválido', 'La fecha final no puede ser anterior a la fecha inicial.', 'error');
         this.selectedEnd = date;
@@ -215,7 +245,6 @@ export class BookVacationComponent {
       }
       this.startInput = value;
     } else {
-      // Para no dejar que end sea antes de start
       if (!this.selectedStart) {
         Swal.fire('Error', 'Primero debe seleccionar una fecha de inicio.', 'error');
         this.endInput = '';
@@ -238,5 +267,4 @@ export class BookVacationComponent {
     this.startInput = '';
     this.endInput = '';
   };
-
 }

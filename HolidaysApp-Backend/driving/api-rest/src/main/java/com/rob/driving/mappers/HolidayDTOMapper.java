@@ -1,11 +1,13 @@
 package com.rob.driving.mappers;
 
 import com.rob.domain.models.Holiday;
-import com.rob.driving.dtos.HolidayDTO;
-import com.rob.driving.dtos.HolidayRequestDTO;
-import com.rob.driving.dtos.HolidayUpdateRequestDTO;
+import com.rob.domain.models.User;
+import com.rob.driving.dtos.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = {UserDTOMapper.class})
 public interface HolidayDTOMapper {
@@ -17,6 +19,27 @@ public interface HolidayDTOMapper {
     @Mapping(source = "updatedBy", target = "updatedBy")
     @Mapping(source = "deletedBy", target = "deletedBy")
     HolidayDTO toHolidayDTO(Holiday holiday);
+
+    @Mapping(source = "id", target = "data.holidayId")
+    @Mapping(source = "user", target = "data.user")
+    @Mapping(source = "reviewedByAdmin", target = "data.reviewedByAdmin")
+    @Mapping(source = "createdBy", target = "data.createdBy")
+    @Mapping(source = "updatedBy", target = "data.updatedBy")
+    @Mapping(source = "deletedBy", target = "data.deletedBy")
+    @Mapping(source = "createdAt", target = "data.createdAt")
+    @Mapping(source = "holidayEndDate", target = "data.holidayEndDate")
+    @Mapping(source = "holidayStartDate", target = "data.holidayStartDate")
+    @Mapping(source = "vacationType", target = "data.vacationType")
+    @Mapping(source = "vacationState", target = "data.vacationState")
+    HolidayResponse toHolidayResponse(Holiday holiday);
+
+    default HolidayCollectionResponse toHolidayCollectionResponse(List<Holiday> holidays) {
+        List<HolidayDTO> userDTOList = holidays.stream()
+                .map(this::toHolidayDTO)
+                .collect(Collectors.toList());
+
+        return new HolidayCollectionResponse().data(userDTOList);
+    }
 
     @Mapping(source = "holidayId", target = "id")
     @Mapping(source = "user", target = "user")

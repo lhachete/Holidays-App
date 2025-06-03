@@ -1,10 +1,10 @@
 import Swal from 'sweetalert2';
 
 const vacationTypeOptions = {
-  Vacation: 'Vacaciones',
-  PTO: 'Días personales',
-  Sick: 'Baja por enfermedad',
-  Other: 'Otro'
+  Vacaciones: 'Vacaciones',
+  Personales: 'Días personales',
+  Enfermedad: 'Baja por enfermedad',
+  Otro: 'Otro'
 };
 
 
@@ -38,4 +38,7 @@ const showErrorAlert = (text: string): void => {
   });
 };
 
-export { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate, showErrorAlert };
+const getRandomColor = () => '#' + Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, '0');
+
+
+export { vacationTypeOptions, setUTCDate, toDateInputValue, parseInputDate, showErrorAlert, getRandomColor };

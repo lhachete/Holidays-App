@@ -23,14 +23,18 @@ export class DeleteVacationComponent {
 
   // Carga las vacaciones al iniciar el componente
   async ngOnInit(): Promise<void> {
-    const userId = this.user.id;
+    const userId = this.user.userId;
     const holidays = await this.holidayService.getHolidaysById(userId);
 
     this.userEvents = holidays.map(h => ({
       start: new Date(h.holidayStartDate),
       end: new Date(h.holidayEndDate),
       title: `Vacaciones: ${new Date(h.holidayStartDate).toLocaleDateString()} – ${new Date(h.holidayEndDate).toLocaleDateString()}`,
-      holidayId: h.holidayId 
+      holidayId: h.holidayId,
+      color: {
+        primary: this.user.codeColor,
+        secondary: `${this.user.codeColor}25`
+      }
     } as CalendarEvent));
   }
 
@@ -48,6 +52,8 @@ export class DeleteVacationComponent {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si, borrar',
+        confirmButtonColor: '#d33',
+        iconColor: '#d33',
         cancelButtonText: 'Cancelar',
       });
 
@@ -66,7 +72,7 @@ export class DeleteVacationComponent {
         Swal.fire({
           toast: true,
           icon: 'success',
-          title: 'Vacations deleted',
+          title: 'Vacaciones borradas',
           showConfirmButton: false,
           timer: 1500,
           position: 'top-end'

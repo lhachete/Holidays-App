@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Data
 @AllArgsConstructor
@@ -19,8 +21,13 @@ public class UserMO {
     @Column(name = "user_id", nullable = false)
     private Integer id;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.RESTRICT)
+    @JoinColumn(name = "employee_id")
+    private EmployeeMO employee;
+
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "rol_id", nullable = false)
     private RoleMO rol;
 
@@ -31,8 +38,8 @@ public class UserMO {
 
     @Size(max = 255)
     @NotNull
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "hash_password", nullable = false)
+    private String hashedPassword;
 
     @NotNull
     @Column(name = "enabled", nullable = false)
@@ -42,5 +49,11 @@ public class UserMO {
     @NotNull
     @Column(name = "email", nullable = false)
     private String email;
+
+    @Size(max = 7)
+    @NotNull
+    @ColumnDefault("'#000000'")
+    @Column(name = "code_color", nullable = false, length = 7)
+    private String codeColor;
 
 }
