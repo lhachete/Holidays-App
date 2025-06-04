@@ -1,6 +1,7 @@
 import { Role } from './Role';
 
 export default interface User {
+    id?: number; // No es necesario en el frontend, pero lo dejo por si hace falta.
     userId: number; 
     username: string;
     email: string;

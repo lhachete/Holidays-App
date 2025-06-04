@@ -37,6 +37,7 @@ export class HolidayService {
     return this.api.getBlob(`${this.apiUrl}/report/xlsx?getAll=true`);
   }
   getHolidaysByIdInExcel(userId: number): Promise<Blob> {
+    console.log("userId", userId);
     return this.api.getBlob(`${this.apiUrl}/report/xlsx?getAll=false&userId=${userId}`);
   }
 

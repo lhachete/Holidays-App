@@ -6,6 +6,7 @@ import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
 import { AuthService } from '../../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { UserService } from '../../../services/user.service';
 /* import * as XLSX from 'xlsx'; */
 
 @Component({
@@ -32,7 +33,7 @@ export class ShowVacationComponent {
   showDropdown: boolean = false;
   activeIndex = -1; // índice de la opción destacada
 
-  constructor(private holidayService: HolidayService, private authService: AuthService) { }
+  constructor(private holidayService: HolidayService, private authService: AuthService, private userService: UserService) { }
 
   // Carga las vacaciones al iniciar el componente
   async ngOnInit(): Promise<void> {
@@ -40,13 +41,12 @@ export class ShowVacationComponent {
   }
 
   private loadAllHolidays = async (): Promise<void> => {
-
     try {
       const user = this.user;
-      {
-        user.rol.name === 'ADMIN'
-          ? this.holidays = await this.holidayService.getAllHolidays()
-          : this.holidays = await this.holidayService.getHolidaysById(user.userId)
+      if (user.rol.name === 'ADMIN') {
+        this.holidays = await this.holidayService.getAllHolidays();
+      } else {
+        this.holidays = await this.holidayService.getHolidaysById(user.userId);
       }
 
       this.usersEvents = this.holidays.map(h => ({
@@ -61,26 +61,20 @@ export class ShowVacationComponent {
         }
       } as CalendarEvent));
 
-      // Si el usuario es ADMIN, cargamos los usuarios disponibles para la lista desplegable
-      if (this.user.rol.name === 'ADMIN') {
-        const userMap = new Map();
-        for (const h of this.holidays) {
-          if (!userMap.has(h.user.employee.personId)) {
-            userMap.set(h.user.employee.personId, {
-              personId: h.user.employee.personId,
-              name: h.user.employee.name,
-              lastName: h.user.employee.lastName
-            });
-          }
-        }
-        this.availableUsers = Array.from(userMap.values());
+      if (user.rol.name === 'ADMIN') {
+        const users = await this.userService.getAllUsers(); 
+        this.availableUsers = users.map(u => ({
+          personId: u.id!, 
+          name: u.employee!.name,
+          lastName: u.employee!.lastName
+        }));
+
       }
-
-
     } catch (err) {
-      console.error('Error al cargar todas las vacaciones', err);
+      console.error('Error al cargar todas las vacaciones o usuarios', err);
     }
   };
+
 
   loadHolidaysByUserId = async (personId: number): Promise<void> => {
     try {
@@ -103,6 +97,7 @@ export class ShowVacationComponent {
   };
 
   onUserSelect(personId: number) {
+    console.log("availableUsers:", this.availableUsers);
     const user = this.availableUsers.find(u => u.personId === personId);
     console.log("Usuario seleccionado:", user);
     // carga las vacaciones, asigno el valor y oculto el dropdown
@@ -227,6 +222,7 @@ export class ShowVacationComponent {
 
     if (user.rol.name === 'ADMIN') {
       if (this.selectedUserId) {
+        console.log("Exportando vacaciones del usuario con ID:", this.selectedUserId);
         exportPromise = this.holidayService.getHolidaysByIdInExcel(this.selectedUserId);
       } else {
         exportPromise = this.holidayService.getAllHolidaysInExcel();
