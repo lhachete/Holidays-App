@@ -46,8 +46,8 @@ export class AuthService {
         userId: foundUser.userId,
         username: foundUser.username,
         email: foundUser.email,
-        name: foundUser.name,
-        lastName: foundUser.lastName,
+        name: foundUser.employee!.name,
+        lastName: foundUser.employee!.lastName,
         codeColor: foundUser.codeColor,
         rol: foundUser.rol
       };
