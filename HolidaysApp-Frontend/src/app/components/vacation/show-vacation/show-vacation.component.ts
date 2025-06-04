@@ -104,7 +104,7 @@ export class ShowVacationComponent {
 
   onUserSelect(personId: number) {
     const user = this.availableUsers.find(u => u.personId === personId);
-
+    console.log("Usuario seleccionado:", user);
     // carga las vacaciones, asigno el valor y oculto el dropdown
     if (user) {
       this.searchTerm = `${user.name} ${user.lastName}`;
@@ -183,6 +183,7 @@ export class ShowVacationComponent {
 
   // Cuando el usuario pulsa Enter en el input
   selectUserFromInput() {
+    
     // Si hay usuarios filtrados, seleccionamos el primero
     if (this.filteredUsers.length) {
       const first = this.filteredUsers[0];
