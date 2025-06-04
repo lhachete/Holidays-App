@@ -227,14 +227,11 @@ export class ShowVacationComponent {
 
     if (user.rol.name === 'ADMIN') {
       if (this.selectedUserId) {
-        console.log("Exportando vacaciones del usuario con ID:", this.selectedUserId);
         exportPromise = this.holidayService.getHolidaysByIdInExcel(this.selectedUserId);
       } else {
-        console.log("Exportando todas las vacaciones");
         exportPromise = this.holidayService.getAllHolidaysInExcel();
       }
     } else {
-      console.log("Exportando vacaciones del usuario actual");
       exportPromise = this.holidayService.getHolidaysByInExcelForUser();
     }
 
