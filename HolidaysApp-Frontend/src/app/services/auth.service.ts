@@ -46,8 +46,8 @@ export class AuthService {
         userId: foundUser.userId,
         username: foundUser.username,
         email: foundUser.email,
-        name: foundUser.name,
-        lastName: foundUser.lastName,
+        name: foundUser.employee!.name,
+        lastName: foundUser.employee!.lastName,
         codeColor: foundUser.codeColor,
         rol: foundUser.rol
       };
@@ -139,10 +139,10 @@ export class AuthService {
 
 
   logout(): void {
-    this.isAuthenticated = false;
     localStorage.removeItem('userSession');
     localStorage.removeItem('authToken');
     this.router.navigateByUrl('/login');
+    this.isAuthenticated = false;
     this.user = null;
   }
 

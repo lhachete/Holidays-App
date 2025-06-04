@@ -36,4 +36,14 @@ export class ApiService {
         return firstValueFrom(this.http.delete<T>(url, { headers: this.getAuthHeaders() }));
     }
 
+    getBlob(url: string): Promise<Blob> {
+    return firstValueFrom(
+        this.http.get(url, {
+        headers: this.getAuthHeaders(),
+        responseType: 'blob'
+        })
+    );
+    }
+
+
 }

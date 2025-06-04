@@ -6,7 +6,7 @@ import { CustomCalendarEv } from '../../../models/CustomCalendarEv';
 import { AuthService } from '../../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-import * as XLSX from 'xlsx';
+/* import * as XLSX from 'xlsx'; */
 
 @Component({
   selector: 'app-show-vacation',
@@ -103,17 +103,18 @@ export class ShowVacationComponent {
   };
 
   onUserSelect(personId: number) {
-  const user = this.availableUsers.find(u => u.personId === personId);
-
-  // carga las vacaciones, asigno el valor y oculto el dropdown
-  if (user){
-    this.searchTerm = `${user.name} ${user.lastName}`;
-    this.selectedUserId = personId;
-    this.loadHolidaysByUserId(personId);
-    this.showDropdown = false;
-    this.activeIndex = -1;
-  };
-}
+    const user = this.availableUsers.find(u => u.personId === personId);
+    console.log("Usuario seleccionado:", user);
+    // carga las vacaciones, asigno el valor y oculto el dropdown
+    if (user) {
+      this.searchTerm = `${user.name} ${user.lastName}`;
+      this.selectedUserId = personId;
+      this.loadHolidaysByUserId(personId);
+      this.showDropdown = false;
+      this.activeIndex = -1;
+    };
+    console.log("lista de vacaciones del usuario seleccionado:", this.filteredUsers);
+  }
 
 
   clearFilters = (): void => {
@@ -177,12 +178,13 @@ export class ShowVacationComponent {
   onSearchTermChange(value: string) {
     this.searchTerm = value;
     this.showDropdown = true;
-    this.activeIndex = 0; 
+    this.activeIndex = 0;
   }
 
   // Cuando el usuario pulsa Enter en el input
   selectUserFromInput() {
-    // Intentamos emparejar con la primera sugerencia
+    
+    // Si hay usuarios filtrados, seleccionamos el primero
     if (this.filteredUsers.length) {
       const first = this.filteredUsers[0];
       this.onUserSelect(first.personId);
@@ -216,8 +218,46 @@ export class ShowVacationComponent {
       }
     }
   }
-    
-  exportToExcel(): void {
+
+  // Exporta las vacaciones a un archivo Excel desde el back
+  exportToExcelFromBackend(): void {
+    const user = this.user;
+
+    let exportPromise: Promise<Blob>;
+
+    if (user.rol.name === 'ADMIN') {
+      if (this.selectedUserId) {
+        console.log("Exportando vacaciones del usuario con ID:", this.selectedUserId);
+        exportPromise = this.holidayService.getHolidaysByIdInExcel(this.selectedUserId);
+      } else {
+        console.log("Exportando todas las vacaciones");
+        exportPromise = this.holidayService.getAllHolidaysInExcel();
+      }
+    } else {
+      console.log("Exportando vacaciones del usuario actual");
+      exportPromise = this.holidayService.getHolidaysByInExcelForUser();
+    }
+
+    exportPromise.then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `holidays_${this.selectedUserId || user.userId || 'all'}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    }).catch(error => {
+      console.error("Error al exportar el archivo Excel", error);
+    });
+  }
+
+
+
+
+
+  // Exporta las vacaciones a un archivo Excel desde el frontend
+  /* exportToExcel(): void {
     // Si hay un usuario seleccionado, filtra; si no, toma todas las vacaciones
     const source = this.selectedUserId
       ? this.holidays.filter(h => h.user.employee.personId === this.selectedUserId)
@@ -238,6 +278,6 @@ export class ShowVacationComponent {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Vacaciones');
     XLSX.writeFile(wb, 'vacaciones.xlsx');
-  }
+  } */
 
 }
