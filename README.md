@@ -57,8 +57,8 @@ A continuación, te explicamos paso a paso cómo levantar todo el entorno de des
 Primero, clona el repositorio del proyecto en tu máquina:
 
 ```bash
-git clone https://github.com/lhachete/Holidays-App-GFT.git
-cd Holidays-App-GFT
+git clone https://github.com/lhachete/Holidays-App.git
+cd Holidays-App
 ```
 
 ### 2. Levantar la base de datos PostgreSQL con Docker
@@ -73,7 +73,7 @@ Esto iniciará un contenedor con la base de datos necesaria para el backend.  La
 
 > 🔐 Las credenciales por defecto para PostgreSQL son:  
 > Usuario: `postgres`  
-> Contraseña: `gft`  
+> Contraseña: `postgres`  
 > Base de datos: `holidays_app`  
 >  
 > Se pueden modificar estos valores en el archivo `docker-compose.yml`.
