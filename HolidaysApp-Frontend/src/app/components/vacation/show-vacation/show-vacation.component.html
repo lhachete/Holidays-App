@@ -1,13 +1,13 @@
 <div class="container py-4 calendar-size">
   <div class="text-center d-flex justify-content-between align-items-center mb-4">
     <h1 class="fs-3 mb-0">Ver vacaciones</h1>
-    <button class="btn btn-blueGFT fs-xs" (click)="exportToExcelFromBackend()">Exportar a EXCEL</button>
+    <button class="btn btn-blue fs-xs" (click)="exportToExcelFromBackend()">Exportar a EXCEL</button>
   </div>
 
   @if (this.user.rol.name === 'ADMIN') {
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h3 class="fs-5 mb-0">Filtrar por usuario</h3>
-    <button class="btn btn-blueGFT" (click)="clearFilters()">Quitar filtros</button>
+    <button class="btn btn-blue" (click)="clearFilters()">Quitar filtros</button>
   </div>
 
   <!-- Input de búsqueda -->

@@ -59,7 +59,7 @@
                         <button
                             type="submit"
                             [disabled]="form.invalid || authService.loading"
-                            class="btn btn-primary mt-1 w-100 bg-blueGFT bg-blueGFT-hover">
+                            class="btn btn-primary mt-1 w-100 bg-blue bg-blue-hover">
                             {{ authService.loading
                                 ? 'Iniciando sesión…'
                                 : (mode === 'login' ? 'Iniciar sesión' : 'Registrarse') }}
@@ -69,11 +69,11 @@
                     <div class="text-center mt-4">
                         @if (mode==='login') {
                             <span> ¿No tienes cuenta?
-                                <a routerLink="/register" class="text-blueGFT">Registrarse</a>
+                                <a routerLink="/register" class="text-blue">Registrarse</a>
                             </span>
                         } @else {
                             <span> ¿Ya tienes una cuenta?
-                                <a routerLink="/login" class="text-blueGFT">Iniciar sesión</a>
+                                <a routerLink="/login" class="text-blue">Iniciar sesión</a>
                             </span>
                         }
                     </div>
