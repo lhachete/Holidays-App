@@ -1,14 +1,20 @@
 # Holidays App - Guía de Configuración
 
 ### Tecnologías utilizadas
-
 <p>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg" alt="Angular" width="40" height="40"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="40" height="40"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" width="40" height="40"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="40" height="40"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="40" height="40"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java" width="40" height="40"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" alt="Spring Boot" width="40" height="40"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" width="40" height="40"/>
 </p>
+
+Desarrollé una aplicación web para gestionar reservas de vacaciones junto a mi compañero, utilizando Angular 19 en el Frontend y Java con Spring Boot en el Backend. La aplicación cuenta con autenticación segura mediante tokens JWT, y se hace uso de los roles según los permisos del usuario mediante GUARDS. Además se ha implementado funcionaliddes avanzadas como la exportación de datos mediante archivos Excel.
+
+![Captura del proyecto](./holidaysScreenshot.png)
 
 
 ## Requisitos Previos
